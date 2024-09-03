@@ -7,8 +7,8 @@ Tristan Pommering:Pommertl@mail.uc.edu
 Oankar Santosh Ghorpade:ghorpaos@mail.uc.edu
 
 Majors:
-Ethan Reed: Computer Science
-Tristan Pommering:Computer Science
+Ethan Reed: Computer Science,
+Tristan Pommering:Computer Science,
 Oankar Santosh Ghorpade: Computer Science
 
 Project Description:
