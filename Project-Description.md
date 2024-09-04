@@ -1,5 +1,5 @@
 Project Name:
-Rock Climbing AI Project
+Bouldering AI 
 
 Name and Contact Information
 Ethan Reed:reed2ep@mail.uc.edu
@@ -12,3 +12,4 @@ Tristan Pommering:Computer Science,
 Oankar Santosh Ghorpade: Computer Science
 
 Project Description:
+A mobile application that allows users to scan boulder problems and provides them with optimal completion paths
