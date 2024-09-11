@@ -1,5 +1,5 @@
 Project Name:
-Bouldering AI 
+Bouldering Path Finding
 
 Name and Contact Information
 Ethan Reed:reed2ep@mail.uc.edu
