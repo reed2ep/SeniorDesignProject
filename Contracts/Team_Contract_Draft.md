@@ -26,7 +26,7 @@
 
 ## Project Focus
 
-The team will focus on [creating a mobile application to scan and solve boulder problems]. This project will address [the current lack of guided climbing solutions] by [utilizing modern path-finding algorithms].
+The team will focus on creating a mobile application to scan and solve boulder problems. This project will address the current lack of guided climbing solutions by utilizing modern path-finding algorithms.
 
 ---
 
