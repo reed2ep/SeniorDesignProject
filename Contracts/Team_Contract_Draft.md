@@ -38,7 +38,7 @@ The team will focus on creating a mobile application to scan and solve boulder p
 - **Application Lead Co-Lead**: [Oankar]  
   Responsible for cooperatively completing the application development.
 
-- **Path-Finding Co-Lead **: [Tristan]  
+- **Path-Finding Co-Lead**: [Tristan]  
   Responsible for cooperatively identifying, implementing and optimizing the path-finding algorithm.
 
 - **Path-Finding Co-Lead**: [Bridget]  
