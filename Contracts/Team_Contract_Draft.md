@@ -35,8 +35,8 @@ The team will focus on creating a mobile application to scan and solve boulder p
 - **Coordinator/Application Development Co-Lead**: [Ethan]  
   Responsible for coordinating team meetings, communicating with the advisor, and ensuring project milestones are met. Responsible for cooperatively completing the application development.
 
-- **Application Lead Co-Lead**: [Oankar]  
-  Responsible for cooperatively completing the application development.
+- **Documentation/Application Lead Co-Lead**: [Oankar]  
+  Responsible for collecting and maintaining records relevant to project deliverables. Responsible for cooperatively completing the application development.
 
 - **Path-Finding Co-Lead**: [Tristan]  
   Responsible for cooperatively identifying, implementing and optimizing the path-finding algorithm.
