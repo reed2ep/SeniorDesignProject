@@ -15,12 +15,20 @@
 
 ---
 
-## Meeting Schedule
+## Team Meeting Schedule
 
 - **Frequency**: Weekly meetings on [Thursday]
 - **Time**: [3:30]  
 - **Platform**: [In-Person/Discord]  
 - **Location**: [Clifton Court Hall]
+
+---
+
+## Advisor Meeting Schedule
+
+- **Frequency**: Monthly meetings on [TBD]
+- **Time**: [TBD]  
+- **Platform**: [TBD]  
 
 ---
 
