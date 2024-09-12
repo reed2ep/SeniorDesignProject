@@ -1,60 +1,49 @@
 
 # Team Contract Draft
 
-**Team Name:** [Insert Team Name]  
-**Project Title:** [Insert Project Title]
-
-**Faculty Advisor:** [Advisor Name]  
-**Date:** [Insert Date]
+**Team Name/Project Title:** [Bouldering Path-Finding]  
+**Date:** [9/12/24]
 
 ---
 
 ## Team Member Information
-
-- **Member 1**: [Name], [Email], [Phone]  
-- **Member 2**: [Name], [Email], [Phone]  
-- **Member 3**: [Name], [Email], [Phone]  
-- **Member 4**: [Name], [Email], [Phone]
+**Faculty Advisor:** [John Gallagher]  
+- **Member 1**: [Ethan Reed], [reed2ep@mail.uc.edu], [513-212-5851]  
+- **Member 2**: [Oankar Ghorpade], [ghorpaos@mail.uc.edu], [513-884-4918]  
+- **Member 3**: [Tristan Pommering], [pommertl@mail.uc.edu], [513-709-2616]  
+- **Member 4**: [Bridget Hoernschemeyer], [hoernsba@mail.uc.edu], [513-400-9189]
 
 ---
 
 ## Meeting Schedule
 
-- **Frequency**: Weekly/Biweekly meetings on [Day(s) of the Week]
-- **Time**: [Time]  
-- **Platform**: [In-Person/Zoom/Other]  
-- **First Meeting Date**: [Insert Date]
+- **Frequency**: Weekly meetings on [Thursday]
+- **Time**: [3:30]  
+- **Platform**: [In-Person/Discord]  
+- **Location**: [Clifton Court Hall]
 
 ---
 
 ## Project Focus
 
-The team will focus on [brief description of the project focus], aiming to accomplish [key project goals/objectives]. This project will address [insert the key problem or opportunity] by [outline of intended approach or methodology].
+The team will focus on [creating a mobile application to scan and solve boulder problems]. This project will address [the current lack of guided climbing solutions] by [utilizing modern path-finding algorithms].
 
 ---
 
 ## Preliminary Roles
 
-- **Team Leader/Coordinator**: [Name]  
-  Responsible for coordinating team meetings, communicating with the advisor, and ensuring project milestones are met.
+- **Coordinator/Application Development Co-Lead**: [Ethan]  
+  Responsible for coordinating team meetings, communicating with the advisor, and ensuring project milestones are met. Responsible for cooperatively completing the application development.
 
-- **Research Lead**: [Name]  
-  Responsible for gathering and synthesizing research data relevant to the project focus.
+- **Application Lead Co-Lead**: [Oankar]  
+  Responsible for cooperatively completing the application development.
 
-- **Documentation Lead**: [Name]  
-  Responsible for maintaining project documentation, including meeting minutes, reports, and deliverables.
+- **Path-Finding Co-Lead **: [Tristan]  
+  Responsible for cooperatively identifying, implementing and optimizing the path-finding algorithm.
 
-- **Presentation Lead**: [Name]  
-  Responsible for organizing and preparing materials for presentations and other formal project communications.
+- **Path-Finding Co-Lead**: [Bridget]  
+  Responsible for cooperatively identifying, implementing and optimizing the path-finding algorithm.
 
 ---
-
 Once this draft is approved by our advisor, we will refine these roles and tasks in future assignments (Assignment #5 Task List and Assignment #6 Effort Matrix).
-
-Please review this draft, and once finalized, we will submit it for approval.
-
 ---
-
-**Next Steps:**  
-- Email this contract to [Advisor Name] for approval.  
-- Upload a copy of the approved contract to Canvas.
