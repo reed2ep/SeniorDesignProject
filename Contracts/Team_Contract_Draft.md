@@ -26,9 +26,9 @@
 
 ## Advisor Meeting Schedule
 
-- **Frequency**: Monthly meetings on [TBD]
-- **Time**: [TBD]  
-- **Platform**: [TBD]  
+- **Frequency**: Weekly meetings on [Wednesday]
+- **Time**: [3:30]  
+- **Platform**: [Teams]  
 
 ---
 
