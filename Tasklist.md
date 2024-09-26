@@ -4,9 +4,6 @@
 - **Research and Document Path-Finding Algorithms**  
   **Primary:** Tristan | **Secondary:** Everyone
 
-- **Document All Path-Finding Algorithms**  
-  Responsible: Tristan
-
 - **Prototype on Path-Finding**  
   Responsible: Tristan
 
