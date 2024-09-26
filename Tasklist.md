@@ -8,7 +8,7 @@
 - Document all path-finding algorithms (Tristan)
 - Prototype on Path-finding (Tristan)
 - Environment Setup
-- Research how to get an app on Google Play Store
+- Research how to get an app on Google Play Store - Ethan
 - Research app-ui layouts
 - Research database construction for user info and data
 - Research how to store user info safely
