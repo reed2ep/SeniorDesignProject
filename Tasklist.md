@@ -2,7 +2,7 @@
 - Research Android app-development tools - Oankar
 - Research blob-detection - Ethan
 - Research language for UI in application - Oankar and Ethan
-- Research tools for movement visualization
+- Research tools for movement visualization - Bridget
 - Research similar tools to our project - Ethan
 - Research environment to use - Oankar
 - Documenting environment tools - Oankar
