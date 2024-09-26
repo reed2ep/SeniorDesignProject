@@ -5,8 +5,8 @@
 - Research tools for movement visualization
 - Research similar tools to our project
 - Research environment to use
-- Document all path-finding algorithms
-- Prototype on Path-finding
+- Document all path-finding algorithms (Tristan)
+- Prototype on Path-finding (Tristan)
 - Environment Setup
 - Research how to get an app on Google Play Store
 - Research app-ui layouts
