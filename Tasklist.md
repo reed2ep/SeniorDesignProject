@@ -3,7 +3,7 @@
 - Research blob-detection - Ethan
 - Research language for UI in application - Oankar and Ethan
 - Research tools for movement visualization
-- Research similar tools to our project
+- Research similar tools to our project - Ethan
 - Research environment to use
 - Document all path-finding algorithms (Tristan)
 - Prototype on Path-finding (Tristan)
