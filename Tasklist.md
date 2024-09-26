@@ -13,7 +13,7 @@
 - **Research and Document Android App-Development Tools**  
   Responsible: Oankar
 
-- **Research and Document UI Language for the Application**  
+- **Research and Document Poissible UI Language for the Application**  
   Responsible: Oankar, Ethan
 
 - **Research and Document App UI Layouts**  
@@ -22,7 +22,7 @@
 - **Research and Document Environment to Use**  
   Responsible: Oankar
 
-- **Environment Setup**  
+- **Complete Environment Setup**  
   Responsible: Everyone
 
 - **Document Environment Tools**  
