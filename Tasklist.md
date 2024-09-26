@@ -1,1 +1,17 @@
-
+- Research path-finding algorithms - Tristan (Primary), Everyone (Secondary)
+- Research Android app-development tools - Oankar
+- Research blob-detection - Ethan
+- Research language for UI in application - Oankar and Ethan
+- Research tools for movement visualization
+- Research similar tools to our project
+- Research environment to use
+- Document all path-finding algorithms
+- Prototype on Path-finding
+- Environment Setup
+- Research how to get an app on Google Play Store
+- Research app-ui layouts
+- Research database construction for user info and data
+- Research how to store user info safely
+- Research image scanning
+- Research input-validation
+- 
