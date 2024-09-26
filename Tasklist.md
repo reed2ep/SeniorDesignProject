@@ -4,14 +4,15 @@
 - Research language for UI in application - Oankar and Ethan
 - Research tools for movement visualization
 - Research similar tools to our project - Ethan
-- Research environment to use
+- Research environment to use - Oankar
+- Documenting environment tools - Oankar
 - Document all path-finding algorithms (Tristan)
 - Prototype on Path-finding (Tristan)
-- Environment Setup
+- Environment Setup - Everyone
 - Research how to get an app on Google Play Store - Ethan
-- Research app-ui layouts
-- Research database construction for user info and data
-- Research how to store user info safely
-- Research image scanning
-- Research input-validation
-- 
+- Research app-ui layouts - Tristan
+- Research database construction for user info and data - Bridget
+- Research how to store user info safely - Bridget
+- Research image scanning - Ethan
+- Research input-validation  - Ethan
+  
