@@ -15,4 +15,5 @@
 - Research how to store user info safely - Bridget
 - Research image scanning - Ethan
 - Research input-validation  - Ethan
+- Research Android app optimization - Oankar
   
