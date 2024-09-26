@@ -1,19 +1,73 @@
-- Research path-finding algorithms - Tristan (Primary), Everyone (Secondary)
-- Research Android app-development tools - Oankar
-- Research blob-detection - Ethan
-- Research language for UI in application - Oankar and Ethan
-- Research tools for movement visualization - Bridget
-- Research similar tools to our project - Ethan
-- Research environment to use - Oankar
-- Documenting environment tools - Oankar
-- Document all path-finding algorithms (Tristan)
-- Prototype on Path-finding (Tristan)
-- Environment Setup - Everyone
-- Research how to get an app on Google Play Store - Ethan
-- Research app-ui layouts - Tristan
-- Research database construction for user info and data - Bridget
-- Research how to store user info safely - Bridget
-- Research image scanning - Ethan
-- Research input-validation  - Ethan
-- Research Android app optimization - Oankar
+# Project Task List
+
+## Path-Finding
+- **Research and Document Path-Finding Algorithms**  
+  **Primary:** Tristan | **Secondary:** Everyone
+
+- **Document All Path-Finding Algorithms**  
+  Responsible: Tristan
+
+- **Prototype on Path-Finding**  
+  Responsible: Tristan
+
+---
+
+## Application Development
+- **Research and Document Android App-Development Tools**  
+  Responsible: Oankar
+
+- **Research and Document UI Language for the Application**  
+  Responsible: Oankar, Ethan
+
+- **Research and Document App UI Layouts**  
+  Responsible: Tristan
+
+- **Research and Document Environment to Use**  
+  Responsible: Oankar
+
+- **Environment Setup**  
+  Responsible: Everyone
+
+- **Document Environment Tools**  
+  Responsible: Oankar
+
+- **Research and Document Input Validation**  
+  Responsible: Ethan
+
+- **Research and Document Android App Optimization**  
+  Responsible: Oankar
+
+- **Research and Document How to Get an App on Google Play Store**  
+  Responsible: Ethan
+
+---
+
+## Image Processing & Detection
+- **Research and Document Blob Detection**  
+  Responsible: Ethan
+
+- **Research and Document Image Scanning**  
+  Responsible: Ethan
+
+---
+
+## Data Management
+- **Research and Document Database Construction for User Info and Data**  
+  Responsible: Bridget
+
+- **Research and Document How to Store User Info Safely**  
+  Responsible: Bridget
+
+---
+
+## Movement Visualization
+- **Research and Document Tools for Movement Visualization**  
+  Responsible: Bridget
+
+---
+
+## Competitive Analysis
+- **Research and Document Similar Tools to Our Project**  
+  Responsible: Ethan
+
   
