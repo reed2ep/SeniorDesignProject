@@ -5,7 +5,7 @@
   **Primary:** Tristan | **Secondary:** Everyone
 
 - **Prototype on Path-Finding**  
-  Responsible: Tristan
+  Responsible: Tristan, Ethan
 
 ---
 
