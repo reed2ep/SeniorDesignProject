@@ -3,7 +3,7 @@
 ## Path-Finding
 - **Research and Document Path-Finding Algorithms**  
   **Primary:** Tristan | **Secondary:** Everyone
-  - **Ponder Admissable A-Star Heuristic**
+  - **Ponder Admissable A-Star Heuristic**  
     Responsible: Ethan, Tristan
 
 - **Prototype on Path-Finding**  
