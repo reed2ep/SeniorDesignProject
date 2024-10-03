@@ -3,7 +3,7 @@
 ## Path-Finding
 - **Research and Document Path-Finding Algorithms**  
   **Primary:** Tristan | **Secondary:** Everyone
-  - **Ponder admissable A* heuristic**
+  - **Ponder admissable A star heuristic**
     **Primary:** Ethan | **Secondary:** Tristan
 
 - **Prototype on Path-Finding**  
