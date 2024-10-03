@@ -3,13 +3,15 @@
 ## Path-Finding
 - **Research and Document Path-Finding Algorithms**  
   **Primary:** Tristan | **Secondary:** Everyone
+  - **Ponder admissable A* heuristic**
+    **Primary:** Ethan | **Secondary:** Tristan
 
 - **Prototype on Path-Finding**  
-  Responsible: Tristan, Ethan
+  Responsible: Tristan
   - **Implement path-finding prototype**  
-    Responsible: Tristan, Ethan
+    Responsible: Tristan
   - **Test path-finding prototype for accuracy and speed (under 10 seconds)**  
-    Responsible: Tristan, Ethan
+    Responsible: Tristan
 
 ---
 
