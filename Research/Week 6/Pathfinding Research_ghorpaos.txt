@@ -1,0 +1,15 @@
+Reasearch on path finidng optimization:
+
+Waypoints are the key decision points where you might have to change direction. In the above diagram, I mark places where you have to go around a corner or wall. I call these “exterior corners”.
+Navigation meshes are the walkable regions of the map. Regions can be any size and shape. These store the key decision points and also a way to pathfind from/to any other points that aren’t the waypoints.
+Hierarchical approaches have coarse and fine level map representations. An approximate path is found with the coarse level, and then refined with the fine level.
+Quad trees use square regions of various sizes to represent the map. Large open areas can be represented by a few squares. Irregular edges can be represented by many small squares. See this; please send me references.
+
+Optimized BLOB pathfinding:
+
+A* is a popular choice for pathfinding because it's flexible and can be used in many contexts. It's considered the industry standard for finding the shortest path between two nodes.Use a priority queue with bins, a partitioned priority queue, or batch process nodes in the priority queue. 
+This can help smooth out artifacts in the map analysis that can occur on grid maps. 
+
+Dijkstra's algorithm (/ˈdaɪkstrəz/ DYKE-strəz) is an algorithm for finding the shortest paths between nodes in a weighted graph, It can also be used to find the shortest path to a specific destination node, by terminating the algorithm once the shortest path to the destination node is known.
+
+Breadth-first search (BFS) is an algorithm for searching a tree data structure for a node that satisfies a given property. It starts at the tree root and explores all nodes at the present depth prior to moving on to the nodes at the next depth level.
