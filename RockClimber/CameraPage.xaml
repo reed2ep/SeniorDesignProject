@@ -1,0 +1,17 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RockClimber.CameraPage"
+             Title="Camera">
+    <VerticalStackLayout Padding="20">
+        <Button Text="Capture Photo"
+                Clicked="OnCapturePhotoClicked"
+                HorizontalOptions="Center"/>
+
+        <!-- Image to display the captured photo -->
+        <Image x:Name="CapturedImage"
+               WidthRequest="200"
+               HeightRequest="200"
+               Aspect="AspectFill"
+               HorizontalOptions="Center"/>
+    </VerticalStackLayout>
+</ContentPage>

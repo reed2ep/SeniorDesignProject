@@ -31,7 +31,13 @@
                 Text="Go to Profile" 
                 Clicked="OnGoToProfileClicked"
                 HorizontalOptions="Fill" />
-            
+
+            <Button 
+                Text="Go To Camera"
+                Clicked="OnGoToCameraPageClicked"
+                HorizontalOptions="Center"/>
+
+
         </VerticalStackLayout>
     </ScrollView>
 

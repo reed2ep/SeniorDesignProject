@@ -25,6 +25,12 @@
         {
             await Navigation.PushAsync(new ProfilePage());
         }
+
+        private async void OnGoToCameraPageClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CameraPage());
+        }
+
     }
 
 }
