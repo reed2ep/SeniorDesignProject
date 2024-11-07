@@ -21,13 +21,6 @@
                 SemanticProperties.Description="Welcome to the testing app!" />
 
             <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
-            
-            <Button
                 Text="Go to Profile" 
                 Clicked="OnGoToProfileClicked"
                 HorizontalOptions="Fill" />
