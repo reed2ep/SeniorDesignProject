@@ -30,6 +30,11 @@
                 Clicked="OnGoToCameraPageClicked"
                 HorizontalOptions="Center"/>
 
+            <Button
+                Text="Open Gallery"
+                Clicked="OnOpenGalleryClicked"
+                HorizontalOptions="Center" />
+
 
         </VerticalStackLayout>
     </ScrollView>
