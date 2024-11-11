@@ -1,4 +1,5 @@
-﻿namespace RockClimber
+﻿using Microsoft.Maui.Storage;
+namespace RockClimber
 {
     public partial class MainPage : ContentPage
     {
@@ -7,18 +8,6 @@
         public MainPage()
         {
             InitializeComponent();
-        }
-
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
         }
 
         private async void OnGoToProfileClicked(object sender, EventArgs e)
@@ -30,6 +19,22 @@
         {
             await Navigation.PushAsync(new CameraPage());
         }
+
+        private async void OnOpenGalleryClicked(object sender, EventArgs e)
+        {
+            var result = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Select an image",
+                FileTypes = FilePickerFileType.Images
+            });
+
+            if (result != null)
+            {
+                await Navigation.PushAsync(new ImagePage(result.FullPath));
+            }
+        }
+
+
 
     }
 
