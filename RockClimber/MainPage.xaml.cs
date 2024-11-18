@@ -17,8 +17,31 @@ namespace RockClimber
 
         private async void OnGoToCameraPageClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new CameraPage());
+            try
+            {
+                var photo = await MediaPicker.CapturePhotoAsync(new MediaPickerOptions
+                {
+                    Title = "Take a photo"
+                });
+
+                if (photo != null)
+                {
+                    var photoPath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+                    using (var stream = await photo.OpenReadAsync())
+                    using (var fileStream = File.OpenWrite(photoPath))
+                    {
+                        await stream.CopyToAsync(fileStream);
+                    }
+
+                    await Navigation.PushAsync(new ImagePage(photoPath));
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Unable to take photo: {ex.Message}", "OK");
+            }
         }
+
 
         private async void OnOpenGalleryClicked(object sender, EventArgs e)
         {
