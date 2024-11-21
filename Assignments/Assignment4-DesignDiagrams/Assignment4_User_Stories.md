@@ -5,4 +5,7 @@
 - As a user, I want to be able to set problem difficulty for optimal path-finding.
 - As a user, I want to be able to save scanned problems so that i may refer to them in the future.
 - As a user, I want to be able to generate the next best solution if the first one doesnt suit me.
+- As a user, I want to be able to save previous solutions so I can use them later.
+- As a user, I want to be able to take a picure or upload a picture from my gallery.
+- As a user, I want to be able to easily read and follow the givin solution.
   
