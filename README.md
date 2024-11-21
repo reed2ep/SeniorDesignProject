@@ -2,7 +2,7 @@
 
 1. [Team Names and Project Abstract](#team-names-and-project-abstract)
     - *Limit of 400 ASCII characters*
-2. [Project Description]([#project-description](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md))
+2. [Project Description]([#(https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md))
     - *(Assignment #2)*
 3. [User Stories and Design Diagrams](#user-stories-and-design-diagrams)
     - *User Stories*
