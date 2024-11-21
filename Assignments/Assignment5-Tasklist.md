@@ -81,6 +81,12 @@
   - **Test image scanning with different image qualities and sizes**  
     Responsible: Ethan
 
+  - **User hold annotation tool development**
+    Responsible: Tristan
+
+  - **Photo verificaiton**
+  -  Responsible: Oankar
+
 ---
 
 ## Data Management
