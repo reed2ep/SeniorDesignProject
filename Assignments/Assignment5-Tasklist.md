@@ -37,6 +37,8 @@
 
 - **App Development**
   Responsible: Tristan, Oankar
+- **App Testing and QA testing**
+- Responsible Tristan
  
 - **Document Environment Tools**  
   Responsible: Oankar
