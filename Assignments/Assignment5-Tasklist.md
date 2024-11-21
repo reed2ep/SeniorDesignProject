@@ -68,7 +68,7 @@
 - **Research and Document Blob Detection**  
   Responsible: Ethan
   - **Implement blob detection for identifying holds in images**  
-    Responsible: Ethan
+    Responsible: Ethan, Oankar
   - **Test blob detection on a variety of sample images**  
     Responsible: Ethan
 
