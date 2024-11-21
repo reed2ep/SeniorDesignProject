@@ -7,11 +7,11 @@
     Responsible: Ethan, Tristan
 
 - **Prototype on Path-Finding**  
-  Responsible: Tristan
+  Responsible: Ethan
   - **Implement path-finding prototype**  
-    Responsible: Tristan
+    Responsible: Ethan
   - **Test path-finding prototype for accuracy and speed (under 10 seconds)**  
-    Responsible: Tristan
+    Responsible: Ethan
 
 ---
 
@@ -35,6 +35,9 @@
   - **Test environment setup by running a sample app**  
     Responsible: Everyone
 
+- **App Development**
+  Responsible: Tristan, Oankar
+ 
 - **Document Environment Tools**  
   Responsible: Oankar
 
