@@ -1,0 +1,55 @@
+Time(hours) Date Topic
+1 Sep 5 Group Meeting Intro discussion 
+1 Sep 12 Meeting Planning 
+1 Sep 14 Individual capstone and team contract review
+1 Sep 19 Group Meeting 
+2 Sep 21 Researching and project write up
+1 Sep 25 Meet with project advisor 
+2 Sep 30 Researched AI methods
+1 Oct 2 Meet with Project advisor 
+1 Oct 3 Group Meeting
+2 Oct 7 Researched App development tools 
+1 Oct 9 Meet with Project advisor 
+1 Oct 10 Group Meeting
+2 Oct 14 Set up enviornment
+1 Oct 16 Meet with Project advisor 
+1 Oct 17 Group Meeting
+3 Oct 21 Created blank test app and verified functionality with buttons and setup emulator
+3 Oct 28 Created a writeup on enviornment setup and added blank app to project
+1 Oct 30 Meet with Project advisor 
+1 Oct 31 Group Meeting
+2 Nov 4 Added Gallery funcitnality
+3 Nov 11 Merged Camera and Gallery page and tested app physically on my phone 
+2 Nov 18 Attempted to modify the UI and updtae app splash screen and app icon
+1 Nov 21 Group Meeting
+2 Nov 25 Researched alternative Blob detection methods
+3 Nov 26 Attempted alternative blob detection methods
+Total 41 Hours
+
+Total Work: 
+
+Various meeting notes:
+Evolutionary computing 
+- Center point with arms and legs searching for valid positions 
+- Decide how are we going to extract the image and store it
+- Model climber
+- Optimization for phones
+- Find alternative path planning algorithms
+- Path planning research
+- Greedy tree search, evolutionary
+- blob detection of color
+
+Always bring deliverable to advisor meetings
+format: What we did, any issues, what we plan to do 
+
+Got basic app env setup
+Got an app working 
+need to upload base to github 
+Talk about UI design 
+
+For the demo at the expo?
+Research getting phone into dev mode
+Getting app on my phone and testing camera 
+
+Blob detection alternatives
+State of work divison Blob detection and AI Should be more fairly divivded
