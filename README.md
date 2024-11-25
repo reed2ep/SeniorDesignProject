@@ -1,6 +1,6 @@
 # Table of Contents
 
-1. [Team Names and Project Abstract](#team-names-and-project-abstract)
+1. [Team Names and Project Abstract](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md)
     - (https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md)
 2. [Project Description]([#(https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md))
     - (https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md)
