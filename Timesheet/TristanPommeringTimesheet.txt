@@ -26,8 +26,6 @@ Time(hours) Date Topic
 3 Nov 26 Attempted alternative blob detection methods
 Total 41 Hours
 
-Total Work: 
-
 Various meeting notes:
 Evolutionary computing 
 - Center point with arms and legs searching for valid positions 
