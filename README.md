@@ -1,6 +1,6 @@
 # Table of Contents
 
-1. [Team Names and Project Abstract]
+1. [Team Names and Project Abstract](https://github.com/reed2ep/SeniorDesignProject/blob/main/Research/ProjectAbstract.md)
    - Members: Bridget Hoernschemeyer, Ethan Reed, Tristan Pommering, Oankar Ghorpade
    - Advisor: John Gallagher
 2. [Project Description](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment2-Project-Description.md)
@@ -12,6 +12,6 @@
 8. [Professional Biographies](https://github.com/reed2ep/SeniorDesignProject/tree/main/Assignments/Assignment1-Biographies)
 9. Budget
     - Currently no expenses and none planned
-10. [Appendix]
+10. Appendix
     - Research:(https://github.com/reed2ep/SeniorDesignProject/tree/main/Research)
     - Code Repo:(https://github.com/reed2ep/SeniorDesignProject/tree/main/RockClimber)
