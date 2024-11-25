@@ -52,6 +52,3 @@ The team will focus on creating a mobile application to scan and solve boulder p
 - **Path-Finding Co-Lead**: [Bridget]  
   Responsible for cooperatively identifying, implementing and optimizing the path-finding algorithm.
 
----
-Once this draft is approved by our advisor, we will refine these roles and tasks in future assignments (Assignment #5 Task List and Assignment #6 Effort Matrix).
----
