@@ -34,7 +34,10 @@ namespace RockClimber
             }
         }
 
-
+        private async void OnGoToSavedPathsPageClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SavedPathsPage());
+        }
 
     }
 

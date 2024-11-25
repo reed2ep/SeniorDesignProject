@@ -5,43 +5,76 @@
              Title="Profile">
 
     <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="15">
-            <Label Text="User Profile" FontSize="24" HorizontalOptions="Center" />
+        <VerticalStackLayout Padding="30" Spacing="20">
 
-            <!-- Name -->
-            <Label Text="Name:" />
-            <Entry x:Name="NameEntry" Placeholder="Enter your name" />
+            <!-- Profile Header -->
+            <Label Text="User Profile" 
+                   FontSize="30" 
+                   HorizontalOptions="Center" 
+                   FontAttributes="Bold"
+                   TextColor="#3B83BD" />
 
-            <!-- Height -->
-            <Label Text="Height:" />
-            <HorizontalStackLayout>
-                <Picker x:Name="HeightFeetPicker" Title="Feet" />
-                <Picker x:Name="HeightInchesPicker" Title="Inches" />
-            </HorizontalStackLayout>
+            <!-- Name Field -->
+            <Frame CornerRadius="10" Padding="10" BorderColor="#D3D3D3">
+                <VerticalStackLayout>
+                    <Label Text="Name:" FontSize="16" TextColor="#333333"/>
+                    <Entry x:Name="NameEntry" Placeholder="Enter your name" FontSize="18"/>
+                </VerticalStackLayout>
+            </Frame>
 
-            <!-- Wingspan -->
-            <Label Text="Wingspan:" />
-            <HorizontalStackLayout>
-                <Picker x:Name="WingspanFeetPicker" Title="Feet" />
-                <Picker x:Name="WingspanInchesPicker" Title="Inches" />
-            </HorizontalStackLayout>
+            <!-- Height Section -->
+            <Frame CornerRadius="10" Padding="10" BorderColor="#D3D3D3">
+                <VerticalStackLayout>
+                    <Label Text="Height:" FontSize="16" TextColor="#333333"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Picker x:Name="HeightFeetPicker" Title="Feet" WidthRequest="100"/>
+                        <Label Text="Feet" VerticalOptions="Center" FontSize="16"/>
+                        <Picker x:Name="HeightInchesPicker" Title="Inches" WidthRequest="100"/>
+                        <Label Text="Inches" VerticalOptions="Center" FontSize="16"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
 
-            <!-- Difficulty Level -->
-            <Label Text="Difficulty Level:" />
-            <Picker x:Name="DifficultyPicker" Title="Select Difficulty">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Beginner</x:String>
-                        <x:String>Intermediate Beginner</x:String>
-                        <x:String>Advanced Beginner</x:String>
-                        <x:String>Intermediate</x:String>
-                        <x:String>Advanced</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+            <!-- Wingspan Section -->
+            <Frame CornerRadius="10" Padding="10" BorderColor="#D3D3D3">
+                <VerticalStackLayout>
+                    <Label Text="Wingspan:" FontSize="16" TextColor="#333333"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Picker x:Name="WingspanFeetPicker" Title="Feet" WidthRequest="100"/>
+                        <Label Text="Feet" VerticalOptions="Center" FontSize="16"/>
+                        <Picker x:Name="WingspanInchesPicker" Title="Inches" WidthRequest="100"/>
+                        <Label Text="Inches" VerticalOptions="Center" FontSize="16"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Difficulty Level Section -->
+            <Frame CornerRadius="10" Padding="10" BorderColor="#D3D3D3">
+                <VerticalStackLayout>
+                    <Label Text="Difficulty Level:" FontSize="16" TextColor="#333333"/>
+                    <Picker x:Name="DifficultyPicker" Title="Select Difficulty" FontSize="18">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Beginner</x:String>
+                                <x:String>Intermediate Beginner</x:String>
+                                <x:String>Advanced Beginner</x:String>
+                                <x:String>Intermediate</x:String>
+                                <x:String>Advanced</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
 
             <!-- Save Button -->
-            <Button Text="Save" Clicked="OnSaveButtonClicked" HorizontalOptions="Center" />
+            <Button Text="Save Profile" 
+                    Clicked="OnSaveButtonClicked" 
+                    BackgroundColor="#3B83BD" 
+                    TextColor="White" 
+                    FontSize="18" 
+                    CornerRadius="20" 
+                    HorizontalOptions="Center" 
+                    WidthRequest="200"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

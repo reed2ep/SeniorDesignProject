@@ -23,7 +23,7 @@
             <Button
                 Text="Go to Profile" 
                 Clicked="OnGoToProfileClicked"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Center" />
 
             <Button 
                 Text="Go To Camera"
@@ -35,6 +35,10 @@
                 Clicked="OnOpenGalleryClicked"
                 HorizontalOptions="Center" />
 
+            <Button
+                Text="Saved Paths"
+                Clicked="OnGoToSavedPathsPageClicked"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>
