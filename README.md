@@ -13,5 +13,6 @@
 9. Budget
     - Currently no expenses and none planned
 10. Appendix
-    - Research:(https://github.com/reed2ep/SeniorDesignProject/tree/main/Research)
-    - Code Repo:(https://github.com/reed2ep/SeniorDesignProject/tree/main/RockClimber)
+    - [Research](https://github.com/reed2ep/SeniorDesignProject/tree/main/Research)
+    - [Code Repo](https://github.com/reed2ep/SeniorDesignProject/tree/main/RockClimber)
+    - [Timesheets](https://github.com/reed2ep/SeniorDesignProject/tree/main/Timesheet)
