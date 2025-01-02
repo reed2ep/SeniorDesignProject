@@ -2,16 +2,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.CameraPage"
              Title="Camera">
-    <VerticalStackLayout Padding="20">
-        <Button Text="Capture Photo"
+	<VerticalStackLayout Padding="20" Spacing="15">
+		<!-- Button to capture a photo -->
+		<Button Text="Capture Photo"
                 Clicked="OnCapturePhotoClicked"
                 HorizontalOptions="Center"/>
 
-        <!-- Image to display the captured photo -->
-        <Image x:Name="CapturedImage"
-               WidthRequest="200"
-               HeightRequest="200"
-               Aspect="AspectFill"
+		<!-- Image to display the captured/processed photo -->
+		<Image x:Name="CapturedImage"
+               WidthRequest="300"
+               HeightRequest="300"
+               Aspect="AspectFit"
                HorizontalOptions="Center"/>
-    </VerticalStackLayout>
+	</VerticalStackLayout>
 </ContentPage>
