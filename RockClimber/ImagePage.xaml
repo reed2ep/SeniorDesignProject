@@ -2,9 +2,27 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.ImagePage"
-             Title="ImagePage">
-    <VerticalStackLayout Padding="10">
-        <Label Text="Selected Image" FontSize="24" HorizontalOptions="Center" />
-        <Image x:Name="SelectedImage" Aspect="AspectFit" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
+             Title="Selected Image">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <!-- Title Label -->
+        <Label Text="Selected Image"
+               FontSize="24"
+               HorizontalOptions="Center"
+               VerticalOptions="Start" />
+
+        <!-- Activity Indicator for Loading -->
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           IsRunning="false"
+                           IsVisible="false"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+
+        <!-- Display the selected/processed image -->
+        <Image x:Name="SelectedImage"
+               WidthRequest="300"
+               HeightRequest="300"
+               Aspect="AspectFit"
+               HorizontalOptions="Center"
+               VerticalOptions="CenterAndExpand" />
     </VerticalStackLayout>
 </ContentPage>
