@@ -6,55 +6,45 @@ using System.Drawing;
 
 public static class BlobDetector
 {
-    public static List<CircleF> DetectBlobs(Mat inputImage)
+    public static List<System.Drawing.Rectangle> DetectHoldsByColor(Mat inputImage, MCvScalar lowerBound, MCvScalar upperBound)
     {
-        // Convert to grayscale
-        Mat grayImage = new Mat();
-        CvInvoke.CvtColor(inputImage, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+        // Convert to HSV color space
+        Mat hsvImage = new Mat();
+        CvInvoke.CvtColor(inputImage, hsvImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
 
-        // Apply Gaussian blur
-        CvInvoke.GaussianBlur(grayImage, grayImage, new System.Drawing.Size(5, 5), 0);
+        // Create a binary mask for the given color range
+        Mat mask = new Mat();
+        CvInvoke.InRange(hsvImage, new ScalarArray(lowerBound), new ScalarArray(upperBound), mask);
 
-        // Apply adaptive thresholding
-        Mat thresholded = new Mat();
-        CvInvoke.AdaptiveThreshold(grayImage, thresholded, 255,
-            Emgu.CV.CvEnum.AdaptiveThresholdType.GaussianC,
-            Emgu.CV.CvEnum.ThresholdType.Binary, 15, 5);
+        // Optional: Apply morphological operations to clean up noise
+        Mat kernel = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.ElementShape.Ellipse, new System.Drawing.Size(5, 5), new System.Drawing.Point(-1, -1));
+        CvInvoke.MorphologyEx(mask, mask, Emgu.CV.CvEnum.MorphOp.Close, kernel, new System.Drawing.Point(-1, -1), 1, Emgu.CV.CvEnum.BorderType.Default, new MCvScalar());
 
-        // Detect contours
+        // Find contours
         using (var contours = new VectorOfVectorOfPoint())
         {
-            CvInvoke.FindContours(thresholded, contours, null, Emgu.CV.CvEnum.RetrType.External,
-                Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
+            CvInvoke.FindContours(mask, contours, null, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
 
             Console.WriteLine($"Contours detected: {contours.Size}");
 
-            // Draw contours for debugging
-            CvInvoke.DrawContours(inputImage, contours, -1, new MCvScalar(255, 0, 0), 2); // Draw in blue
-
-            // Extract circular blobs
-            var blobs = new List<CircleF>();
+            // Extract bounding rectangles for each contour
+            var boundingBoxes = new List<System.Drawing.Rectangle>();
             for (int i = 0; i < contours.Size; i++)
             {
                 using (var contour = contours[i])
                 {
-                    var circle = CvInvoke.MinEnclosingCircle(contour);
-                    double contourArea = CvInvoke.ContourArea(contour);
-                    double perimeter = CvInvoke.ArcLength(contour, true);
-                    double circularity = 4 * Math.PI * contourArea / (perimeter * perimeter);
+                    // Calculate the bounding rectangle of the contour
+                    System.Drawing.Rectangle boundingBox = CvInvoke.BoundingRectangle(contour);
 
-                    Console.WriteLine($"Blob {i}: Radius={circle.Radius}, Area={contourArea}, Circularity={circularity}");
-
-                    // Relaxed filtering for testing
-                    if (circle.Radius > 5 && circularity > 0.5)
+                    // Optional: Filter by size
+                    if (boundingBox.Width > 10 && boundingBox.Height > 10) // Adjust size thresholds
                     {
-                        blobs.Add(circle);
+                        boundingBoxes.Add(boundingBox);
                     }
                 }
             }
-            return blobs;
+            return boundingBoxes;
         }
     }
 }
-
 

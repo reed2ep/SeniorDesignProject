@@ -41,12 +41,12 @@ namespace RockClimber
                     CvInvoke.Resize(selectedImage, resizedImage, new System.Drawing.Size(300, 300));
 
                     // Detect blobs
-                    List<CircleF> detectedBlobs = BlobDetector.DetectBlobs(resizedImage);
+                    //List<CircleF> detectedBlobs = BlobDetector.DetectBlobs(resizedImage);
 
                     // Update the UI with the processed image
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        DisplayBlobs(resizedImage, detectedBlobs);
+                        //DisplayBlobs(resizedImage, detectedBlobs);
                     });
                 });
             }

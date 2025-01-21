@@ -14,5 +14,23 @@
                HeightRequest="300"
                Aspect="AspectFit"
                HorizontalOptions="Center"/>
-	</VerticalStackLayout>
+        <!-- Dropdown for selecting the hold color -->
+        <Label Text="Select Hold Color" FontSize="18" HorizontalOptions="Center" />
+        <Picker x:Name="ColorPicker" Title="Choose a color" SelectedIndexChanged="OnColorSelected" HorizontalOptions="Center">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Pink</x:String>
+                    <x:String>Yellow</x:String>
+                    <x:String>Blue</x:String>
+                    <x:String>Green</x:String>
+                    <x:String>Purple</x:String>
+                    <x:String>Black</x:String>
+                    <x:String>Orange</x:String>
+                    <x:String>Red</x:String>
+                    <x:String>White</x:String>
+                    <x:String>Seafoam</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+    </VerticalStackLayout>
 </ContentPage>
