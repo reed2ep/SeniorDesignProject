@@ -32,5 +32,6 @@
                 </x:Array>
             </Picker.ItemsSource>
         </Picker>
+        <Button x:Name="ConfirmButton" Text="Confirm" Clicked="OnConfirmButtonClicked" IsVisible="False" />
     </VerticalStackLayout>
 </ContentPage>
