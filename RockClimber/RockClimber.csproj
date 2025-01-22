@@ -59,10 +59,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<MauiXaml Update="CameraPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
+		<MauiXaml Update="AnnotationPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="ImagePage.xaml">
+		<MauiXaml Update="CameraPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
