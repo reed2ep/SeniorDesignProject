@@ -19,6 +19,17 @@ namespace RockClimber
             InitializeComponent();
         }
 
+        public CameraPage(string imagePath) : this()
+        {
+            _imagePath = imagePath;
+
+            // Display the image in the UI
+            CapturedImage.Source = ImageSource.FromFile(imagePath);
+
+            // Start processing the image
+            ProcessImage(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+        }
+
         private async void OnCapturePhotoClicked(object sender, EventArgs e)
         {
             try
