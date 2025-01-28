@@ -6,18 +6,28 @@
     <VerticalStackLayout Padding="20">
         <!-- Image to display the processed image -->
         <Image x:Name="CapturedImage" 
-               WidthRequest="300" 
-               HeightRequest="300" 
-               Aspect="AspectFit" 
-               HorizontalOptions="Center" />
+           WidthRequest="300" 
+           HeightRequest="300" 
+           Aspect="AspectFit" 
+           HorizontalOptions="Center" />
 
         <!-- Holds Dropdown -->
+        <Label Text="Select Hold to Edit:" FontAttributes="Bold" />
         <Picker x:Name="HoldsPicker" Title="Select Hold" />
 
         <!-- Hold Type Dropdown -->
+        <Label Text="Select or Change Hold Type:" FontAttributes="Bold" />
         <Picker x:Name="HoldTypePicker" Title="Select Hold Type" />
 
-        <!-- Save Value Button -->
-        <Button Text="Save Hold Type" Clicked="OnSaveValueClicked" />
+        <!-- Start Hold Dropdown -->
+        <Label Text="Select Start Hold:" FontAttributes="Bold" />
+        <Picker x:Name="StartHoldPicker" Title="Select Start Hold" />
+
+        <!-- End Hold Dropdown -->
+        <Label Text="Select End Hold:" FontAttributes="Bold" />
+        <Picker x:Name="EndHoldPicker" Title="Select End Hold" />
+
+        <!-- Continue Button -->
+        <Button Text="Continue to Next Step" Clicked="OnContinueClicked" />
     </VerticalStackLayout>
 </ContentPage>

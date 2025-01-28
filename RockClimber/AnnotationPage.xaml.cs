@@ -21,6 +21,9 @@ namespace RockClimber
 
             // Process the image and display it
             ProcessAndDisplayImage();
+
+            // Populate the start and end pickers
+            PopulateStartAndEndPickers();
         }
 
 
@@ -82,7 +85,34 @@ namespace RockClimber
 
         private void PopulateHoldsDropdown()
         {
-            HoldsPicker.ItemsSource = _holds.Keys.Select(i => $"Hold {i + 1}").ToList();
+            var holdItems = _holds.Keys.Select(i => $"Hold {i + 1}").ToList();
+
+            HoldsPicker.ItemsSource = holdItems;
+            StartHoldPicker.ItemsSource = holdItems;
+            EndHoldPicker.ItemsSource = holdItems;
+
+            // Set default values for Start and End Pickers
+            if (holdItems.Any())
+            {
+                StartHoldPicker.SelectedIndex = 0; // Default to the first hold
+                EndHoldPicker.SelectedIndex = holdItems.Count - 1; // Default to the last hold
+            }
+            HoldsPicker.SelectedIndex = -1;
+
+            HoldsPicker.SelectedIndexChanged += OnHoldSelectionChanged;
+        }
+
+
+        private void OnHoldSelectionChanged(object sender, EventArgs e)
+        {
+            if (HoldsPicker.SelectedIndex >= 0)
+            {
+                int selectedHoldIndex = HoldsPicker.SelectedIndex;
+                var holdType = _holds[selectedHoldIndex].Type;
+
+                // Update HoldTypePicker to reflect the current type
+                HoldTypePicker.SelectedIndex = (int)holdType - 1; // Enum values are 1-based
+            }
         }
 
         private void InitializeHoldTypePicker()
@@ -93,26 +123,20 @@ namespace RockClimber
 
         private void OnHoldTypeChanged(object sender, EventArgs e)
         {
-            if (HoldsPicker.SelectedIndex < 0 || HoldTypePicker.SelectedIndex < 0)
+            if (HoldsPicker.SelectedIndex >= 0 && HoldTypePicker.SelectedIndex >= 0)
             {
-                DisplayAlert("Error", "Please select a hold and a type.", "OK");
-                return;
+                int selectedHoldIndex = HoldsPicker.SelectedIndex;
+                HoldType selectedType = (HoldType)Enum.Parse(typeof(HoldType), HoldTypePicker.SelectedItem.ToString());
+
+                // Update the hold type in the dictionary
+                var hold = _holds[selectedHoldIndex];
+                _holds[selectedHoldIndex] = (hold.Rect, selectedType);
+
+                // Redraw the image with updated values
+                RedrawProcessedImage();
             }
-
-            // Get the selected hold and type
-            int selectedHoldIndex = HoldsPicker.SelectedIndex;
-            HoldType selectedType = (HoldType)Enum.Parse(typeof(HoldType), HoldTypePicker.SelectedItem.ToString());
-
-            // Update the hold type
-            var hold = _holds[selectedHoldIndex];
-            _holds[selectedHoldIndex] = (hold.Rect, selectedType);
-
-            // Refresh the display with the updated hold type
-            RefreshHoldsDisplay();
-
-            // Redraw the image with updated values
-            RedrawProcessedImage();
         }
+
 
         private void RedrawProcessedImage()
         {
@@ -187,8 +211,42 @@ namespace RockClimber
                 return memoryStream;
             });
         }
+        private void PopulateStartAndEndPickers()
+        {
+            var holdItems = _holds.Keys.Select(i => $"Hold {i + 1}").ToList();
 
+            StartHoldPicker.ItemsSource = holdItems;
+            EndHoldPicker.ItemsSource = holdItems;
 
+            // Set default values: first hold for Start and last hold for End
+            if (holdItems.Any())
+            {
+                StartHoldPicker.SelectedIndex = 0; // Default to the first hold
+                EndHoldPicker.SelectedIndex = holdItems.Count - 1; // Default to the last hold
+            }
+
+            // Optional: Add event handlers for changes
+            StartHoldPicker.SelectedIndexChanged += OnStartHoldChanged;
+            EndHoldPicker.SelectedIndexChanged += OnEndHoldChanged;
+        }
+
+        private void OnStartHoldChanged(object sender, EventArgs e)
+        {
+            if (StartHoldPicker.SelectedIndex >= 0)
+            {
+                var selectedStartHold = StartHoldPicker.SelectedItem.ToString();
+                Console.WriteLine($"Start Hold changed to: {selectedStartHold}");
+            }
+        }
+
+        private void OnEndHoldChanged(object sender, EventArgs e)
+        {
+            if (EndHoldPicker.SelectedIndex >= 0)
+            {
+                var selectedEndHold = EndHoldPicker.SelectedItem.ToString();
+                Console.WriteLine($"End Hold changed to: {selectedEndHold}");
+            }
+        }
 
         private static Android.Graphics.Bitmap BitmapFromMat(Mat mat)
         {
@@ -199,28 +257,22 @@ namespace RockClimber
             }
         }
 
-        private void OnSaveValueClicked(object sender, EventArgs e)
+        private async void OnContinueClicked(object sender, EventArgs e)
         {
-            if (HoldsPicker.SelectedIndex >= 0 && HoldTypePicker.SelectedIndex >= 0)
+            if (StartHoldPicker.SelectedIndex >= 0 && EndHoldPicker.SelectedIndex >= 0)
             {
-                // Get the selected hold and type
-                int selectedHoldIndex = HoldsPicker.SelectedIndex;
-                HoldType selectedType = (HoldType)Enum.Parse(typeof(HoldType), HoldTypePicker.SelectedItem.ToString());
+                var startHold = StartHoldPicker.SelectedItem.ToString();
+                var endHold = EndHoldPicker.SelectedItem.ToString();
 
-                // Update the hold type
-                var hold = _holds[selectedHoldIndex];
-                _holds[selectedHoldIndex] = (hold.Rect, selectedType);
-
-                // Refresh display
-                RefreshHoldsDisplay();
-
-                DisplayAlert("Success", $"Hold {selectedHoldIndex + 1} updated to {selectedType}.", "OK");
+                // Proceed to the next step with the selected start and end holds
+                await DisplayAlert("Continue", $"Start Hold: {startHold}\nEnd Hold: {endHold}", "OK");
             }
             else
             {
-                DisplayAlert("Error", "Please select a hold and a hold type.", "OK");
+                await DisplayAlert("Error", "Please select both start and end holds.", "OK");
             }
         }
+
 
     }
 }
