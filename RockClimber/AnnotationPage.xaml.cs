@@ -261,18 +261,61 @@ namespace RockClimber
         {
             if (StartHoldPicker.SelectedIndex >= 0 && EndHoldPicker.SelectedIndex >= 0)
             {
-                var startHold = StartHoldPicker.SelectedItem.ToString();
-                var endHold = EndHoldPicker.SelectedItem.ToString();
+                // Retrieve selected start and end holds
+                int startIndex = StartHoldPicker.SelectedIndex;
+                int endIndex = EndHoldPicker.SelectedIndex;
 
-                // Proceed to the next step with the selected start and end holds
-                await DisplayAlert("Continue", $"Start Hold: {startHold}\nEnd Hold: {endHold}", "OK");
+                var startHold = _holds[startIndex].Rect;
+                var endHold = _holds[endIndex].Rect;
+
+                double maxReach = 150; // Adjust based on climber ability
+
+                // Find best path
+                var path = ClimbingGraph.FindBestRoute(_holds.Values.Select(h => h.Rect).ToList(), startHold, endHold, maxReach);
+
+                if (path == null || path.Count == 0)
+                {
+                    await DisplayAlert("No Path Found", "No valid climbing path was found.", "OK");
+                }
+                else
+                {
+                    DisplayPath(path);
+                }
             }
             else
             {
                 await DisplayAlert("Error", "Please select both start and end holds.", "OK");
             }
         }
+        private void DisplayPath(List<Node> path)
+        {
+            // Reload the original image
+            Mat annotatedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
+            // Draw the path
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var start = path[i].Hold;
+                var end = path[i + 1].Hold;
+
+                System.Drawing.Point startPoint = new System.Drawing.Point(start.X + start.Width / 2, start.Y + start.Height / 2);
+                System.Drawing.Point endPoint = new System.Drawing.Point(end.X + end.Width / 2, end.Y + end.Height / 2);
+
+                CvInvoke.Line(annotatedImage, startPoint, endPoint, new MCvScalar(0, 0, 255), 2);
+            }
+
+            // Display image
+            CapturedImage.Source = ImageSource.FromStream(() =>
+            {
+                var memoryStream = new MemoryStream();
+                using (var androidBitmap = BitmapFromMat(annotatedImage))
+                {
+                    androidBitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 100, memoryStream);
+                    memoryStream.Position = 0;
+                }
+                return memoryStream;
+            });
+        }
 
     }
 }
