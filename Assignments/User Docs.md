@@ -22,6 +22,7 @@ After you finish filling out your User Profile hit **Save Profile**. Your profil
 After you have your profile set up the app is ready to use. You have 3 available options.
 
 **Saved Paths:** If you already calculated a path you can choose to save it for later. Those paths wil be saved here for future use. 
+
 ### Step 1: Select one of the following options
 **Go to Camera:** Launches camera and allows you to take a live photo of a bouldering problem you would like a path created for.
 
@@ -38,13 +39,16 @@ After you select confirm you will be prompted with a picture showing all the det
 You are presented with various options:
 
 **Select Hold to Edit:** This is used to select a hold. If you want to modify hold 1 you simpily select hold 1.
+
 **Select or Change Hold Type:** Once you have selected a hold above you will have the option to change the hold type. By default all holds are considered jugs. If you'd like to avoid certain holds and favor others, you can do that here.
 1. Select Desired hold by its number on the image.
 2. Change the hold type to what you would categorize it as.
 3. Selected hold should be automatically updated with new hold type.
 
 **Select Start Hold:** This is your starting point. By default it goes to the lowest available hold but should be modified to match where the you would like to start with your hands.
+
 **Select End Hold:** This is your destination. By default it will go to the top hold but can be changed here.
 
 **2 Hand Start:** If the route indicates there are 2 starting hand holds instead of one, you can check this box and you will be prompted to select a start hold for both hands. 
+
 **2 Hand End:** If the route indicates there are 2 finish holds instead of one, you can check this box and you will be prompted to select a finish hold for both hands.
