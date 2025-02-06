@@ -9,7 +9,7 @@ You will be prompted with 4 options ***Name, Height, Wingspan, Difficulty Level*
 
 **Name:** This is just a your name, It is optional but can be helpful if multiple people use the app on the same device.
 
-**Height:** Your height should be inputed in Feet and Inches. These measurements will be used to optimize a route best fit for your height. The default is 5 ft.
+**Height:** Your height should be inputed in Feet and Inches. These measurements will be used to optimize a [route](AdditionalInformation/WhatIsARoute.md) best fit for your height. The default is 5 ft.
 
 **Wingspan:** Similar to height, this is in Feet and Inches and is used alongside height to optimize possible moves during the route calculation. 
 - If you are unsure of your wingspan a good estimate is your height
