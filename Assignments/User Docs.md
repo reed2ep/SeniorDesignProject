@@ -27,12 +27,9 @@ After you have your profile set up the app is ready to use. You have 3 available
 **Open Gallery:** If you would like to take photos for later or do some prep work prior you can select images from your galley instead of using your camera.
 
 ### Step 2: Select a color
-![alt text](image-2.png)
-
-As seen above you will be presented with a screen displaying you selected image.
 To determine a route you need to select a color that best displays the route you want.
 
-The example above has selected pink as the desired path
+For example if you would like to take a route with all red you would select **RED**
 
 ### Step 3: Selecting a start point and end point
 After you select confirm you will be prompted with a picture showing all the detected holds as well as hold type.
