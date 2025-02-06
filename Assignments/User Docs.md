@@ -1,5 +1,5 @@
 # Rock Climber App Guide
-Welcome to Rock Climber, the bouldering path-finding app for Android. New to bouldering? Check out [this](Assignments/AdditionalInformation/WhatIsIndoorBouldering.md) page.
+Welcome to Rock Climber, the bouldering path-finding app for Android. New to bouldering? Check out [this](AdditionalInformation/WhatIsIndoorBouldering.md) page.
 Upon Launching the app you will be greeted with 4 options. 
 If this is your first time using the app you should head to the ***Profile page***.
 ## User Profile
