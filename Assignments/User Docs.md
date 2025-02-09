@@ -28,7 +28,7 @@ After you have your profile set up the app is ready to use. You have 3 available
 
 **[Open Gallery:](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/ImageSelectPage.jpg)** If you would like to take photos for later or do some prep work prior you can select images from your galley instead of using your camera.
 
-### Step 2: Select a color
+### Step 2: [Select a color](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/ColorSelectPage.jpg)
 To determine a route, you need to select a color that best displays the route you want.
 
 For example if you would like to take a route with all red holds you would select **RED**
