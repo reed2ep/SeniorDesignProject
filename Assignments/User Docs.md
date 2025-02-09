@@ -24,7 +24,7 @@ After you have your profile set up the app is ready to use. You have 3 available
 **Saved Paths:** If you already calculated a path you can choose to save it for later. Those paths wil be saved here for future use. 
 
 ### Step 1: Select one of the following options
-**Go to Camera:** Launches camera and allows you to take a live photo of a bouldering problem you would like a path created for.
+**Go to Camera:** Launches [camera](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/UserProfile.jpg) and allows you to take a live photo of a bouldering problem you would like a path created for.
 
 **Open Gallery:** If you would like to take photos for later or do some prep work prior you can select images from your galley instead of using your camera.
 
