@@ -26,7 +26,7 @@ After you have your profile set up the app is ready to use. You have 3 available
 ### Step 1: Select one of the following options
 **[Go to Camera:](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/UserProfile.jpg)** Launches camera and allows you to take a live photo of a bouldering problem you would like a path created for.
 
-**Open Gallery:** If you would like to take photos for later or do some prep work prior you can select images from your galley instead of using your camera.
+**[Open Gallery:](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/ImageSelectPage.jpg)** If you would like to take photos for later or do some prep work prior you can select images from your galley instead of using your camera.
 
 ### Step 2: Select a color
 To determine a route, you need to select a color that best displays the route you want.
