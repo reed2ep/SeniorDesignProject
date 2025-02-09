@@ -33,7 +33,7 @@ To determine a route, you need to select a color that best displays the route yo
 
 For example if you would like to take a route with all red holds you would select **RED**
 
-### Step 3: Selecting a start point and end point
+### Step 3: [Selecting a start point and end point](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/AnnotationPage.jpg)
 After you select confirm you will be prompted with a picture showing all the detected holds as well as hold type.
 
 You are presented with various options:
