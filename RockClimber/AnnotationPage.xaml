@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.AnnotationPage"
              Title="AnnotationPage">
+
     <VerticalStackLayout Padding="20">
         <!-- Image to display the processed image -->
         <Image x:Name="CapturedImage" 
-           WidthRequest="300" 
-           HeightRequest="300" 
-           Aspect="AspectFit" 
-           HorizontalOptions="Center" />
+               WidthRequest="300" 
+               HeightRequest="300" 
+               Aspect="AspectFit" 
+               HorizontalOptions="Center" />
 
         <!-- Holds Dropdown -->
         <Label Text="Select Hold to Edit:" FontAttributes="Bold" />
@@ -19,9 +20,12 @@
         <Label Text="Select or Change Hold Type:" FontAttributes="Bold" />
         <Picker x:Name="HoldTypePicker" Title="Select Hold Type" />
 
-        <!-- Start Hold Dropdown -->
-        <Label Text="Select Start Hold:" FontAttributes="Bold" />
-        <Picker x:Name="StartHoldPicker" Title="Select Start Hold" />
+        <!-- Start Hold Dropdowns for Two-Hand Start -->
+        <Label Text="Select Start1 Hold:" FontAttributes="Bold" />
+        <Picker x:Name="StartHoldPicker" Title="Select Left Start Hold" />
+
+        <Label Text="Select Start2 Hold:" FontAttributes="Bold" />
+        <Picker x:Name="SecondStartHoldPicker" Title="Select Right Start Hold" />
 
         <!-- End Hold Dropdown -->
         <Label Text="Select End Hold:" FontAttributes="Bold" />

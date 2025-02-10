@@ -26,7 +26,6 @@ namespace RockClimber
             PopulateStartAndEndPickers();
         }
 
-
         public enum HoldType
         {
             Jug = 1,
@@ -100,8 +99,12 @@ namespace RockClimber
             HoldsPicker.SelectedIndex = -1;
 
             HoldsPicker.SelectedIndexChanged += OnHoldSelectionChanged;
-        }
 
+            // Add a second StartHoldPicker for the second start hold
+            SecondStartHoldPicker.ItemsSource = holdItems;
+            SecondStartHoldPicker.SelectedIndex = 1; // Default to the second hold
+            SecondStartHoldPicker.SelectedIndexChanged += OnSecondStartHoldChanged;
+        }
 
         private void OnHoldSelectionChanged(object sender, EventArgs e)
         {
@@ -136,7 +139,6 @@ namespace RockClimber
                 RedrawProcessedImage();
             }
         }
-
 
         private void RedrawProcessedImage()
         {
@@ -211,6 +213,7 @@ namespace RockClimber
                 return memoryStream;
             });
         }
+
         private void PopulateStartAndEndPickers()
         {
             var holdItems = _holds.Keys.Select(i => $"Hold {i + 1}").ToList();
@@ -228,6 +231,11 @@ namespace RockClimber
             // Optional: Add event handlers for changes
             StartHoldPicker.SelectedIndexChanged += OnStartHoldChanged;
             EndHoldPicker.SelectedIndexChanged += OnEndHoldChanged;
+
+            // Add a second StartHoldPicker for the second start hold
+            SecondStartHoldPicker.ItemsSource = holdItems;
+            SecondStartHoldPicker.SelectedIndex = 1; // Default to the second hold
+            SecondStartHoldPicker.SelectedIndexChanged += OnSecondStartHoldChanged;
         }
 
         private void OnStartHoldChanged(object sender, EventArgs e)
@@ -236,6 +244,15 @@ namespace RockClimber
             {
                 var selectedStartHold = StartHoldPicker.SelectedItem.ToString();
                 Console.WriteLine($"Start Hold changed to: {selectedStartHold}");
+            }
+        }
+
+        private void OnSecondStartHoldChanged(object sender, EventArgs e)
+        {
+            if (SecondStartHoldPicker.SelectedIndex >= 0)
+            {
+                var selectedSecondStartHold = SecondStartHoldPicker.SelectedItem.ToString();
+                Console.WriteLine($"Second Start Hold changed to: {selectedSecondStartHold}");
             }
         }
 
@@ -259,19 +276,21 @@ namespace RockClimber
 
         private async void OnContinueClicked(object sender, EventArgs e)
         {
-            if (StartHoldPicker.SelectedIndex >= 0 && EndHoldPicker.SelectedIndex >= 0)
+            if (StartHoldPicker.SelectedIndex >= 0 && EndHoldPicker.SelectedIndex >= 0 && SecondStartHoldPicker.SelectedIndex >= 0)
             {
                 // Retrieve selected start and end holds
                 int startIndex = StartHoldPicker.SelectedIndex;
+                int secondStartIndex = SecondStartHoldPicker.SelectedIndex;
                 int endIndex = EndHoldPicker.SelectedIndex;
 
                 var startHold = _holds[startIndex].Rect;
+                var secondStartHold = _holds[secondStartIndex].Rect;
                 var endHold = _holds[endIndex].Rect;
 
                 double maxReach = 150; // Adjust based on climber ability
 
-                // Find best path
-                var path = ClimbingGraph.FindBestRoute(_holds.Values.Select(h => h.Rect).ToList(), startHold, endHold, maxReach);
+                // Find best path between two start holds and the end hold
+                var path = ClimbingGraph.FindBestRoute(_holds.Values.Select(h => h.Rect).ToList(), startHold, secondStartHold, endHold, maxReach);
 
                 if (path == null || path.Count == 0)
                 {
@@ -284,9 +303,10 @@ namespace RockClimber
             }
             else
             {
-                await DisplayAlert("Error", "Please select both start and end holds.", "OK");
+                await DisplayAlert("Error", "Please select both start holds and the end hold.", "OK");
             }
         }
+
         private void DisplayPath(List<Node> path)
         {
             // Reload the original image
@@ -316,6 +336,5 @@ namespace RockClimber
                 return memoryStream;
             });
         }
-
     }
 }
