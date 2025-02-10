@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.AnnotationPage"
-             Title="Annotation Page">
+             Title="AnnotationPage">
 
     <VerticalStackLayout Padding="20">
         <!-- Image to display the processed image -->
@@ -21,11 +21,11 @@
         <Picker x:Name="HoldTypePicker" Title="Select Hold Type" />
 
         <!-- Start Hold Dropdowns for Two-Hand Start -->
-        <Label Text="Select Left Start Hold:" FontAttributes="Bold" />
-        <Picker x:Name="StartHoldPickerLeft" Title="Select Left Start Hold" />
+        <Label Text="Select Start1 Hold:" FontAttributes="Bold" />
+        <Picker x:Name="StartHoldPicker" Title="Select Left Start Hold" />
 
-        <Label Text="Select Right Start Hold:" FontAttributes="Bold" />
-        <Picker x:Name="StartHoldPickerRight" Title="Select Right Start Hold" />
+        <Label Text="Select Start2 Hold:" FontAttributes="Bold" />
+        <Picker x:Name="SecondStartHoldPicker" Title="Select Right Start Hold" />
 
         <!-- End Hold Dropdown -->
         <Label Text="Select End Hold:" FontAttributes="Bold" />

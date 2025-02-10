@@ -71,6 +71,11 @@ public class ClimbingGraph
 
         return Pathfinding.AStar(startNode, goalNode);
     }
+
+    internal static List<Node> FindBestRoute(List<Rectangle> rectangles, Rectangle startHold, Rectangle secondStartHold, Rectangle endHold, double maxReach)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class Node
