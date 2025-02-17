@@ -28,6 +28,9 @@ namespace RockClimber
             _lowerBound = lowerBound;
             _upperBound = upperBound;
 
+            // Initialize the height of the wall
+            LoadWallHeight();
+
             // Initialize the HoldType picker 
             InitializeHoldTypePicker();
 
@@ -447,13 +450,6 @@ namespace RockClimber
 
         private async void OnContinueClicked(object sender, EventArgs e)
         {
-            // Writing hold selections for testing
-            Console.WriteLine($"Right Hand Start Hold: {rightHandStartIndex}");
-            Console.WriteLine($"Left Hand Start Hold: {leftHandStartIndex}");
-            Console.WriteLine($"Right Leg Start Hold: {rightLegStartIndex}");
-            Console.WriteLine($"Left Leg Start Hold: {leftLegStartIndex}");
-            Console.WriteLine($"Right Hand End Hold: {rightHandEndIndex}");
-            Console.WriteLine($"Left Hand End Hold: {leftHandEndIndex}");
 
             // Ensure at least one hand start hold, one leg start hold, and one end hold is selected
             if ((rightHandStartIndex == -1 && leftHandStartIndex == -1) ||
@@ -464,10 +460,11 @@ namespace RockClimber
                 return;
             }
 
-            // Retrieve user saved wingspan
+            // Convert user's max reach (wingspan) to pixels
             int wingspanFeet = Preferences.Get("wingspanFeet", 5);
             int wingspanInches = Preferences.Get("wingspanInches", 0);
-            double maxReach = (wingspanFeet * 12) + wingspanInches;
+            double maxReachFeet = wingspanFeet + (wingspanInches / 12.0);
+            double maxReachPixels = ConvertFeetToPixels(maxReachFeet); // Use helper method
 
             // Retrieve the hold rectangles
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
@@ -478,9 +475,17 @@ namespace RockClimber
             var leftHandEndHold = _holds[leftHandEndIndex].Rect;
 
             // Sending the holds to the pathfinding algorithm
-            // Right now only sending hand start and right end holds
-             var path = ClimbingGraph.FindBestRoute(_holds.Values.Select(h => h.Rect).ToList(), rightHandStartHold, leftHandStartHold, rightHandEndHold, maxReach);
+            var path = ClimbingGraph.FindBestRoute(
+               _holds.Values.Select(h => h.Rect).ToList(),
+               leftHandStartHold,
+               rightHandStartHold,
+               leftLegStartHold,
+               rightLegStartHold,
+               leftHandEndHold,
+               rightHandEndHold,
+               maxReachPixels); // Use pixel-based reach
 
+            // Handle no path found
             if (path == null || path.Count == 0)
             {
                 await DisplayAlert("No Path Found", "No valid climbing path was found.", "OK");
@@ -491,20 +496,21 @@ namespace RockClimber
             }
         }
 
-
         private void DisplayPath(List<Node> path)
         {
             // Reload the original image
             Mat annotatedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
-            // Draw the path
+            // Draw the path for each limb separately
             for (int i = 0; i < path.Count - 1; i++)
             {
-                var start = path[i].Hold;
-                var end = path[i + 1].Hold;
-                System.Drawing.Point startPoint = new System.Drawing.Point(start.X + start.Width / 2, start.Y + start.Height / 2);
-                System.Drawing.Point endPoint = new System.Drawing.Point(end.X + end.Width / 2, end.Y + end.Height / 2);
-                CvInvoke.Line(annotatedImage, startPoint, endPoint, new MCvScalar(0, 0, 255), 2);
+                var current = path[i];
+                var next = path[i + 1];
+
+                DrawMovement(annotatedImage, current.LeftHand, next.LeftHand, new MCvScalar(255, 0, 0));  // Blue for LH
+                DrawMovement(annotatedImage, current.RightHand, next.RightHand, new MCvScalar(0, 255, 0)); // Green for RH
+                DrawMovement(annotatedImage, current.LeftFoot, next.LeftFoot, new MCvScalar(255, 255, 0)); // Yellow for LF
+                DrawMovement(annotatedImage, current.RightFoot, next.RightFoot, new MCvScalar(255, 0, 255)); // Purple for RF
             }
 
             // Display image
@@ -518,6 +524,61 @@ namespace RockClimber
                 }
                 return memoryStream;
             });
+        }
+
+        // Helper method to draw movement lines
+        private void DrawMovement(Mat image, System.Drawing.Rectangle from, System.Drawing.Rectangle to, MCvScalar color)
+        {
+            if (from != to) // Only draw if there is movement
+            {
+                System.Drawing.Point startPoint = new System.Drawing.Point(from.X + from.Width / 2, from.Y + from.Height / 2);
+                System.Drawing.Point endPoint = new System.Drawing.Point(to.X + to.Width / 2, to.Y + to.Height / 2);
+                CvInvoke.Line(image, startPoint, endPoint, color, 2);
+            }
+        }
+
+        private void LoadWallHeight()
+        {
+            // Retrieve stored wall height or default to 15 feet
+            double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
+            WallHeightEntry.Text = wallHeightFeet.ToString();
+        }
+
+        private void OnChangeWallHeightClicked(object sender, EventArgs e)
+        {
+            if (!WallHeightSection.IsVisible)
+            {
+                WallHeightSection.IsVisible = true;
+            }
+            else
+            {
+                if (double.TryParse(WallHeightEntry.Text, out double newWallHeight) && newWallHeight > 0)
+                {
+                    Preferences.Set("wallHeightFeet", newWallHeight);
+                    DisplayAlert("Success", $"Wall height set to {newWallHeight} feet.", "OK");
+                    WallHeightSection.IsVisible = false; // Hide the input field after saving
+                }
+                else
+                {
+                    DisplayAlert("Error", "Please enter a valid wall height.", "OK");
+                }
+            }
+        }
+
+        private double ConvertFeetToPixels(double feet)
+        {
+            // Retrieve stored wall height (default: 15 feet)
+            double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
+
+            // Load the climbing wall image and get height in pixels
+            Mat capturedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
+            int wallHeightPixels = capturedImage.Rows; // Get the image height in pixels
+
+            // Compute scaling factor (pixels per foot)
+            double pixelsPerFoot = wallHeightPixels / wallHeightFeet;
+
+            // Convert feet to pixels
+            return feet * pixelsPerFoot;
         }
     }
 }

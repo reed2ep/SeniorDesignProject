@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.AnnotationPage"
              Title="AnnotationPage">
-    <VerticalStackLayout Padding="20">
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
         <!-- Image to display the processed image -->
         <Image x:Name="CapturedImage" 
            WidthRequest="300" 
@@ -94,6 +95,16 @@
                 <Label Text="Two Hand End Hold Selection" FontSize="Medium" />
                 <Picker x:Name="LeftHandEndPicker" Title="Left Hand End"/>
                 <Picker x:Name="RightHandEndPicker" Title="Right Hand End"/>
+            </StackLayout>
+            
+            <!-- Entry for the height of the wall -->
+            <StackLayout>
+                <Button Text="Change Wall Height" Clicked="OnChangeWallHeightClicked"/>
+                <StackLayout x:Name="WallHeightSection" IsVisible="False">
+                    <Label Text="Wall Height (feet):" FontSize="Medium"/>
+                    <Entry x:Name="WallHeightEntry" Placeholder="Enter wall height" Keyboard="Numeric"/>
+                    <Button Text="Save Wall Height" Clicked="OnChangeWallHeightClicked"/>
+                </StackLayout>
             </StackLayout>
 
             <!-- Save & Continue Buttons -->

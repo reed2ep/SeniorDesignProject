@@ -11,12 +11,6 @@ public static class Pathfinding
         var gScore = new Dictionary<Node, double>();
         var fScore = new Dictionary<Node, double>();
 
-        foreach (var node in start.Connections.Select(e => e.Target))
-        {
-            gScore[node] = double.MaxValue;
-            fScore[node] = double.MaxValue;
-        }
-
         gScore[start] = 0;
         fScore[start] = GetDistance(start, goal);
         openSet.Enqueue(start, fScore[start]);
@@ -25,8 +19,14 @@ public static class Pathfinding
         {
             Node current = openSet.Dequeue();
 
-            if (current == goal)
+            // Check if ALL limbs reached the goal
+            if (current.LeftHand == goal.LeftHand &&
+                current.RightHand == goal.RightHand &&
+                current.LeftFoot == goal.LeftFoot &&
+                current.RightFoot == goal.RightFoot)
+            {
                 return ReconstructPath(cameFrom, current);
+            }
 
             foreach (var edge in current.Connections)
             {
@@ -45,9 +45,15 @@ public static class Pathfinding
         return null;
     }
 
+    // Updated to compare all four limbs
     private static double GetDistance(Node a, Node b)
     {
-        return Math.Sqrt(Math.Pow(a.Hold.X - b.Hold.X, 2) + Math.Pow(a.Hold.Y - b.Hold.Y, 2));
+        double lhDist = Math.Sqrt(Math.Pow(a.LeftHand.X - b.LeftHand.X, 2) + Math.Pow(a.LeftHand.Y - b.LeftHand.Y, 2));
+        double rhDist = Math.Sqrt(Math.Pow(a.RightHand.X - b.RightHand.X, 2) + Math.Pow(a.RightHand.Y - b.RightHand.Y, 2));
+        double lfDist = Math.Sqrt(Math.Pow(a.LeftFoot.X - b.LeftFoot.X, 2) + Math.Pow(a.LeftFoot.Y - b.LeftFoot.Y, 2));
+        double rfDist = Math.Sqrt(Math.Pow(a.RightFoot.X - b.RightFoot.X, 2) + Math.Pow(a.RightFoot.Y - b.RightFoot.Y, 2));
+
+        return lhDist + rhDist + lfDist + rfDist; // Sum of all distances
     }
 
     private static List<Node> ReconstructPath(Dictionary<Node, Node> cameFrom, Node current)

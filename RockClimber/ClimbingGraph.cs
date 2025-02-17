@@ -17,37 +17,86 @@ public class ClimbingGraph
         from.Connections.Add(new Edge(to, cost));
     }
 
-    // Static method to build a graph from detected holds
-    public static ClimbingGraph BuildGraph(List<System.Drawing.Rectangle> holds, double maxReach)
+    public static ClimbingGraph BuildGraph(List<Rectangle> holds, double maxReach)
     {
         ClimbingGraph graph = new ClimbingGraph();
-        Dictionary<System.Drawing.Rectangle, Node> nodeMap = new Dictionary<System.Drawing.Rectangle, Node>();
+        Dictionary<(Rectangle, Rectangle, Rectangle, Rectangle), Node> nodeMap = new();
 
-        // Create nodes for each hold
-        foreach (var hold in holds)
+        // Generate nodes only for reachable hold positions
+        foreach (var lh in holds)
         {
-            Node node = new Node(hold);
-            graph.AddNode(node);
-            nodeMap[hold] = node;
+            foreach (var rh in holds)
+            {
+                if (GetDistance(lh, rh) > maxReach) continue; // Hands must be within reach
+
+                foreach (var lf in holds)
+                {
+                    if (GetDistance(lf, rh) > maxReach) continue; // Feet must be within reach of hands
+
+                    foreach (var rf in holds)
+                    {
+                        if (GetDistance(rf, rh) > maxReach) continue; // Ensure reasonable positioning
+
+                        // Create only valid node states
+                        Node node = new Node(lh, rh, lf, rf);
+                        graph.AddNode(node);
+                        nodeMap[(lh, rh, lf, rf)] = node;
+                    }
+                }
+            }
         }
 
-        // Create edges between reachable holds
+        // Only connect nodes with a valid single-limb transition
         foreach (var nodeA in graph.Nodes)
         {
             foreach (var nodeB in graph.Nodes)
             {
                 if (nodeA == nodeB) continue;
 
-                double distance = GetDistance(nodeA.Hold, nodeB.Hold);
-                if (distance <= maxReach)
+                double cost = GetTransitionCost(nodeA, nodeB, maxReach);
+                if (cost >= 0)
                 {
-                    graph.AddEdge(nodeA, nodeB, distance);
+                    graph.AddEdge(nodeA, nodeB, cost);
                 }
             }
         }
-
+        foreach (var node in graph.Nodes)
+        {
+            Console.WriteLine($"Node Added: LH={node.LeftHand}, RH={node.RightHand}, LF={node.LeftFoot}, RF={node.RightFoot}");
+        }
         return graph;
     }
+
+
+    public static List<Node> FindBestRoute(
+        List<Rectangle> holds,
+        Rectangle leftHandStart,
+        Rectangle rightHandStart,
+        Rectangle leftFootStart,
+        Rectangle rightFootStart,
+        Rectangle leftHandEnd,
+        Rectangle rightHandEnd,
+        double maxReach)
+    {
+        ClimbingGraph graph = BuildGraph(holds, maxReach);
+
+        Node startNode = graph.Nodes.FirstOrDefault(n =>
+            n.LeftHand.Equals(leftHandStart) &&
+            n.RightHand.Equals(rightHandStart) &&
+            n.LeftFoot.Equals(leftFootStart) &&
+            n.RightFoot.Equals(rightFootStart));
+
+
+        Node goalNode = graph.Nodes.FirstOrDefault(n =>
+            n.LeftHand.Equals(leftHandEnd) &&
+            n.RightHand.Equals(rightHandEnd));
+
+        if (startNode == null || goalNode == null)
+            throw new Exception("Start or goal holds not found in graph.");
+
+        return Pathfinding.AStar(startNode, goalNode);
+    }
+
 
     private static double GetDistance(System.Drawing.Rectangle holdA, System.Drawing.Rectangle holdB)
     {
@@ -59,33 +108,66 @@ public class ClimbingGraph
         return Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
     }
 
-    public static List<Node> FindBestRoute(List<System.Drawing.Rectangle> holds, System.Drawing.Rectangle startHold, System.Drawing.Rectangle goalHold, double maxReach)
+    private static double GetTransitionCost(Node current, Node next, double maxReach)
     {
-        ClimbingGraph graph = BuildGraph(holds, maxReach);
+        int moveCount = 0;
+        double cost = 0;
 
-        Node startNode = graph.Nodes.FirstOrDefault(n => n.Hold == startHold);
-        Node goalNode = graph.Nodes.FirstOrDefault(n => n.Hold == goalHold);
+        if (current.LeftHand != next.LeftHand)
+        {
+            if (!IsReachable(current.LeftHand, next.LeftHand, maxReach)) return -1;
+            moveCount++;
+            cost += GetDistance(current.LeftHand, next.LeftHand);
+        }
 
-        if (startNode == null || goalNode == null)
-            throw new Exception("Start or goal hold not found in graph.");
+        if (current.RightHand != next.RightHand)
+        {
+            if (!IsReachable(current.RightHand, next.RightHand, maxReach)) return -1;
+            moveCount++;
+            cost += GetDistance(current.RightHand, next.RightHand);
+        }
 
-        return Pathfinding.AStar(startNode, goalNode);
+        if (current.LeftFoot != next.LeftFoot)
+        {
+            if (!IsReachable(current.LeftFoot, next.LeftFoot, maxReach)) return -1;
+            moveCount++;
+            cost += GetDistance(current.LeftFoot, next.LeftFoot);
+        }
+
+        if (current.RightFoot != next.RightFoot)
+        {
+            if (!IsReachable(current.RightFoot, next.RightFoot, maxReach)) return -1;
+            moveCount++;
+            cost += GetDistance(current.RightFoot, next.RightFoot);
+        }
+
+        if (moveCount > 1) return -1; // Only allow one limb movement at a time
+
+        return cost;
     }
 
-    internal static List<Node> FindBestRoute(List<Rectangle> rectangles, Rectangle startHold, Rectangle secondStartHold, Rectangle endHold, double maxReach)
+    private static bool IsReachable(Rectangle from, Rectangle to, double maxReach)
     {
-        throw new NotImplementedException();
+        double distance = GetDistance(from, to);
+        return distance <= maxReach; // Only allow movements within reach
     }
 }
 
 public class Node
 {
-    public System.Drawing.Rectangle Hold { get; }
+    public Rectangle LeftHand { get; }
+    public Rectangle RightHand { get; }
+    public Rectangle LeftFoot { get; }
+    public Rectangle RightFoot { get; }
+
     public List<Edge> Connections { get; } = new List<Edge>();
 
-    public Node(System.Drawing.Rectangle hold)
+    public Node(Rectangle lh, Rectangle rh, Rectangle lf, Rectangle rf)
     {
-        Hold = hold;
+        LeftHand = lh;
+        RightHand = rh;
+        LeftFoot = lf;
+        RightFoot = rf;
     }
 }
 
