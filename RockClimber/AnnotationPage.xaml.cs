@@ -235,24 +235,26 @@ namespace RockClimber
         }
         private void OnEditHoldClicked(object sender, EventArgs e)
         {
-            HoldEditSection.IsVisible = true;
-            HoldsPicker.IsEnabled = true;
-            HoldTypePicker.IsEnabled = true;
+            HoldEditSection.IsVisible = !HoldEditSection.IsVisible;
+            HoldsPicker.IsEnabled = HoldEditSection.IsVisible;
+            HoldTypePicker.IsEnabled = HoldEditSection.IsVisible;
         }
 
         private void OnEditStartHoldsClicked(object sender, EventArgs e)
         {
-            // Display checkboxes for end hold assignment
-            EndHoldDisplay.IsVisible = true;
-            OneEndCheckSection.IsVisible = true;
-            TwoEndCheckSection.IsVisible = true;
+            bool isVisible = !StartHoldDisplay.IsVisible;
 
-            // Display checkboxes for start hold assignment
-            StartHoldDisplay.IsVisible = true;
-            OneStartCheckSection.IsVisible = true;
-            TwoStartCheckSection.IsVisible = true;
-            OneLegCheckSection.IsVisible = true;
-            TwoLegCheckSection.IsVisible = true;
+            // Toggle visibility for start hold selection sections
+            StartHoldDisplay.IsVisible = isVisible;
+            OneStartCheckSection.IsVisible = isVisible;
+            TwoStartCheckSection.IsVisible = isVisible;
+            OneLegCheckSection.IsVisible = isVisible;
+            TwoLegCheckSection.IsVisible = isVisible;
+
+            // Toggle visibility for end hold selection sections
+            EndHoldDisplay.IsVisible = isVisible;
+            OneEndCheckSection.IsVisible = isVisible;
+            TwoEndCheckSection.IsVisible = isVisible;
         }
 
         private void OnOneHandEndChecked(object sender, CheckedChangedEventArgs e)

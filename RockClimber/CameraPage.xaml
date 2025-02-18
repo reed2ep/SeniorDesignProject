@@ -2,22 +2,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.CameraPage"
              Title="CameraPage">
-	<VerticalStackLayout Padding="20" Spacing="15">
-		<!-- Button to capture a photo -->
-		<Button Text="Capture Photo"
-                Clicked="OnCapturePhotoClicked"
-                HorizontalOptions="Center"/>
+    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" Padding="10">
 
-		<!-- Image to display the captured/processed photo -->
-		<Image x:Name="CapturedImage"
-               WidthRequest="400"
-               HeightRequest="400"
-               Aspect="AspectFit"
+        <!-- Top Bar for Buttons -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="10">
+            <Button Text="Retake Picture"
+                    Clicked="OnCapturePhotoClicked"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"/>
+        </Grid>
+
+        <!-- Image fills the screen below the buttons -->
+        <Grid Grid.Row="1">
+            <Image x:Name="CapturedImage"
+                   Aspect="AspectFill"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand"/>
+        </Grid>
+
+        <!-- Label for color selection -->
+        <Label Text="Select Hold Color"
+               Grid.Row="2"
+               FontSize="18"
                HorizontalOptions="Center"/>
-        
+
         <!-- Dropdown for selecting the hold color -->
-        <Label Text="Select Hold Color" FontSize="18" HorizontalOptions="Center" />
-        <Picker x:Name="ColorPicker" Title="Choose a color" SelectedIndexChanged="OnColorSelected" HorizontalOptions="Center">
+        <Picker x:Name="ColorPicker"
+                Title="Choose a color"
+                SelectedIndexChanged="OnColorSelected"
+                Grid.Row="3"
+                HorizontalOptions="Center"
+                WidthRequest="200">
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>Pink</x:String>
@@ -33,6 +49,13 @@
                 </x:Array>
             </Picker.ItemsSource>
         </Picker>
-        <Button x:Name="ConfirmButton" Text="Confirm" Clicked="OnConfirmButtonClicked" IsVisible="False" />
-    </VerticalStackLayout>
+
+        <!-- Confirm Button (Initially Hidden) at the bottom -->
+        <Button x:Name="ConfirmButton"
+                Text="Confirm"
+                Clicked="OnConfirmButtonClicked"
+                Grid.Row="4"
+                HorizontalOptions="Center"
+                IsVisible="False"/>
+    </Grid>
 </ContentPage>

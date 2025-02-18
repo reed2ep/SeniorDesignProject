@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui.Media;
+﻿using CommunityToolkit.Maui.Media;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Microsoft.Maui.Controls;
@@ -8,13 +8,15 @@ using System.IO;
 using Android.Graphics; // For Android.Graphics.Bitmap
 using Microsoft.Maui.Dispatching;
 
+
 namespace RockClimber
 {
     public partial class CameraPage : ContentPage
     {
-        private string _imagePath;
+        private string _imagePath = string.Empty;
         private MCvScalar _lowerBound;
         private MCvScalar _upperBound;
+
         public CameraPage()
         {
             InitializeComponent();
@@ -50,6 +52,7 @@ namespace RockClimber
                 await DisplayAlert("Error", $"Unable to capture photo: {ex.Message}", "OK");
             }
         }
+
         private void OnColorSelected(object sender, EventArgs e)
         {
             // Get the selected color from the Picker
