@@ -97,7 +97,16 @@
                     <Picker x:Name="RightHandEndPicker" Title="Right Hand End"/>
                 </StackLayout>
 
-                <!-- Save & Continue Buttons -->
+                <!-- Entry for the height of the wall -->
+                <StackLayout>
+                    <Button Text="Change Wall Height" Clicked="OnChangeWallHeightClicked"/>
+                    <StackLayout x:Name="WallHeightSection" IsVisible="False">
+                        <Label Text="Wall Height (feet):" FontSize="Medium"/>
+                        <Entry x:Name="WallHeightEntry" Placeholder="Enter wall height" Keyboard="Numeric"/>
+                        <Button Text="Save Wall Height" Clicked="OnChangeWallHeightClicked"/>
+                    </StackLayout>
+                </StackLayout>
+            <!-- Save & Continue Buttons -->
                 <Button Text="Save Changes" Clicked="OnSaveClicked" />
             <Button Text="Continue to Next Step" Clicked="OnContinueClicked" />
         </VerticalStackLayout>

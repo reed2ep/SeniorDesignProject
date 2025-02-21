@@ -28,6 +28,8 @@ namespace RockClimber
             _lowerBound = lowerBound;
             _upperBound = upperBound;
 
+            // Initialize the height of the wall
+            LoadWallHeight();
             // Initialize the HoldType picker 
             InitializeHoldTypePicker();
 
@@ -438,81 +440,94 @@ namespace RockClimber
             RightLegPicker.IsEnabled = false;
         }
 
-        private static Android.Graphics.Bitmap BitmapFromMat(Mat mat)
-        {
-            using (var image = mat.ToImage<Bgr, byte>()) // Convert Mat to Emgu Image
-            {
-                byte[] imageBytes = image.ToJpegData(100); // Convert to JPEG data
-                return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length); // Decode as Android Bitmap
-            }
-        }
-
         private async void OnContinueClicked(object sender, EventArgs e)
         {
-            // Writing hold selections for testing
+            // Log the selected indices.
             Console.WriteLine($"Right Hand Start Hold: {rightHandStartIndex}");
             Console.WriteLine($"Left Hand Start Hold: {leftHandStartIndex}");
             Console.WriteLine($"Right Leg Start Hold: {rightLegStartIndex}");
             Console.WriteLine($"Left Leg Start Hold: {leftLegStartIndex}");
-            Console.WriteLine($"Right Hand End Hold: {rightHandEndIndex}");
-            Console.WriteLine($"Left Hand End Hold: {leftHandEndIndex}");
+            Console.WriteLine($"Right Hand Finish Hold: {rightHandEndIndex}");
+            Console.WriteLine($"Left Hand Finish Hold: {leftHandEndIndex}");
 
-            // Ensure at least one hand start hold, one leg start hold, and one end hold is selected
+            // Check that at least one start hold and one finish hold are selected.
             if ((rightHandStartIndex == -1 && leftHandStartIndex == -1) ||
-                (rightLegStartIndex == -1 && leftLegStartIndex == -1) ||
                 (rightHandEndIndex == -1 && leftHandEndIndex == -1))
             {
-                await DisplayAlert("Error", "Please select at least one hand start hold, one leg start hold, and one end hold.", "OK");
+                await DisplayAlert("Error", "Please select at least one hand start hold and one finish hold.", "OK");
                 return;
             }
 
-            // Retrieve user saved wingspan
+            // Retrieve user wingspan and compute max reach.
             int wingspanFeet = Preferences.Get("wingspanFeet", 5);
             int wingspanInches = Preferences.Get("wingspanInches", 0);
-            double maxReach = (wingspanFeet * 12) + wingspanInches;
+            double maxReachFeet = wingspanFeet + (wingspanInches / 12.0);
+            double maxReachPixels = ConvertFeetToPixels(maxReachFeet); // Use helper method
 
-            // Retrieve the hold rectangles
+            // Retrieve all detected holds.
+            var allHolds = _holds.Values.Select(h => h.Rect).ToList();
+
+            // Retrieve start holds for hands and legs.
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
             var leftHandStartHold = _holds[leftHandStartIndex].Rect;
             var rightLegStartHold = _holds[rightLegStartIndex].Rect;
             var leftLegStartHold = _holds[leftLegStartIndex].Rect;
-            var rightHandEndHold = _holds[rightHandEndIndex].Rect;
-            var leftHandEndHold = _holds[leftHandEndIndex].Rect;
 
-            // Sending the holds to the pathfinding algorithm
-            // Right now only sending hand start and right end holds
-             var path = ClimbingGraph.FindBestRoute(_holds.Values.Select(h => h.Rect).ToList(), rightHandStartHold, leftHandStartHold, rightHandEndHold, maxReach);
+            // Retrieve finish holds for hands.
+            var rightHandFinishHold = _holds[rightHandEndIndex].Rect;
+            // If a left-hand finish hold isn’t provided, both hands and legs use the right-hand finish.
+            System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex)
+                ? _holds[leftHandEndIndex].Rect
+                : (System.Drawing.Rectangle?)null;
 
-            if (path == null || path.Count == 0)
+            Dictionary<string, List<Node>> climbingPaths = null;
+            try
             {
-                await DisplayAlert("No Path Found", "No valid climbing path was found.", "OK");
+                climbingPaths = ClimbingGraph.FindClimbingPaths(
+                    allHolds,
+                    rightHandStartHold,
+                    leftHandStartHold,
+                    rightLegStartHold,
+                    leftLegStartHold,
+                    rightHandFinishHold,
+                    leftHandFinishHold,
+                    maxReachPixels);
             }
-            else
+            catch (Exception ex)
             {
-                DisplayPath(path);
+                await DisplayAlert("Error", ex.Message, "OK");
+                return;
             }
+
+            if (climbingPaths.Values.Any(path => path == null || path.Count == 0))
+            {
+                await DisplayAlert("No Path Found", "No valid climbing path was found for one or more limbs.", "OK");
+                return;
+            }
+
+            // Display the computed climbing paths (both hands and legs).
+            DisplayClimbingPaths(climbingPaths);
         }
 
-
-        private void DisplayPath(List<Node> path)
+        private void DisplayClimbingPaths(Dictionary<string, List<Node>> paths)
         {
-            // Reload the original image
+            // Reload the original image.
             Mat annotatedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
-            // Draw the path
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                var start = path[i].Hold;
-                var end = path[i + 1].Hold;
-                System.Drawing.Point startPoint = new System.Drawing.Point(start.X + start.Width / 2, start.Y + start.Height / 2);
-                System.Drawing.Point endPoint = new System.Drawing.Point(end.X + end.Width / 2, end.Y + end.Height / 2);
-                CvInvoke.Line(annotatedImage, startPoint, endPoint, new MCvScalar(0, 0, 255), 2);
-            }
+            // Draw each limb's path with a distinct color and slight offset:
+            if (paths.ContainsKey("RightHand"))
+                DrawPathWithOffset(annotatedImage, paths["RightHand"], new MCvScalar(0, 0, 255), 0, 0);    // Red, no offset.
+            if (paths.ContainsKey("LeftHand"))
+                DrawPathWithOffset(annotatedImage, paths["LeftHand"], new MCvScalar(255, 0, 0), 3, 3);     // Blue, offset a bit.
+            if (paths.ContainsKey("RightLeg"))
+                DrawPathWithOffset(annotatedImage, paths["RightLeg"], new MCvScalar(0, 255, 0), -3, -3);    // Green, offset negatively.
+            if (paths.ContainsKey("LeftLeg"))
+                DrawPathWithOffset(annotatedImage, paths["LeftLeg"], new MCvScalar(0, 255, 255), 3, -3);    // Yellow, different offset.
 
-            // Display image
+            // Update the displayed image.
             CapturedImage.Source = ImageSource.FromStream(() =>
             {
-                var memoryStream = new System.IO.MemoryStream();
+                var memoryStream = new MemoryStream();
                 using (var androidBitmap = BitmapFromMat(annotatedImage))
                 {
                     androidBitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 100, memoryStream);
@@ -520,6 +535,91 @@ namespace RockClimber
                 }
                 return memoryStream;
             });
+        }
+
+
+        private void DrawPathWithOffset(Mat image, List<Node> path, MCvScalar color, int offsetX, int offsetY)
+        {
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var startRect = path[i].Hold;
+                var endRect = path[i + 1].Hold;
+                System.Drawing.Point startPoint = new System.Drawing.Point(
+                    startRect.X + startRect.Width / 2 + offsetX,
+                    startRect.Y + startRect.Height / 2 + offsetY);
+                System.Drawing.Point endPoint = new System.Drawing.Point(
+                    endRect.X + endRect.Width / 2 + offsetX,
+                    endRect.Y + endRect.Height / 2 + offsetY);
+                CvInvoke.Line(image, startPoint, endPoint, color, 2);
+            }
+        }
+
+
+        // Helper method to draw a path by connecting the centers of holds.
+        private void DrawPath(Mat image, List<Node> path, MCvScalar color)
+        {
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var startRect = path[i].Hold;
+                var endRect = path[i + 1].Hold;
+                System.Drawing.Point startPoint = new System.Drawing.Point(startRect.X + startRect.Width / 2, startRect.Y + startRect.Height / 2);
+                System.Drawing.Point endPoint = new System.Drawing.Point(endRect.X + endRect.Width / 2, endRect.Y + endRect.Height / 2);
+                CvInvoke.Line(image, startPoint, endPoint, color, 2);
+            }
+        }
+
+        // Helper to convert an Emgu CV Mat to an Android Bitmap.
+        private static Android.Graphics.Bitmap BitmapFromMat(Mat mat)
+        {
+            using (var image = mat.ToImage<Bgr, byte>())
+            {
+                byte[] imageBytes = image.ToJpegData(100);
+                return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+            }
+        }
+
+        private void LoadWallHeight()
+        {
+            // Retrieve stored wall height or default to 15 feet
+            double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
+            WallHeightEntry.Text = wallHeightFeet.ToString();
+        }
+
+        private void OnChangeWallHeightClicked(object sender, EventArgs e)
+        {
+            if (!WallHeightSection.IsVisible)
+            {
+                WallHeightSection.IsVisible = true;
+            }
+            else
+            {
+                if (double.TryParse(WallHeightEntry.Text, out double newWallHeight) && newWallHeight > 0)
+                {
+                    Preferences.Set("wallHeightFeet", newWallHeight);
+                    DisplayAlert("Success", $"Wall height set to {newWallHeight} feet.", "OK");
+                    WallHeightSection.IsVisible = false; // Hide the input field after saving
+                }
+                else
+                {
+                    DisplayAlert("Error", "Please enter a valid wall height.", "OK");
+                }
+            }
+        }
+
+        private double ConvertFeetToPixels(double feet)
+        {
+            // Retrieve stored wall height (default: 15 feet)
+            double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
+
+            // Load the climbing wall image and get height in pixels
+            Mat capturedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
+            int wallHeightPixels = capturedImage.Rows; // Get the image height in pixels
+
+            // Compute scaling factor (pixels per foot)
+            double pixelsPerFoot = wallHeightPixels / wallHeightFeet;
+
+            // Convert feet to pixels
+            return feet * pixelsPerFoot;
         }
     }
 }
