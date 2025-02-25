@@ -2,16 +2,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.AnnotationPage"
              Title="AnnotationPage">
-    <ScrollView>
-        <VerticalStackLayout Padding="20">
-            <!-- Image to display the processed image -->
-            <Image x:Name="CapturedImage" 
-               WidthRequest="300" 
-               HeightRequest="300" 
-               Aspect="AspectFit" 
-               HorizontalOptions="Center" />
+
+    <!-- Grid to structure the page into two sections dynamically -->
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ImageColumn" Width="*" />
+            <ColumnDefinition x:Name="ListColumn" Width="0" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Side: Image and Controls -->
+        <ScrollView Grid.Column="0">
+            <VerticalStackLayout Padding="20">
+                <!-- Image Display -->
+                <Image x:Name="CapturedImage"
+                       Aspect="AspectFill"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="FillAndExpand"/>
 
                 <!-- Buttons -->
+                <Button Text="List Hold Types" Clicked="OnListHoldTypesClicked"/>
                 <Button Text="Edit Hold" Clicked="OnEditHoldClicked"/>
                 <Button Text="Edit Start and End Holds" Clicked="OnEditStartHoldsClicked"/>
 
@@ -26,7 +35,7 @@
                 <StackLayout x:Name="StartHoldDisplay" IsVisible="False">
                     <Label Text="Edit Start Hold Section" FontSize="Medium" FontAttributes="Bold"/>
                 </StackLayout>
-            
+
                 <HorizontalStackLayout x:Name="OneStartCheckSection" IsVisible="False">
                     <CheckBox x:Name="OneHandStartCheckBox" CheckedChanged="OnOneHandStartChecked"/>
                     <Label Text="One Hand Start"/>
@@ -99,7 +108,14 @@
 
                 <!-- Save & Continue Buttons -->
                 <Button Text="Save Changes" Clicked="OnSaveClicked" />
-            <Button Text="Continue to Next Step" Clicked="OnContinueClicked" />
-        </VerticalStackLayout>
-    </ScrollView>
+                <Button Text="Continue to Next Step" Clicked="OnContinueClicked" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Right Side: Hold List Sidebar (Initially Hidden) -->
+        <StackLayout x:Name="HoldListSection" Grid.Column="1" IsVisible="False" Padding="10">
+            <Label Text="Hold List" FontSize="Medium" FontAttributes="Bold"/>
+            <ListView x:Name="HoldListView"/>
+        </StackLayout>
+    </Grid>
 </ContentPage>
