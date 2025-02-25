@@ -450,7 +450,7 @@ namespace RockClimber
             Console.WriteLine($"Right Hand Finish Hold: {rightHandEndIndex}");
             Console.WriteLine($"Left Hand Finish Hold: {leftHandEndIndex}");
 
-            // Check that at least one start hold and one finish hold are selected.
+            // Check that at least one hand start hold and one finish hold are selected.
             if ((rightHandStartIndex == -1 && leftHandStartIndex == -1) ||
                 (rightHandEndIndex == -1 && leftHandEndIndex == -1))
             {
@@ -461,8 +461,10 @@ namespace RockClimber
             // Retrieve user wingspan and compute max reach.
             int wingspanFeet = Preferences.Get("wingspanFeet", 5);
             int wingspanInches = Preferences.Get("wingspanInches", 0);
-            double maxReachFeet = wingspanFeet + (wingspanInches / 12.0);
-            double maxReachPixels = ConvertFeetToPixels(maxReachFeet); // Use helper method
+            double wingspanTotal = wingspanFeet + (wingspanInches / 12.0);
+            // Effective arm length is roughly half the wingspan, adjusted by a factor (e.g., 0.9) to account for shoulder position.
+            double effectiveArmLengthFeet = (wingspanTotal / 2.0) * 0.9;
+            double maxReachPixels = ConvertFeetToPixels(effectiveArmLengthFeet);
 
             // Retrieve all detected holds.
             var allHolds = _holds.Values.Select(h => h.Rect).ToList();
@@ -475,20 +477,26 @@ namespace RockClimber
 
             // Retrieve finish holds for hands.
             var rightHandFinishHold = _holds[rightHandEndIndex].Rect;
-            // If a left-hand finish hold isn’t provided, both hands and legs use the right-hand finish.
+            // If a left-hand finish hold isn’t provided, use the right-hand finish for both.
             System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex)
                 ? _holds[leftHandEndIndex].Rect
                 : (System.Drawing.Rectangle?)null;
 
-            Dictionary<string, List<Node>> climbingPaths = null;
+            // Build the initial configuration.
+            var startConfig = new LimbConfiguration
+            {
+                RightHand = rightHandStartHold,
+                LeftHand = leftHandStartHold,
+                RightLeg = rightLegStartHold,
+                LeftLeg = leftLegStartHold
+            };
+
+            List<Move> routeMoves = null;
             try
             {
-                climbingPaths = ClimbingGraph.FindClimbingPaths(
+                routeMoves = RoutePlanner.PlanSequentialRoute(
                     allHolds,
-                    rightHandStartHold,
-                    leftHandStartHold,
-                    rightLegStartHold,
-                    leftLegStartHold,
+                    startConfig,
                     rightHandFinishHold,
                     leftHandFinishHold,
                     maxReachPixels);
@@ -499,30 +507,53 @@ namespace RockClimber
                 return;
             }
 
-            if (climbingPaths.Values.Any(path => path == null || path.Count == 0))
+            if (routeMoves == null || routeMoves.Count == 0)
             {
-                await DisplayAlert("No Path Found", "No valid climbing path was found for one or more limbs.", "OK");
+                await DisplayAlert("No Path Found", "No valid sequential climbing moves were found.", "OK");
                 return;
             }
 
-            // Display the computed climbing paths (both hands and legs).
-            DisplayClimbingPaths(climbingPaths);
+            // Optionally, log the moves.
+            foreach (var move in routeMoves)
+            {
+                Console.WriteLine($"{move.Limb} moved from {move.From} to {move.To}");
+            }
+
+            // Now, draw the sequence of moves.
+            DisplaySequentialRoute(routeMoves);
         }
 
-        private void DisplayClimbingPaths(Dictionary<string, List<Node>> paths)
+        private void DisplaySequentialRoute(List<Move> moves)
         {
             // Reload the original image.
             Mat annotatedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
-            // Draw each limb's path with a distinct color and slight offset:
-            if (paths.ContainsKey("RightHand"))
-                DrawPathWithOffset(annotatedImage, paths["RightHand"], new MCvScalar(0, 0, 255), 0, 0);    // Red, no offset.
-            if (paths.ContainsKey("LeftHand"))
-                DrawPathWithOffset(annotatedImage, paths["LeftHand"], new MCvScalar(255, 0, 0), 3, 3);     // Blue, offset a bit.
-            if (paths.ContainsKey("RightLeg"))
-                DrawPathWithOffset(annotatedImage, paths["RightLeg"], new MCvScalar(0, 255, 0), -3, -3);    // Green, offset negatively.
-            if (paths.ContainsKey("LeftLeg"))
-                DrawPathWithOffset(annotatedImage, paths["LeftLeg"], new MCvScalar(0, 255, 255), 3, -3);    // Yellow, different offset.
+            // For each move, draw a small line from the "from" center to the "to" center.
+            foreach (var move in moves)
+            {
+                var color = new MCvScalar(0, 0, 0); // default black
+                                                    // Choose a color based on the limb.
+                switch (move.Limb)
+                {
+                    case Limb.RightHand:
+                        color = new MCvScalar(0, 0, 255); // Red
+                        break;
+                    case Limb.LeftHand:
+                        color = new MCvScalar(255, 0, 0); // Blue
+                        break;
+                    case Limb.RightLeg:
+                        color = new MCvScalar(0, 255, 0); // Green
+                        break;
+                    case Limb.LeftLeg:
+                        color = new MCvScalar(0, 255, 255); // Yellow
+                        break;
+                }
+                var startRect = move.From;
+                var endRect = move.To;
+                System.Drawing.Point startPoint = new System.Drawing.Point(startRect.X + startRect.Width / 2, startRect.Y + startRect.Height / 2);
+                System.Drawing.Point endPoint = new System.Drawing.Point(endRect.X + endRect.Width / 2, endRect.Y + endRect.Height / 2);
+                CvInvoke.Line(annotatedImage, startPoint, endPoint, color, 2);
+            }
 
             // Update the displayed image.
             CapturedImage.Source = ImageSource.FromStream(() =>
