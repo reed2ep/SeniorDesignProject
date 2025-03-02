@@ -20,7 +20,6 @@ namespace RockClimber
         private int rightHandEndIndex = -1;
         private int leftHandEndIndex = -1;
 
-
         public AnnotationPage(string imagePath, MCvScalar lowerBound, MCvScalar upperBound)
         {
             InitializeComponent();
@@ -28,6 +27,8 @@ namespace RockClimber
             _lowerBound = lowerBound;
             _upperBound = upperBound;
 
+            // Initialize the height of the wall
+            LoadWallHeight();
             // Initialize the HoldType picker 
             InitializeHoldTypePicker();
 
@@ -100,35 +101,6 @@ namespace RockClimber
             }
         }
 
-
-        private void OnListHoldTypesClicked(object sender, EventArgs e)
-        {
-            // Populate the hold list in the correct format: "1: Jug"
-            HoldListView.ItemsSource = _holds
-                .OrderBy(h => h.Key)
-                .Select(h => $"{h.Key + 1}: {h.Value.Type}")
-                .ToList();
-
-            // Toggle visibility of the hold list
-            HoldListSection.IsVisible = !HoldListSection.IsVisible;
-
-            // Adjust the layout dynamically to show/hide the hold list
-            if (HoldListSection.IsVisible)
-            {
-                // Shrink image section and show the list
-                ImageColumn.Width = new GridLength(3, GridUnitType.Star);
-                ListColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
-            else
-            {
-                // Hide the list and return to full-screen mode
-                ImageColumn.Width = new GridLength(1, GridUnitType.Star);
-                ListColumn.Width = new GridLength(0, GridUnitType.Absolute);
-            }
-        }
-
-
-
         private void RedrawProcessedImage()
         {
             // Reload the original image
@@ -171,15 +143,6 @@ namespace RockClimber
                 }
                 return memoryStream;
             });
-        }
-
-
-
-        private void RefreshHoldsDisplay()
-        {
-            HoldsPicker.ItemsSource = _holds
-                .Select(kvp => $"Hold {kvp.Key + 1}: {kvp.Value.Type}")
-                .ToList();
         }
 
         private void DisplayProcessedImage(Mat image)
@@ -253,15 +216,6 @@ namespace RockClimber
             LeftLegPicker.ItemsSource = holdItems;
         }
 
-        private void OnHoldSelectionChanged(object sender, EventArgs e)
-        {
-            if (HoldsPicker.SelectedIndex >= 0)
-            {
-                int selectedHoldIndex = HoldsPicker.SelectedIndex;
-                HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
-            }
-        }
-
         private void InitializeHoldTypePicker()
         {
             HoldTypePicker.ItemsSource = Enum.GetValues(typeof(HoldType))
@@ -270,6 +224,117 @@ namespace RockClimber
                                              .ToList();
             HoldTypePicker.SelectedIndexChanged += OnHoldTypeChanged;
             HoldTypePicker.IsEnabled = false;
+        }
+
+        private void SaveSelections(object sender, EventArgs e)
+        {
+            // Save Start Hold Selections
+            if (StartHoldPicker.SelectedIndex >= 0)
+            {
+                rightHandStartIndex = StartHoldPicker.SelectedIndex;
+                leftHandStartIndex = StartHoldPicker.SelectedIndex;
+                Console.WriteLine($"Start Hold selected: {StartHoldPicker.SelectedItem}");
+            }
+
+            if (RightStartPicker.SelectedIndex >= 0)
+            {
+                rightHandStartIndex = RightStartPicker.SelectedIndex;
+                Console.WriteLine($"Right Hand Start Hold: {RightStartPicker.SelectedItem}");
+            }
+
+            if (LeftStartPicker.SelectedIndex >= 0)
+            {
+                leftHandStartIndex = LeftStartPicker.SelectedIndex;
+                Console.WriteLine($"Left Hand Start Hold: {LeftStartPicker.SelectedItem}");
+            }
+
+            if (StartLegPicker.SelectedIndex >= 0)
+            {
+                rightLegStartIndex = StartLegPicker.SelectedIndex;
+                leftLegStartIndex = StartLegPicker.SelectedIndex;
+                Console.WriteLine($"Leg Start Hold: {StartLegPicker.SelectedItem}");
+            }
+
+            if (RightLegPicker.SelectedIndex >= 0)
+            {
+                rightLegStartIndex = RightLegPicker.SelectedIndex;
+                Console.WriteLine($"Right Leg Start Hold: {RightLegPicker.SelectedItem}");
+            }
+
+            if (LeftLegPicker.SelectedIndex >= 0)
+            {
+                leftLegStartIndex = LeftLegPicker.SelectedIndex;
+                Console.WriteLine($"Left Leg Start Hold: {LeftLegPicker.SelectedItem}");
+            }
+
+            // Save End Hold Selections
+            if (EndHoldPicker.SelectedIndex >= 0)
+            {
+                rightHandEndIndex = EndHoldPicker.SelectedIndex;
+                leftHandEndIndex = EndHoldPicker.SelectedIndex;
+                Console.WriteLine($"End Hold selected: {EndHoldPicker.SelectedItem}");
+            }
+
+            if (RightHandEndPicker.SelectedIndex >= 0)
+            {
+                rightHandEndIndex = RightHandEndPicker.SelectedIndex;
+                Console.WriteLine($"Right Hand End Hold: {RightHandEndPicker.SelectedItem}");
+            }
+
+            if (LeftHandEndPicker.SelectedIndex >= 0)
+            {
+                leftHandEndIndex = LeftHandEndPicker.SelectedIndex;
+                Console.WriteLine($"Left Hand End Hold: {LeftHandEndPicker.SelectedItem}");
+            }
+        }
+
+
+        private void AttachPickerEventHandlers()
+        {
+            EndHoldPicker.SelectedIndexChanged += SaveSelections;
+            RightHandEndPicker.SelectedIndexChanged += SaveSelections;
+            LeftHandEndPicker.SelectedIndexChanged += SaveSelections;
+            StartHoldPicker.SelectedIndexChanged += SaveSelections;
+            RightStartPicker.SelectedIndexChanged += SaveSelections;
+            LeftStartPicker.SelectedIndexChanged += SaveSelections;
+            RightLegPicker.SelectedIndexChanged += SaveSelections;
+            LeftLegPicker.SelectedIndexChanged += SaveSelections;
+        }
+
+        #region Event Handlers
+        private void OnListHoldTypesClicked(object sender, EventArgs e)
+        {
+            // Populate the hold list in the correct format: "1: Jug"
+            HoldListView.ItemsSource = _holds
+                .OrderBy(h => h.Key)
+                .Select(h => $"{h.Key + 1}: {h.Value.Type}")
+                .ToList();
+
+            // Toggle visibility of the hold list
+            HoldListSection.IsVisible = !HoldListSection.IsVisible;
+
+            // Adjust the layout dynamically to show/hide the hold list
+            if (HoldListSection.IsVisible)
+            {
+                // Shrink image section and show the list
+                ImageColumn.Width = new GridLength(3, GridUnitType.Star);
+                ListColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
+            else
+            {
+                // Hide the list and return to full-screen mode
+                ImageColumn.Width = new GridLength(1, GridUnitType.Star);
+                ListColumn.Width = new GridLength(0, GridUnitType.Absolute);
+            }
+        }
+
+        private void OnHoldSelectionChanged(object sender, EventArgs e)
+        {
+            if (HoldsPicker.SelectedIndex >= 0)
+            {
+                int selectedHoldIndex = HoldsPicker.SelectedIndex;
+                HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
+            }
         }
 
         private void OnHoldTypeChanged(object sender, EventArgs e)
@@ -380,81 +445,6 @@ namespace RockClimber
             LeftLegPicker.IsEnabled = e.Value;
         }
 
-        private void SaveSelections(object sender, EventArgs e)
-        {
-            // Save Start Hold Selections
-            if (StartHoldPicker.SelectedIndex >= 0)
-            {
-                rightHandStartIndex = StartHoldPicker.SelectedIndex;
-                leftHandStartIndex = StartHoldPicker.SelectedIndex;
-                Console.WriteLine($"Start Hold selected: {StartHoldPicker.SelectedItem}");
-            }
-
-            if (RightStartPicker.SelectedIndex >= 0)
-            {
-                rightHandStartIndex = RightStartPicker.SelectedIndex;
-                Console.WriteLine($"Right Hand Start Hold: {RightStartPicker.SelectedItem}");
-            }
-
-            if (LeftStartPicker.SelectedIndex >= 0)
-            {
-                leftHandStartIndex = LeftStartPicker.SelectedIndex;
-                Console.WriteLine($"Left Hand Start Hold: {LeftStartPicker.SelectedItem}");
-            }
-
-            if (StartLegPicker.SelectedIndex >= 0)
-            {
-                rightLegStartIndex = StartLegPicker.SelectedIndex;
-                leftLegStartIndex = StartLegPicker.SelectedIndex;
-                Console.WriteLine($"Leg Start Hold: {StartLegPicker.SelectedItem}");
-            }
-
-            if (RightLegPicker.SelectedIndex >= 0)
-            {
-                rightLegStartIndex = RightLegPicker.SelectedIndex;
-                Console.WriteLine($"Right Leg Start Hold: {RightLegPicker.SelectedItem}");
-            }
-
-            if (LeftLegPicker.SelectedIndex >= 0)
-            {
-                leftLegStartIndex = LeftLegPicker.SelectedIndex;
-                Console.WriteLine($"Left Leg Start Hold: {LeftLegPicker.SelectedItem}");
-            }
-
-            // Save End Hold Selections
-            if (EndHoldPicker.SelectedIndex >= 0)
-            {
-                rightHandEndIndex = EndHoldPicker.SelectedIndex;
-                leftHandEndIndex = EndHoldPicker.SelectedIndex;
-                Console.WriteLine($"End Hold selected: {EndHoldPicker.SelectedItem}");
-            }
-
-            if (RightHandEndPicker.SelectedIndex >= 0)
-            {
-                rightHandEndIndex = RightHandEndPicker.SelectedIndex;
-                Console.WriteLine($"Right Hand End Hold: {RightHandEndPicker.SelectedItem}");
-            }
-
-            if (LeftHandEndPicker.SelectedIndex >= 0)
-            {
-                leftHandEndIndex = LeftHandEndPicker.SelectedIndex;
-                Console.WriteLine($"Left Hand End Hold: {LeftHandEndPicker.SelectedItem}");
-            }
-        }
-
-
-        private void AttachPickerEventHandlers()
-        {
-            EndHoldPicker.SelectedIndexChanged += SaveSelections;
-            RightHandEndPicker.SelectedIndexChanged += SaveSelections;
-            LeftHandEndPicker.SelectedIndexChanged += SaveSelections;
-            StartHoldPicker.SelectedIndexChanged += SaveSelections;
-            RightStartPicker.SelectedIndexChanged += SaveSelections;
-            LeftStartPicker.SelectedIndexChanged += SaveSelections;
-            RightLegPicker.SelectedIndexChanged += SaveSelections;
-            LeftLegPicker.SelectedIndexChanged += SaveSelections;
-        }
-
         private async void OnSaveClicked(object sender, EventArgs e)
         {
             await DisplayAlert("Success", "Hold details updated successfully!", "OK");
@@ -492,88 +482,113 @@ namespace RockClimber
             RightLegPicker.IsEnabled = false;
         }
 
-        private static Android.Graphics.Bitmap BitmapFromMat(Mat mat)
-        {
-            using (var image = mat.ToImage<Bgr, byte>()) // Convert Mat to Emgu Image
-            {
-                byte[] imageBytes = image.ToJpegData(100); // Convert to JPEG data
-                return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length); // Decode as Android Bitmap
-            }
-        }
-
         private async void OnContinueClicked(object sender, EventArgs e)
         {
-            // Writing hold selections for testing
             Console.WriteLine($"Right Hand Start Hold: {rightHandStartIndex}");
             Console.WriteLine($"Left Hand Start Hold: {leftHandStartIndex}");
             Console.WriteLine($"Right Leg Start Hold: {rightLegStartIndex}");
             Console.WriteLine($"Left Leg Start Hold: {leftLegStartIndex}");
-            Console.WriteLine($"Right Hand End Hold: {rightHandEndIndex}");
-            Console.WriteLine($"Left Hand End Hold: {leftHandEndIndex}");
+            Console.WriteLine($"Right Hand Finish Hold: {rightHandEndIndex}");
+            Console.WriteLine($"Left Hand Finish Hold: {leftHandEndIndex}");
 
-            // Ensure at least one hand start hold, one leg start hold, and one end hold is selected
             if ((rightHandStartIndex == -1 && leftHandStartIndex == -1) ||
-                (rightLegStartIndex == -1 && leftLegStartIndex == -1) ||
                 (rightHandEndIndex == -1 && leftHandEndIndex == -1))
             {
-                await DisplayAlert("Error", "Please select at least one hand start hold, one leg start hold, and one end hold.", "OK");
+                await DisplayAlert("Error", "Please select at least one hand start hold and one finish hold.", "OK");
                 return;
             }
 
-            // Retrieve user saved wingspan
             int wingspanFeet = Preferences.Get("wingspanFeet", 5);
             int wingspanInches = Preferences.Get("wingspanInches", 0);
-            double maxReach = (wingspanFeet * 12) + wingspanInches;
+            double wingspanTotal = wingspanFeet + (wingspanInches / 12.0);
+            // Effective arm length: roughly half the wingspan adjusted by 0.9.
+            double effectiveArmLengthFeet = (wingspanTotal / 2.0) * 0.9;
+            double maxReachPixels = ConvertFeetToPixels(effectiveArmLengthFeet);
 
-            // Retrieve the hold rectangles
+            var allHolds = _holds.Values.Select(h => h.Rect).ToList();
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
             var leftHandStartHold = _holds[leftHandStartIndex].Rect;
             var rightLegStartHold = _holds[rightLegStartIndex].Rect;
             var leftLegStartHold = _holds[leftLegStartIndex].Rect;
-            var rightHandEndHold = _holds[rightHandEndIndex].Rect;
-            var leftHandEndHold = _holds[leftHandEndIndex].Rect;
 
-            // Sending the holds to the pathfinding algorithm
-            // Right now only sending hand start and right end holds
-             var path = ClimbingGraph.FindBestRoute(_holds.Values.Select(h => h.Rect).ToList(), rightHandStartHold, leftHandStartHold, rightHandEndHold, maxReach);
+            var rightHandFinishHold = _holds[rightHandEndIndex].Rect;
+            System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex) ? _holds[leftHandEndIndex].Rect : (System.Drawing.Rectangle?)null;
 
-            if (path == null || path.Count == 0)
+            var startConfig = new LimbConfiguration
             {
-                await DisplayAlert("No Path Found", "No valid climbing path was found.", "OK");
+                RightHand = rightHandStartHold,
+                LeftHand = leftHandStartHold,
+                RightLeg = rightLegStartHold,
+                LeftLeg = leftLegStartHold
+            };
+
+            List<Move> routeMoves = null;
+            try
+            {
+                routeMoves = RoutePlanner.PlanSequentialRoute(allHolds, startConfig, rightHandFinishHold, leftHandFinishHold, maxReachPixels);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+                return;
+            }
+
+            if (routeMoves == null || routeMoves.Count == 0)
+            {
+                await DisplayAlert("No Path Found", "No valid sequential climbing moves were found.", "OK");
+                return;
+            }
+
+            await Navigation.PushAsync(new PathDisplayPage(routeMoves, _imagePath));
+        }
+        #endregion
+
+        #region Wall Height and Conversion
+
+        private void LoadWallHeight()
+        {
+            double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
+            WallHeightEntry.Text = wallHeightFeet.ToString();
+        }
+
+        private void OnChangeWallHeightClicked(object sender, EventArgs e)
+        {
+            if (!WallHeightSection.IsVisible)
+            {
+                WallHeightSection.IsVisible = true;
             }
             else
             {
-                DisplayPath(path);
-            }
-        }
-
-
-        private void DisplayPath(List<Node> path)
-        {
-            // Reload the original image
-            Mat annotatedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
-
-            // Draw the path
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                var start = path[i].Hold;
-                var end = path[i + 1].Hold;
-                System.Drawing.Point startPoint = new System.Drawing.Point(start.X + start.Width / 2, start.Y + start.Height / 2);
-                System.Drawing.Point endPoint = new System.Drawing.Point(end.X + end.Width / 2, end.Y + end.Height / 2);
-                CvInvoke.Line(annotatedImage, startPoint, endPoint, new MCvScalar(0, 0, 255), 2);
-            }
-
-            // Display image
-            CapturedImage.Source = ImageSource.FromStream(() =>
-            {
-                var memoryStream = new System.IO.MemoryStream();
-                using (var androidBitmap = BitmapFromMat(annotatedImage))
+                if (double.TryParse(WallHeightEntry.Text, out double newWallHeight) && newWallHeight > 0)
                 {
-                    androidBitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 100, memoryStream);
-                    memoryStream.Position = 0;
+                    Preferences.Set("wallHeightFeet", newWallHeight);
+                    DisplayAlert("Success", $"Wall height set to {newWallHeight} feet.", "OK");
+                    WallHeightSection.IsVisible = false;
                 }
-                return memoryStream;
-            });
+                else
+                {
+                    DisplayAlert("Error", "Please enter a valid wall height.", "OK");
+                }
+            }
         }
+
+        private double ConvertFeetToPixels(double feet)
+        {
+            double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
+            Mat capturedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
+            int wallHeightPixels = capturedImage.Rows;
+            double pixelsPerFoot = wallHeightPixels / wallHeightFeet;
+            return feet * pixelsPerFoot;
+        }
+
+        private Android.Graphics.Bitmap BitmapFromMat(Mat mat)
+        {
+            using (var image = mat.ToImage<Bgr, byte>())
+            {
+                byte[] imageBytes = image.ToJpegData(100);
+                return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+            }
+        }
+        #endregion
     }
 }
