@@ -101,35 +101,6 @@ namespace RockClimber
             }
         }
 
-
-        private void OnListHoldTypesClicked(object sender, EventArgs e)
-        {
-            // Populate the hold list in the correct format: "1: Jug"
-            HoldListView.ItemsSource = _holds
-                .OrderBy(h => h.Key)
-                .Select(h => $"{h.Key + 1}: {h.Value.Type}")
-                .ToList();
-
-            // Toggle visibility of the hold list
-            HoldListSection.IsVisible = !HoldListSection.IsVisible;
-
-            // Adjust the layout dynamically to show/hide the hold list
-            if (HoldListSection.IsVisible)
-            {
-                // Shrink image section and show the list
-                ImageColumn.Width = new GridLength(3, GridUnitType.Star);
-                ListColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
-            else
-            {
-                // Hide the list and return to full-screen mode
-                ImageColumn.Width = new GridLength(1, GridUnitType.Star);
-                ListColumn.Width = new GridLength(0, GridUnitType.Absolute);
-            }
-        }
-
-
-
         private void RedrawProcessedImage()
         {
             // Reload the original image
@@ -331,6 +302,32 @@ namespace RockClimber
         }
 
         #region Event Handlers
+        private void OnListHoldTypesClicked(object sender, EventArgs e)
+        {
+            // Populate the hold list in the correct format: "1: Jug"
+            HoldListView.ItemsSource = _holds
+                .OrderBy(h => h.Key)
+                .Select(h => $"{h.Key + 1}: {h.Value.Type}")
+                .ToList();
+
+            // Toggle visibility of the hold list
+            HoldListSection.IsVisible = !HoldListSection.IsVisible;
+
+            // Adjust the layout dynamically to show/hide the hold list
+            if (HoldListSection.IsVisible)
+            {
+                // Shrink image section and show the list
+                ImageColumn.Width = new GridLength(3, GridUnitType.Star);
+                ListColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
+            else
+            {
+                // Hide the list and return to full-screen mode
+                ImageColumn.Width = new GridLength(1, GridUnitType.Star);
+                ListColumn.Width = new GridLength(0, GridUnitType.Absolute);
+            }
+        }
+
         private void OnHoldSelectionChanged(object sender, EventArgs e)
         {
             if (HoldsPicker.SelectedIndex >= 0)
