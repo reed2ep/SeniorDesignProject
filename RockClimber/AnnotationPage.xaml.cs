@@ -54,14 +54,22 @@ namespace RockClimber
                     Mat capturedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
                     var holds = BlobDetector.DetectHoldsByColor(capturedImage, _lowerBound, _upperBound);
 
-                    // Highlight detected holds
+                    // Draw circles with only numbers (No rectangles)
                     for (int i = 0; i < holds.Count; i++)
                     {
-                        CvInvoke.Rectangle(capturedImage, holds[i], new MCvScalar(0, 255, 0), 2); // Green rectangle
+                        var rect = holds[i];
+
+                        // Calculate center of the hold
+                        var center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+
+                        // Draw a circle
+                        CvInvoke.Circle(capturedImage, center, 15, new MCvScalar(0, 255, 0), 2);
+
+                        // Draw the number inside the circle (Only the number)
                         CvInvoke.PutText(
                             capturedImage,
-                            $"Hold {i + 1}",
-                            new System.Drawing.Point(holds[i].X, holds[i].Y - 10),
+                            $"{i + 1}", // Just the number
+                            new System.Drawing.Point(center.X - 10, center.Y + 5),
                             Emgu.CV.CvEnum.FontFace.HersheySimplex,
                             0.6,
                             new MCvScalar(0, 255, 0),
@@ -93,23 +101,57 @@ namespace RockClimber
             }
         }
 
+
+        private void OnListHoldTypesClicked(object sender, EventArgs e)
+        {
+            // Populate the hold list in the correct format: "1: Jug"
+            HoldListView.ItemsSource = _holds
+                .OrderBy(h => h.Key)
+                .Select(h => $"{h.Key + 1}: {h.Value.Type}")
+                .ToList();
+
+            // Toggle visibility of the hold list
+            HoldListSection.IsVisible = !HoldListSection.IsVisible;
+
+            // Adjust the layout dynamically to show/hide the hold list
+            if (HoldListSection.IsVisible)
+            {
+                // Shrink image section and show the list
+                ImageColumn.Width = new GridLength(3, GridUnitType.Star);
+                ListColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
+            else
+            {
+                // Hide the list and return to full-screen mode
+                ImageColumn.Width = new GridLength(1, GridUnitType.Star);
+                ListColumn.Width = new GridLength(0, GridUnitType.Absolute);
+            }
+        }
+
+
+
         private void RedrawProcessedImage()
         {
             // Reload the original image
             Mat originalImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
-            // Redraw the rectangles and hold types
+            // Draw circles with numbers only (no rectangles)
             foreach (var kvp in _holds)
             {
                 var index = kvp.Key;
                 var rect = kvp.Value.Rect;
-                var type = kvp.Value.Type;
 
-                CvInvoke.Rectangle(originalImage, rect, new MCvScalar(0, 255, 0), 2); // Green rectangle
+                // Calculate the center of the hold
+                var center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+
+                // Draw a circle
+                CvInvoke.Circle(originalImage, center, 15, new MCvScalar(0, 255, 0), 2); // Green circle
+
+                // Draw the number inside the circle (No "Hold")
                 CvInvoke.PutText(
                     originalImage,
-                    $"Hold {index + 1} ({type})",
-                    new System.Drawing.Point(rect.X, rect.Y - 10), // Place text above the rectangle
+                    $"{index + 1}", // Just the number
+                    new System.Drawing.Point(center.X - 10, center.Y + 5), // Center the text
                     Emgu.CV.CvEnum.FontFace.HersheySimplex,
                     0.6,
                     new MCvScalar(0, 255, 0),
@@ -122,8 +164,11 @@ namespace RockClimber
                 var memoryStream = new MemoryStream();
                 using (var androidBitmap = BitmapFromMat(originalImage))
                 {
-                    androidBitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 100, memoryStream);
-                    memoryStream.Position = 0;
+                    if (androidBitmap != null)
+                    {
+                        androidBitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 100, memoryStream);
+                        memoryStream.Position = 0;
+                    }
                 }
                 return memoryStream;
             });
@@ -131,17 +176,23 @@ namespace RockClimber
 
         private void DisplayProcessedImage(Mat image)
         {
+            // Draw circles with numbers only (no rectangles)
             foreach (var kvp in _holds)
             {
                 var index = kvp.Key;
                 var rect = kvp.Value.Rect;
-                var type = kvp.Value.Type;
 
-                CvInvoke.Rectangle(image, rect, new MCvScalar(0, 255, 0), 2);
+                // Calculate the center of the hold
+                var center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+
+                // Draw a circle (No rectangle)
+                CvInvoke.Circle(image, center, 15, new MCvScalar(0, 255, 0), 2); // Green circle
+
+                // Draw the number inside the circle (No "Hold")
                 CvInvoke.PutText(
                     image,
-                    $"Hold {index + 1} ({type})",
-                    new System.Drawing.Point(rect.X, rect.Y - 10),
+                    $"{index + 1}", // Just the number
+                    new System.Drawing.Point(center.X - 10, center.Y + 5), // Center the text
                     Emgu.CV.CvEnum.FontFace.HersheySimplex,
                     0.6,
                     new MCvScalar(0, 255, 0),
@@ -158,8 +209,9 @@ namespace RockClimber
                 }
                 return memoryStream;
             });
-
         }
+
+
         private void PopulateHoldsDropdown()
         {
             var holdItems = _holds.Keys.Select(i => $"Hold {i + 1}").ToList();
