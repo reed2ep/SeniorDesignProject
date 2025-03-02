@@ -37,7 +37,7 @@ public static class RoutePlanner
         double maxReach)
     {
         List<Move> moves = new List<Move>();
-        // Initialize current configuration.
+        // Setup current limb configuration
         LimbConfiguration current = new LimbConfiguration
         {
             RightHand = startConfig.RightHand,
@@ -48,12 +48,12 @@ public static class RoutePlanner
 
         int iterations = 0;
         int maxIterations = 100;
-        // Helper: center point of a rectangle.
+        // Get middle of rectangle
         Func<Rectangle, Point> GetCenter = rect => new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
 
-        // Parameters for candidate scoring.
+        // Parameters for scoring.
         double thresholdGap = 50;      // gap (in pixels) for extra adjustments.
-        double penaltyFactorHand = 0.5;  // extra penalty per pixel if hand move is too high.
+        double penaltyFactorHand = 0.5;  // extra penalty per pixel if hand move is too far.
         double bonusFactorFoot = 0.5;    // bonus per pixel for foot moves when gap is large.
         double minMoveDistance = 5;      // ignore moves that barely change position.
         double horizontalPenaltyFactor = 0.3; // penalize moves with excessive horizontal deviation.
@@ -62,10 +62,9 @@ public static class RoutePlanner
         while (!current.HandsAtFinish(rightHandFinish, leftHandFinish) && iterations < maxIterations)
         {
             // For foot moves, use the lower hand as a baseline.
-            // In screen coordinates, a larger Y means lower.
+            // Larger Y value is means lower on picture
             double handBaselineForFeet = Math.Max(current.RightHand.Y, current.LeftHand.Y);
 
-            // (For other purposes, you might compute a gap between feet and hands.)
             double footBaseline = Math.Max(current.RightLeg.Y, current.LeftLeg.Y);
             double handBaseline = Math.Min(current.RightHand.Y, current.LeftHand.Y);
             double gap = footBaseline - handBaseline;
@@ -79,13 +78,6 @@ public static class RoutePlanner
                 Point centerCurrent = GetCenter(currentHold);
                 foreach (var candidate in holds)
                 {
-                    // Skip if candidate is occupied.
-                    if (candidate == current.RightHand ||
-                        candidate == current.LeftHand ||
-                        candidate == current.RightLeg ||
-                        candidate == current.LeftLeg)
-                        continue;
-
                     double dist = Math.Sqrt(
                         Math.Pow(GetCenter(candidate).X - centerCurrent.X, 2) +
                         Math.Pow(GetCenter(candidate).Y - centerCurrent.Y, 2));
@@ -107,7 +99,7 @@ public static class RoutePlanner
                             score = weight * verticalProgress - dist;
                             score -= horizontalPenaltyFactor * horizontalDiff;
 
-                            // Bonus if candidate is exactly a finish hold.
+                            // Bonus if candidate is a finish hold.
                             if (candidate == rightHandFinish || (leftHandFinish.HasValue && candidate == leftHandFinish.Value))
                             {
                                 score += finishBonus;
@@ -152,7 +144,7 @@ public static class RoutePlanner
 
             if (candidates.Count == 0)
             {
-                // No valid moves found; exit loop.
+                // No valid moves found
                 break;
             }
 
@@ -200,7 +192,7 @@ public class LimbConfiguration
     public Rectangle RightLeg { get; set; }
     public Rectangle LeftLeg { get; set; }
 
-    // Now require that both hands are on finish holds.
+    // Require that both hands are on finish holds.
     public bool HandsAtFinish(Rectangle rightFinish, Rectangle? leftFinish)
     {
         if (leftFinish.HasValue)

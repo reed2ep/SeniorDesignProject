@@ -20,7 +20,6 @@ namespace RockClimber
         private int rightHandEndIndex = -1;
         private int leftHandEndIndex = -1;
 
-
         public AnnotationPage(string imagePath, MCvScalar lowerBound, MCvScalar upperBound)
         {
             InitializeComponent();
@@ -130,13 +129,6 @@ namespace RockClimber
             });
         }
 
-        private void RefreshHoldsDisplay()
-        {
-            HoldsPicker.ItemsSource = _holds
-                .Select(kvp => $"Hold {kvp.Key + 1}: {kvp.Value.Type}")
-                .ToList();
-        }
-
         private void DisplayProcessedImage(Mat image)
         {
             foreach (var kvp in _holds)
@@ -201,15 +193,6 @@ namespace RockClimber
             LeftLegPicker.ItemsSource = holdItems;
         }
 
-        private void OnHoldSelectionChanged(object sender, EventArgs e)
-        {
-            if (HoldsPicker.SelectedIndex >= 0)
-            {
-                int selectedHoldIndex = HoldsPicker.SelectedIndex;
-                HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
-            }
-        }
-
         private void InitializeHoldTypePicker()
         {
             HoldTypePicker.ItemsSource = Enum.GetValues(typeof(HoldType))
@@ -218,6 +201,91 @@ namespace RockClimber
                                              .ToList();
             HoldTypePicker.SelectedIndexChanged += OnHoldTypeChanged;
             HoldTypePicker.IsEnabled = false;
+        }
+
+        private void SaveSelections(object sender, EventArgs e)
+        {
+            // Save Start Hold Selections
+            if (StartHoldPicker.SelectedIndex >= 0)
+            {
+                rightHandStartIndex = StartHoldPicker.SelectedIndex;
+                leftHandStartIndex = StartHoldPicker.SelectedIndex;
+                Console.WriteLine($"Start Hold selected: {StartHoldPicker.SelectedItem}");
+            }
+
+            if (RightStartPicker.SelectedIndex >= 0)
+            {
+                rightHandStartIndex = RightStartPicker.SelectedIndex;
+                Console.WriteLine($"Right Hand Start Hold: {RightStartPicker.SelectedItem}");
+            }
+
+            if (LeftStartPicker.SelectedIndex >= 0)
+            {
+                leftHandStartIndex = LeftStartPicker.SelectedIndex;
+                Console.WriteLine($"Left Hand Start Hold: {LeftStartPicker.SelectedItem}");
+            }
+
+            if (StartLegPicker.SelectedIndex >= 0)
+            {
+                rightLegStartIndex = StartLegPicker.SelectedIndex;
+                leftLegStartIndex = StartLegPicker.SelectedIndex;
+                Console.WriteLine($"Leg Start Hold: {StartLegPicker.SelectedItem}");
+            }
+
+            if (RightLegPicker.SelectedIndex >= 0)
+            {
+                rightLegStartIndex = RightLegPicker.SelectedIndex;
+                Console.WriteLine($"Right Leg Start Hold: {RightLegPicker.SelectedItem}");
+            }
+
+            if (LeftLegPicker.SelectedIndex >= 0)
+            {
+                leftLegStartIndex = LeftLegPicker.SelectedIndex;
+                Console.WriteLine($"Left Leg Start Hold: {LeftLegPicker.SelectedItem}");
+            }
+
+            // Save End Hold Selections
+            if (EndHoldPicker.SelectedIndex >= 0)
+            {
+                rightHandEndIndex = EndHoldPicker.SelectedIndex;
+                leftHandEndIndex = EndHoldPicker.SelectedIndex;
+                Console.WriteLine($"End Hold selected: {EndHoldPicker.SelectedItem}");
+            }
+
+            if (RightHandEndPicker.SelectedIndex >= 0)
+            {
+                rightHandEndIndex = RightHandEndPicker.SelectedIndex;
+                Console.WriteLine($"Right Hand End Hold: {RightHandEndPicker.SelectedItem}");
+            }
+
+            if (LeftHandEndPicker.SelectedIndex >= 0)
+            {
+                leftHandEndIndex = LeftHandEndPicker.SelectedIndex;
+                Console.WriteLine($"Left Hand End Hold: {LeftHandEndPicker.SelectedItem}");
+            }
+        }
+
+
+        private void AttachPickerEventHandlers()
+        {
+            EndHoldPicker.SelectedIndexChanged += SaveSelections;
+            RightHandEndPicker.SelectedIndexChanged += SaveSelections;
+            LeftHandEndPicker.SelectedIndexChanged += SaveSelections;
+            StartHoldPicker.SelectedIndexChanged += SaveSelections;
+            RightStartPicker.SelectedIndexChanged += SaveSelections;
+            LeftStartPicker.SelectedIndexChanged += SaveSelections;
+            RightLegPicker.SelectedIndexChanged += SaveSelections;
+            LeftLegPicker.SelectedIndexChanged += SaveSelections;
+        }
+
+        #region Event Handlers
+        private void OnHoldSelectionChanged(object sender, EventArgs e)
+        {
+            if (HoldsPicker.SelectedIndex >= 0)
+            {
+                int selectedHoldIndex = HoldsPicker.SelectedIndex;
+                HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
+            }
         }
 
         private void OnHoldTypeChanged(object sender, EventArgs e)
@@ -328,81 +396,6 @@ namespace RockClimber
             LeftLegPicker.IsEnabled = e.Value;
         }
 
-        private void SaveSelections(object sender, EventArgs e)
-        {
-            // Save Start Hold Selections
-            if (StartHoldPicker.SelectedIndex >= 0)
-            {
-                rightHandStartIndex = StartHoldPicker.SelectedIndex;
-                leftHandStartIndex = StartHoldPicker.SelectedIndex;
-                Console.WriteLine($"Start Hold selected: {StartHoldPicker.SelectedItem}");
-            }
-
-            if (RightStartPicker.SelectedIndex >= 0)
-            {
-                rightHandStartIndex = RightStartPicker.SelectedIndex;
-                Console.WriteLine($"Right Hand Start Hold: {RightStartPicker.SelectedItem}");
-            }
-
-            if (LeftStartPicker.SelectedIndex >= 0)
-            {
-                leftHandStartIndex = LeftStartPicker.SelectedIndex;
-                Console.WriteLine($"Left Hand Start Hold: {LeftStartPicker.SelectedItem}");
-            }
-
-            if (StartLegPicker.SelectedIndex >= 0)
-            {
-                rightLegStartIndex = StartLegPicker.SelectedIndex;
-                leftLegStartIndex = StartLegPicker.SelectedIndex;
-                Console.WriteLine($"Leg Start Hold: {StartLegPicker.SelectedItem}");
-            }
-
-            if (RightLegPicker.SelectedIndex >= 0)
-            {
-                rightLegStartIndex = RightLegPicker.SelectedIndex;
-                Console.WriteLine($"Right Leg Start Hold: {RightLegPicker.SelectedItem}");
-            }
-
-            if (LeftLegPicker.SelectedIndex >= 0)
-            {
-                leftLegStartIndex = LeftLegPicker.SelectedIndex;
-                Console.WriteLine($"Left Leg Start Hold: {LeftLegPicker.SelectedItem}");
-            }
-
-            // Save End Hold Selections
-            if (EndHoldPicker.SelectedIndex >= 0)
-            {
-                rightHandEndIndex = EndHoldPicker.SelectedIndex;
-                leftHandEndIndex = EndHoldPicker.SelectedIndex;
-                Console.WriteLine($"End Hold selected: {EndHoldPicker.SelectedItem}");
-            }
-
-            if (RightHandEndPicker.SelectedIndex >= 0)
-            {
-                rightHandEndIndex = RightHandEndPicker.SelectedIndex;
-                Console.WriteLine($"Right Hand End Hold: {RightHandEndPicker.SelectedItem}");
-            }
-
-            if (LeftHandEndPicker.SelectedIndex >= 0)
-            {
-                leftHandEndIndex = LeftHandEndPicker.SelectedIndex;
-                Console.WriteLine($"Left Hand End Hold: {LeftHandEndPicker.SelectedItem}");
-            }
-        }
-
-
-        private void AttachPickerEventHandlers()
-        {
-            EndHoldPicker.SelectedIndexChanged += SaveSelections;
-            RightHandEndPicker.SelectedIndexChanged += SaveSelections;
-            LeftHandEndPicker.SelectedIndexChanged += SaveSelections;
-            StartHoldPicker.SelectedIndexChanged += SaveSelections;
-            RightStartPicker.SelectedIndexChanged += SaveSelections;
-            LeftStartPicker.SelectedIndexChanged += SaveSelections;
-            RightLegPicker.SelectedIndexChanged += SaveSelections;
-            LeftLegPicker.SelectedIndexChanged += SaveSelections;
-        }
-
         private async void OnSaveClicked(object sender, EventArgs e)
         {
             await DisplayAlert("Success", "Hold details updated successfully!", "OK");
@@ -442,7 +435,6 @@ namespace RockClimber
 
         private async void OnContinueClicked(object sender, EventArgs e)
         {
-            // Log the selected indices.
             Console.WriteLine($"Right Hand Start Hold: {rightHandStartIndex}");
             Console.WriteLine($"Left Hand Start Hold: {leftHandStartIndex}");
             Console.WriteLine($"Right Leg Start Hold: {rightLegStartIndex}");
@@ -450,7 +442,6 @@ namespace RockClimber
             Console.WriteLine($"Right Hand Finish Hold: {rightHandEndIndex}");
             Console.WriteLine($"Left Hand Finish Hold: {leftHandEndIndex}");
 
-            // Check that at least one hand start hold and one finish hold are selected.
             if ((rightHandStartIndex == -1 && leftHandStartIndex == -1) ||
                 (rightHandEndIndex == -1 && leftHandEndIndex == -1))
             {
@@ -458,31 +449,22 @@ namespace RockClimber
                 return;
             }
 
-            // Retrieve user wingspan and compute max reach.
             int wingspanFeet = Preferences.Get("wingspanFeet", 5);
             int wingspanInches = Preferences.Get("wingspanInches", 0);
             double wingspanTotal = wingspanFeet + (wingspanInches / 12.0);
-            // Effective arm length is roughly half the wingspan, adjusted by a factor (e.g., 0.9) to account for shoulder position.
+            // Effective arm length: roughly half the wingspan adjusted by 0.9.
             double effectiveArmLengthFeet = (wingspanTotal / 2.0) * 0.9;
             double maxReachPixels = ConvertFeetToPixels(effectiveArmLengthFeet);
 
-            // Retrieve all detected holds.
             var allHolds = _holds.Values.Select(h => h.Rect).ToList();
-
-            // Retrieve start holds for hands and legs.
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
             var leftHandStartHold = _holds[leftHandStartIndex].Rect;
             var rightLegStartHold = _holds[rightLegStartIndex].Rect;
             var leftLegStartHold = _holds[leftLegStartIndex].Rect;
 
-            // Retrieve finish holds for hands.
             var rightHandFinishHold = _holds[rightHandEndIndex].Rect;
-            // If a left-hand finish hold isn’t provided, use the right-hand finish for both.
-            System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex)
-                ? _holds[leftHandEndIndex].Rect
-                : (System.Drawing.Rectangle?)null;
+            System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex) ? _holds[leftHandEndIndex].Rect : (System.Drawing.Rectangle?)null;
 
-            // Build the initial configuration.
             var startConfig = new LimbConfiguration
             {
                 RightHand = rightHandStartHold,
@@ -494,12 +476,7 @@ namespace RockClimber
             List<Move> routeMoves = null;
             try
             {
-                routeMoves = RoutePlanner.PlanSequentialRoute(
-                    allHolds,
-                    startConfig,
-                    rightHandFinishHold,
-                    leftHandFinishHold,
-                    maxReachPixels);
+                routeMoves = RoutePlanner.PlanSequentialRoute(allHolds, startConfig, rightHandFinishHold, leftHandFinishHold, maxReachPixels);
             }
             catch (Exception ex)
             {
@@ -513,105 +490,14 @@ namespace RockClimber
                 return;
             }
 
-            // Optionally, log the moves.
-            foreach (var move in routeMoves)
-            {
-                Console.WriteLine($"{move.Limb} moved from {move.From} to {move.To}");
-            }
-
-            // Now, draw the sequence of moves.
-            DisplaySequentialRoute(routeMoves);
+            await Navigation.PushAsync(new PathDisplayPage(routeMoves, _imagePath));
         }
+        #endregion
 
-        private void DisplaySequentialRoute(List<Move> moves)
-        {
-            // Reload the original image.
-            Mat annotatedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
-
-            // For each move, draw a small line from the "from" center to the "to" center.
-            foreach (var move in moves)
-            {
-                var color = new MCvScalar(0, 0, 0); // default black
-                                                    // Choose a color based on the limb.
-                switch (move.Limb)
-                {
-                    case Limb.RightHand:
-                        color = new MCvScalar(0, 0, 255); // Red
-                        break;
-                    case Limb.LeftHand:
-                        color = new MCvScalar(255, 0, 0); // Blue
-                        break;
-                    case Limb.RightLeg:
-                        color = new MCvScalar(0, 255, 0); // Green
-                        break;
-                    case Limb.LeftLeg:
-                        color = new MCvScalar(0, 255, 255); // Yellow
-                        break;
-                }
-                var startRect = move.From;
-                var endRect = move.To;
-                System.Drawing.Point startPoint = new System.Drawing.Point(startRect.X + startRect.Width / 2, startRect.Y + startRect.Height / 2);
-                System.Drawing.Point endPoint = new System.Drawing.Point(endRect.X + endRect.Width / 2, endRect.Y + endRect.Height / 2);
-                CvInvoke.Line(annotatedImage, startPoint, endPoint, color, 2);
-            }
-
-            // Update the displayed image.
-            CapturedImage.Source = ImageSource.FromStream(() =>
-            {
-                var memoryStream = new MemoryStream();
-                using (var androidBitmap = BitmapFromMat(annotatedImage))
-                {
-                    androidBitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 100, memoryStream);
-                    memoryStream.Position = 0;
-                }
-                return memoryStream;
-            });
-        }
-
-
-        private void DrawPathWithOffset(Mat image, List<Node> path, MCvScalar color, int offsetX, int offsetY)
-        {
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                var startRect = path[i].Hold;
-                var endRect = path[i + 1].Hold;
-                System.Drawing.Point startPoint = new System.Drawing.Point(
-                    startRect.X + startRect.Width / 2 + offsetX,
-                    startRect.Y + startRect.Height / 2 + offsetY);
-                System.Drawing.Point endPoint = new System.Drawing.Point(
-                    endRect.X + endRect.Width / 2 + offsetX,
-                    endRect.Y + endRect.Height / 2 + offsetY);
-                CvInvoke.Line(image, startPoint, endPoint, color, 2);
-            }
-        }
-
-
-        // Helper method to draw a path by connecting the centers of holds.
-        private void DrawPath(Mat image, List<Node> path, MCvScalar color)
-        {
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                var startRect = path[i].Hold;
-                var endRect = path[i + 1].Hold;
-                System.Drawing.Point startPoint = new System.Drawing.Point(startRect.X + startRect.Width / 2, startRect.Y + startRect.Height / 2);
-                System.Drawing.Point endPoint = new System.Drawing.Point(endRect.X + endRect.Width / 2, endRect.Y + endRect.Height / 2);
-                CvInvoke.Line(image, startPoint, endPoint, color, 2);
-            }
-        }
-
-        // Helper to convert an Emgu CV Mat to an Android Bitmap.
-        private static Android.Graphics.Bitmap BitmapFromMat(Mat mat)
-        {
-            using (var image = mat.ToImage<Bgr, byte>())
-            {
-                byte[] imageBytes = image.ToJpegData(100);
-                return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-            }
-        }
+        #region Wall Height and Conversion
 
         private void LoadWallHeight()
         {
-            // Retrieve stored wall height or default to 15 feet
             double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
             WallHeightEntry.Text = wallHeightFeet.ToString();
         }
@@ -628,7 +514,7 @@ namespace RockClimber
                 {
                     Preferences.Set("wallHeightFeet", newWallHeight);
                     DisplayAlert("Success", $"Wall height set to {newWallHeight} feet.", "OK");
-                    WallHeightSection.IsVisible = false; // Hide the input field after saving
+                    WallHeightSection.IsVisible = false;
                 }
                 else
                 {
@@ -639,18 +525,21 @@ namespace RockClimber
 
         private double ConvertFeetToPixels(double feet)
         {
-            // Retrieve stored wall height (default: 15 feet)
             double wallHeightFeet = Preferences.Get("wallHeightFeet", 15.0);
-
-            // Load the climbing wall image and get height in pixels
             Mat capturedImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
-            int wallHeightPixels = capturedImage.Rows; // Get the image height in pixels
-
-            // Compute scaling factor (pixels per foot)
+            int wallHeightPixels = capturedImage.Rows;
             double pixelsPerFoot = wallHeightPixels / wallHeightFeet;
-
-            // Convert feet to pixels
             return feet * pixelsPerFoot;
         }
+
+        private Android.Graphics.Bitmap BitmapFromMat(Mat mat)
+        {
+            using (var image = mat.ToImage<Bgr, byte>())
+            {
+                byte[] imageBytes = image.ToJpegData(100);
+                return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+            }
+        }
+        #endregion
     }
 }
