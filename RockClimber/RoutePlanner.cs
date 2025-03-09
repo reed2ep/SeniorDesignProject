@@ -157,14 +157,7 @@ public static class RoutePlanner
                                 score -= extra * extraFootPenaltyFactor;
                             }
                             if (score >= 0)
-                        {
-                            candidates.Add(new MoveCandidate
-                            {
-                                Limb = limb,
-                                From = currentHold,
-                                To = candidate,
-                                Score = score
-                            });
+                                footCandidates.Add(new MoveCandidate { Limb = limb, From = currentHold, To = candidate, Score = score });
                         }
                     }
                 }
