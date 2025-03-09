@@ -505,6 +505,10 @@ namespace RockClimber
             double effectiveArmLengthFeet = (wingspanTotal / 2.0) * 0.9;
             double maxReachPixels = ConvertFeetToPixels(effectiveArmLengthFeet);
 
+            int climberHeightFeet = Preferences.Get("climberHeightFeet", 5);
+            double climberHeightPixels = ConvertFeetToPixels(climberHeightFeet);
+            double targetGap = 0.75 * climberHeightPixels;
+
             var allHolds = _holds.Values.Select(h => h.Rect).ToList();
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
             var leftHandStartHold = _holds[leftHandStartIndex].Rect;
@@ -525,7 +529,7 @@ namespace RockClimber
             List<Move> routeMoves = null;
             try
             {
-                routeMoves = RoutePlanner.PlanSequentialRoute(allHolds, startConfig, rightHandFinishHold, leftHandFinishHold, maxReachPixels);
+                routeMoves = RoutePlanner.PlanSequentialRoute(allHolds, startConfig, rightHandFinishHold, leftHandFinishHold, maxReachPixels, targetGap);
             }
             catch (Exception ex)
             {
