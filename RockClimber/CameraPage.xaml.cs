@@ -98,8 +98,8 @@ namespace RockClimber
                     _upperBound = new MCvScalar(180, 30, 255);
                     break;
                 case "Seafoam":
-                    _lowerBound = new MCvScalar(85, 50, 50);
-                    _upperBound = new MCvScalar(100, 255, 255);
+                    _lowerBound = new MCvScalar(60, 20, 90);
+                    _upperBound = new MCvScalar(90, 255, 255);
                     break;
                 default:
                     return;

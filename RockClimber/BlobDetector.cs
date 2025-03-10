@@ -37,7 +37,7 @@ public static class BlobDetector
                     System.Drawing.Rectangle boundingBox = CvInvoke.BoundingRectangle(contour);
 
                     // Filter by size
-                    if (boundingBox.Width > 10 && boundingBox.Height > 10) // Adjust size thresholds
+                    if (boundingBox.Width > 3 && boundingBox.Height > 3) // Adjust size thresholds
                     {
                         boundingBoxes.Add(boundingBox);
                     }
