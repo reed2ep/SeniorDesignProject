@@ -1,12 +1,14 @@
 using SQLite;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace RockClimber
 {
     public class DatabaseHelper
     {
         private SQLiteConnection _database;
+        private readonly string _dbPath;
 
         public DatabaseHelper(string dbPath)
         {
@@ -17,9 +19,27 @@ namespace RockClimber
         }
 
         // Save a new saved path to the database
-        public void SavePath(SavedPath savedPath)
+        public void SavePath(string name, List<Move> routeMoves, string imagePath)
         {
+            string movesJson = JsonConvert.SerializeObject(routeMoves);
+
+            var savedPath = new SavedPath
+            {
+                Name = name,
+                Steps = movesJson,
+                ImagePath = imagePath
+            };
+
             _database.Insert(savedPath);
+        }
+
+        public void DeletePath(int id)
+        {
+            var savedPath = _database.Table<SavedPath>().FirstOrDefault(p => p.Id == id);
+            if (savedPath != null)
+            {
+                _database.Delete(savedPath);
+            }
         }
 
         // Retrieve all saved paths from the database
@@ -28,10 +48,24 @@ namespace RockClimber
             return _database.Table<SavedPath>().ToList();
         }
 
-        // Optionally, get a saved path by ID (if needed)
-        public SavedPath GetSavedPathById(int id)
+        // Get a saved path by ID
+        public (string RouteMoves, string ImagePath) GetSavedPathById(int id)
         {
-            return _database.Table<SavedPath>().FirstOrDefault(sp => sp.Id == id);
+            var savedPath = _database.Table<SavedPath>().FirstOrDefault(p => p.Id == id);
+            if (savedPath != null)
+            {
+                return (savedPath.Steps, savedPath.ImagePath);
+            }
+            return (string.Empty, string.Empty);
+        }
+
+        public List<Move> GetRouteMovesById(int id)
+        {
+            var savedPath = _database.Table<SavedPath>().FirstOrDefault(p => p.Id == id);
+            if (savedPath == null || string.IsNullOrEmpty(savedPath.Steps))
+                return new List<Move>();
+
+            return JsonConvert.DeserializeObject<List<Move>>(savedPath.Steps);
         }
     }
 }

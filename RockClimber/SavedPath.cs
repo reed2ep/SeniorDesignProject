@@ -6,7 +6,9 @@ namespace RockClimber
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public string Steps { get; set; }
-        public string ImagePath { get; set; }  // Path to the saved image
+
+        public string Name { get; set; } // Path name
+        public string Steps { get; set; } // Route moves
+        public string ImagePath { get; set; } // Path to the input image
     }
 }

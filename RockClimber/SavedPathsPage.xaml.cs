@@ -13,38 +13,42 @@ namespace RockClimber
         {
             InitializeComponent();
 
-            // Get the database path
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "savedPaths.db3");
-
-            // Initialize the database helper with the dbPath
             _databaseHelper = new DatabaseHelper(dbPath);
 
-            // Load saved paths
             LoadSavedPaths();
         }
 
-        // Load saved paths from the database and bind to the ListView
         private void LoadSavedPaths()
         {
-            // Get all saved paths from the database
-            var savedPaths = _databaseHelper.GetSavedPaths();
-
-            // Bind the retrieved paths to the ListView
+            var savedPaths = _databaseHelper.GetSavedPaths(); // Fetch saved paths from DB
             SavedPathsListView.ItemsSource = savedPaths;
         }
 
-        // Handle item selection in the ListView
         private async void OnPathSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var selectedPath = e.SelectedItem as SavedPath;
+            if (selectedPath == null) return;
 
-            if (selectedPath != null)
+            // Retrieve route moves as a List<Move>
+            var routeMoves = _databaseHelper.GetRouteMovesById(selectedPath.Id);
+            var imagePath = selectedPath.ImagePath;
+
+            // Navigate to PathDisplayPage
+            await Navigation.PushAsync(new PathDisplayPage(routeMoves, imagePath));
+        }
+        private async void OnDeletePathClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var selectedPath = button?.CommandParameter as SavedPath;
+
+            if (selectedPath == null) return;
+
+            bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete '{selectedPath.Name}'?", "Yes", "No");
+            if (confirm)
             {
-                // For now, just show a simple alert with the steps and image path
-                await DisplayAlert("Path Selected",
-                    $"Steps: {selectedPath.Steps}\nImage Path: {selectedPath.ImagePath}",
-                    "OK");
-
+                _databaseHelper.DeletePath(selectedPath.Id);
+                LoadSavedPaths(); // Refresh the list
             }
         }
     }

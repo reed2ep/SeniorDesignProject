@@ -12,6 +12,7 @@ namespace RockClimber
 {
     public partial class PathDisplayPage : ContentPage
     {
+        private DatabaseHelper _databaseHelper;
         private List<Move> _routeMoves;
         private int _currentMoveIndex;
         private string _imagePath;
@@ -19,6 +20,12 @@ namespace RockClimber
         public PathDisplayPage(List<Move> routeMoves, string imagePath)
         {
             InitializeComponent();
+
+            // Ensure database is initialized
+            //string dbPath = Path.Combine(FileSystem.AppDataDirectory, "savedPaths.db3");
+            string dbPath = System.IO.Path.Combine(FileSystem.AppDataDirectory, "savedPaths.db3");
+            _databaseHelper = new DatabaseHelper(dbPath);
+
             _routeMoves = routeMoves;
             _imagePath = imagePath;
             _currentMoveIndex = 0;
@@ -41,6 +48,11 @@ namespace RockClimber
                 _currentMoveIndex--;
                 DisplaySequentialRoute(_currentMoveIndex);
             }
+        }
+        private void OnViewFinalPathClicked(object sender, EventArgs e)
+        {
+            // Display all moves at once.
+            DisplaySequentialRoute(_routeMoves.Count);
         }
 
         private async void OnBackClicked(object sender, EventArgs e)
@@ -131,5 +143,29 @@ namespace RockClimber
                 return Android.Graphics.BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
             }
         }
+        private async void OnSavePathClicked(object sender, EventArgs e)
+        {
+            if (_routeMoves.Count == 0)
+            {
+                await DisplayAlert("Error", "No path to save.", "OK");
+                return;
+            }
+
+            string defaultName = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Default name based on date/time
+
+            // Prompt user to enter a name for the path
+            string userEnteredName = await DisplayPromptAsync("Save Path", "Enter a name for this path:",
+                initialValue: defaultName,
+                maxLength: 50,
+                keyboard: Keyboard.Text);
+
+            string finalName = string.IsNullOrWhiteSpace(userEnteredName) ? defaultName : userEnteredName;
+
+            // Save to database
+            _databaseHelper.SavePath(finalName, _routeMoves, _imagePath);
+
+            await DisplayAlert("Success", "Path saved successfully!", "OK");
+        }
+
     }
 }

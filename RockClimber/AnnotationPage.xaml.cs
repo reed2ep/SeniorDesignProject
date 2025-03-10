@@ -540,6 +540,7 @@ namespace RockClimber
             }
 
             await Navigation.PushAsync(new PathDisplayPage(routeMoves, _imagePath));
+
         }
         #endregion
 
@@ -590,5 +591,6 @@ namespace RockClimber
             }
         }
         #endregion
+
     }
 }
