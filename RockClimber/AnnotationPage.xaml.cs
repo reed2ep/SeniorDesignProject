@@ -333,7 +333,7 @@ namespace RockClimber
             if (HoldsPicker.SelectedIndex >= 0)
             {
                 int selectedHoldIndex = HoldsPicker.SelectedIndex;
-                HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
+                    HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
             }
         }
 
@@ -357,7 +357,7 @@ namespace RockClimber
             HoldEditSection.IsVisible = !HoldEditSection.IsVisible;
             HoldsPicker.IsEnabled = HoldEditSection.IsVisible;
             HoldTypePicker.IsEnabled = HoldEditSection.IsVisible;
-        }
+            }
 
         private void OnEditStartHoldsClicked(object sender, EventArgs e)
         {
@@ -374,7 +374,14 @@ namespace RockClimber
             EndHoldDisplay.IsVisible = isVisible;
             OneEndCheckSection.IsVisible = isVisible;
             TwoEndCheckSection.IsVisible = isVisible;
+
+            if (!isVisible) // When hiding, trigger save logic
+            {
+                OnSaveClicked(sender, e);
+            }
         }
+
+
 
         private void OnOneHandEndChecked(object sender, CheckedChangedEventArgs e)
         {

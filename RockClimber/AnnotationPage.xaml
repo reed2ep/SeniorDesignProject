@@ -21,19 +21,23 @@
 
                 <!-- Buttons -->
                 <Button Text="List Hold Types" Clicked="OnListHoldTypesClicked"/>
-                <Button Text="Edit Hold" Clicked="OnEditHoldClicked"/>
+                <Button Text="Edit Holds" Clicked="OnEditHoldClicked"/>
                 <Button Text="Edit Start and End Holds" Clicked="OnEditStartHoldsClicked"/>
 
                 <!-- Hold Edit Section (Initially Hidden) -->
-                <StackLayout x:Name="HoldEditSection" IsVisible="False">
+                <StackLayout x:Name="HoldEditSection" IsVisible="False"
+             HorizontalOptions="FillAndExpand"
+             VerticalOptions="Start">
                     <Label Text="Edit Hold Section" FontSize="Medium" FontAttributes="Bold"/>
                     <Picker x:Name="HoldsPicker" Title="Select Hold"/>
                     <Picker x:Name="HoldTypePicker" Title="Select Hold Type"/>
+                    <Button Text="Save Changes" Clicked="OnSaveClicked"/>
                 </StackLayout>
 
                 <!-- Checkboxes for Start Hold Selection (Initially Hidden) -->
                 <StackLayout x:Name="StartHoldDisplay" IsVisible="False">
                     <Label Text="Edit Start Hold Section" FontSize="Medium" FontAttributes="Bold"/>
+                    <Button Text="Save Changes" Clicked="OnSaveClicked"/>
                 </StackLayout>
 
                 <HorizontalStackLayout x:Name="OneStartCheckSection" IsVisible="False">
@@ -115,9 +119,6 @@
                         <Button Text="Save Wall Height" Clicked="OnChangeWallHeightClicked"/>
                     </StackLayout>
                 </StackLayout>
-            <!-- Save & Continue Buttons -->
-                <Button Text="Save Changes" Clicked="OnSaveClicked" />
-                <Button Text="Continue to Next Step" Clicked="OnContinueClicked" />
             </VerticalStackLayout>
         </ScrollView>
 
