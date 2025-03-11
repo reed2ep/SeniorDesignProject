@@ -130,7 +130,13 @@
         <!-- Right Side: Hold List Sidebar (Initially Hidden) -->
         <StackLayout x:Name="HoldListSection" Grid.Column="1" IsVisible="False" Padding="10">
             <Label Text="Hold List" FontSize="Medium" FontAttributes="Bold"/>
-            <ListView x:Name="HoldListView"/>
+            <ListView x:Name="HoldListView" ItemSelected="OnHoldItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </Grid>
 </ContentPage>
