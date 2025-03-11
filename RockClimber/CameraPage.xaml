@@ -1,24 +1,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.CameraPage"
-             Title="CameraPage">
+             Title="Color Selection">
     <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" Padding="10">
 
         <!-- Top Bar for Buttons -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="10">
             <Button Text="Retake Picture"
                     Clicked="OnCapturePhotoClicked"
-                    Grid.Column="0"
-                    HorizontalOptions="Start"
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
                     VerticalOptions="Start"/>
         </Grid>
 
         <!-- Image fills the screen below the buttons -->
         <Grid Grid.Row="1">
             <Image x:Name="CapturedImage"
-                   Aspect="AspectFill"
-                   HorizontalOptions="FillAndExpand"
-                   VerticalOptions="FillAndExpand"/>
+                   Aspect="AspectFit"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Fill"/>
         </Grid>
 
         <!-- Label for color selection -->

@@ -106,27 +106,32 @@ namespace RockClimber
             // Reload the original image
             Mat originalImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
-            // Draw circles with numbers only (no rectangles)
+            // Draw circles and label them with updated Hold Types
             foreach (var kvp in _holds)
             {
                 var index = kvp.Key;
                 var rect = kvp.Value.Rect;
+                var holdType = kvp.Value.Type;
+
+                // Determine color based on hold type
+                MCvScalar color = holdType switch
+                {
+                    HoldType.Jug => new MCvScalar(0, 255, 0), // Green
+                    HoldType.Crimp => new MCvScalar(255, 0, 0), // Blue
+                    HoldType.Sloper => new MCvScalar(255, 255, 0), // Yellow
+                    _ => new MCvScalar(0, 255, 0)
+                };
 
                 // Calculate the center of the hold
                 var center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
 
                 // Draw a circle
-                CvInvoke.Circle(originalImage, center, 15, new MCvScalar(0, 255, 0), 2); // Green circle
+                CvInvoke.Circle(originalImage, center, 15, color, 2);
 
-                // Draw the number inside the circle (No "Hold")
-                CvInvoke.PutText(
-                    originalImage,
-                    $"{index + 1}", // Just the number
-                    new System.Drawing.Point(center.X - 10, center.Y + 5), // Center the text
-                    Emgu.CV.CvEnum.FontFace.HersheySimplex,
-                    0.6,
-                    new MCvScalar(0, 255, 0),
-                    2);
+                // Draw the number and hold type abbreviation
+                string label = $"{index + 1} ({holdType.ToString()[0]})"; // Example: "4 (J)"
+                CvInvoke.PutText(originalImage, label, new System.Drawing.Point(center.X - 10, center.Y + 5),
+                    Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.6, color, 2);
             }
 
             // Display the updated image
@@ -190,6 +195,7 @@ namespace RockClimber
             HoldsPicker.SelectedIndex = -1;
             HoldsPicker.SelectedIndexChanged += OnHoldSelectionChanged;
         }
+
         private void PopulateEndAndLimbPickers()
         {
             var holdItems = _holds.Keys.Select(i => $"Hold {i + 1}").ToList();
@@ -302,6 +308,57 @@ namespace RockClimber
         }
 
         #region Event Handlers
+
+        private void OnHoldItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem != null)
+            {
+                // Extract selected item as a string
+                string selectedHoldString = e.SelectedItem.ToString();
+
+                // Parse hold index from the selected item (assuming format: "1: Jug")
+                int selectedHoldIndex = int.Parse(selectedHoldString.Split(':')[0]) - 1;
+
+                // Display a picker or another selection method for the user to choose a new hold type
+                DisplayHoldTypePicker(selectedHoldIndex);
+
+                // Clear selection to allow re-selecting the same item
+                HoldListView.SelectedItem = null;
+            }
+        }
+
+        // This function would allow the user to select a new hold type
+        private async void DisplayHoldTypePicker(int selectedHoldIndex)
+        {
+            string[] holdTypeNames = Enum.GetNames(typeof(HoldType));
+
+            string selectedTypeString = await Application.Current.MainPage.DisplayActionSheet(
+                "Select Hold Type",
+                "Cancel",
+                null,
+                holdTypeNames
+            );
+
+            if (selectedTypeString != null && selectedTypeString != "Cancel")
+            {
+                HoldType selectedType = (HoldType)Enum.Parse(typeof(HoldType), selectedTypeString);
+
+                // Update the hold type in the dictionary
+                var hold = _holds[selectedHoldIndex];
+                _holds[selectedHoldIndex] = (hold.Rect, selectedType);
+
+                // Refresh the UI to reflect changes
+                HoldListView.ItemsSource = _holds
+                    .OrderBy(h => h.Key)
+                    .Select(h => $"{h.Key + 1}: {h.Value.Type}")
+                    .ToList();
+
+                // Redraw the image with updated values
+                RedrawProcessedImage();
+            }
+        }
+
+
         private void OnListHoldTypesClicked(object sender, EventArgs e)
         {
             // Populate the hold list in the correct format: "1: Jug"
@@ -327,6 +384,7 @@ namespace RockClimber
                 ListColumn.Width = new GridLength(0, GridUnitType.Absolute);
             }
         }
+
 
         private void OnHoldSelectionChanged(object sender, EventArgs e)
         {
@@ -374,7 +432,14 @@ namespace RockClimber
             EndHoldDisplay.IsVisible = isVisible;
             OneEndCheckSection.IsVisible = isVisible;
             TwoEndCheckSection.IsVisible = isVisible;
+
+            if (!isVisible) // When hiding, trigger save logic
+            {
+                OnSaveClicked(sender, e);
+            }
         }
+
+
 
         private void OnOneHandEndChecked(object sender, CheckedChangedEventArgs e)
         {
@@ -510,6 +575,10 @@ namespace RockClimber
             double targetGap = 0.75 * climberHeightPixels;
 
             var allHolds = _holds.Values.Select(h => h.Rect).ToList();
+
+            // Added Hold types for future use
+            var holdTypes = _holds.Values.Select(h => h.Type).ToList();
+
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
             var leftHandStartHold = _holds[leftHandStartIndex].Rect;
             var rightLegStartHold = _holds[rightLegStartIndex].Rect;
@@ -530,6 +599,7 @@ namespace RockClimber
             try
             {
                 routeMoves = RoutePlanner.PlanSequentialRoute(allHolds, startConfig, rightHandFinishHold, leftHandFinishHold, maxReachPixels, targetGap);
+
             }
             catch (Exception ex)
             {

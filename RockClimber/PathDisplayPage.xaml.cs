@@ -55,11 +55,11 @@ namespace RockClimber
             DisplaySequentialRoute(_routeMoves.Count);
         }
 
-        private void OnViewFinalPathClicked(object sender, EventArgs e)
-        {
-            // Display all moves at once.
-            DisplaySequentialRoute(_routeMoves.Count);
-        }
+        //private void OnViewFinalPathClicked(object sender, EventArgs e)
+        //{
+        //    // Display all moves at once.
+        //    DisplaySequentialRoute(_routeMoves.Count);
+        //}
 
         private async void OnBackClicked(object sender, EventArgs e)
         {
