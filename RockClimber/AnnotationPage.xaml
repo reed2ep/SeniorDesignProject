@@ -36,25 +36,32 @@
                 </StackLayout>
 
                 <!-- Checkboxes for Start Hold Selection -->
-                <HorizontalStackLayout x:Name="OneStartCheckSection" IsVisible="False">
-                    <CheckBox x:Name="OneHandStartCheckBox" CheckedChanged="OnOneHandStartChecked"/>
-                    <Label Text="One Hand Start"/>
+                <!-- Hand Selection Checkboxes (Side by Side) -->
+                <HorizontalStackLayout>
+                    <StackLayout x:Name="OneStartCheckSection" Orientation="Horizontal" IsVisible="False">
+                        <CheckBox x:Name="OneHandStartCheckBox" CheckedChanged="OnOneHandStartChecked"/>
+                        <Label Text="One Hand Start" VerticalOptions="Center"/>
+                    </StackLayout>
+
+                    <StackLayout x:Name="TwoStartCheckSection" Orientation="Horizontal" IsVisible="False">
+                        <CheckBox x:Name="TwoHandStartCheckBox" CheckedChanged="OnTwoHandStartChecked"/>
+                        <Label Text="Two Hand Start" VerticalOptions="Center"/>
+                    </StackLayout>
                 </HorizontalStackLayout>
 
-                <HorizontalStackLayout x:Name="TwoStartCheckSection" IsVisible="False">
-                    <CheckBox x:Name="TwoHandStartCheckBox" CheckedChanged="OnTwoHandStartChecked"/>
-                    <Label Text="Two Hand Start"/>
+                <!-- Leg Selection Checkboxes (Side by Side) -->
+                <HorizontalStackLayout>
+                    <StackLayout x:Name="OneLegCheckSection" Orientation="Horizontal" IsVisible="False">
+                        <CheckBox x:Name="OneLegStartCheckBox" CheckedChanged="OnOneLegChecked"/>
+                        <Label Text="One Leg Start" VerticalOptions="Center"/>
+                    </StackLayout>
+
+                    <StackLayout x:Name="TwoLegCheckSection" Orientation="Horizontal" IsVisible="False">
+                        <CheckBox x:Name="TwoLegStartCheckBox" CheckedChanged="OnTwoLegChecked"/>
+                        <Label Text="Two Leg Start" VerticalOptions="Center"/>
+                    </StackLayout>
                 </HorizontalStackLayout>
 
-                <HorizontalStackLayout x:Name="OneLegCheckSection" IsVisible="False">
-                    <CheckBox x:Name="OneLegStartCheckBox" CheckedChanged="OnOneLegChecked"/>
-                    <Label Text="One Leg Start"/>
-                </HorizontalStackLayout>
-
-                <HorizontalStackLayout x:Name="TwoLegCheckSection" IsVisible="False">
-                    <CheckBox x:Name="TwoLegStartCheckBox" CheckedChanged="OnTwoLegChecked"/>
-                    <Label Text="Two Leg Start"/>
-                </HorizontalStackLayout>
 
                 <!-- Start Hold Sections -->
                 <StackLayout x:Name="StartHoldSection" IsVisible="False">
@@ -85,14 +92,16 @@
                 </StackLayout>
 
                 <!-- Checkboxes for End Hold Selection -->
-                <HorizontalStackLayout x:Name="OneEndCheckSection" IsVisible="False">
-                    <CheckBox x:Name="OneHandEndCheckBox" CheckedChanged="OnOneHandEndChecked"/>
-                    <Label Text="One Hand End Hold"/>
-                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <StackLayout x:Name="OneEndCheckSection" Orientation="Horizontal" IsVisible="False">
+                        <CheckBox x:Name="OneHandEndCheckBox" CheckedChanged="OnOneHandEndChecked"/>
+                        <Label Text="One Hand End Hold" VerticalOptions="Center"/>
+                    </StackLayout>
 
-                <HorizontalStackLayout x:Name="TwoEndCheckSection" IsVisible="False">
-                    <CheckBox x:Name="TwoHandEndCheckBox" CheckedChanged="OnTwoHandEndChecked"/>
-                    <Label Text="Two Hand End Hold"/>
+                    <StackLayout x:Name="TwoEndCheckSection" Orientation="Horizontal" IsVisible="False">
+                        <CheckBox x:Name="TwoHandEndCheckBox" CheckedChanged="OnTwoHandEndChecked"/>
+                        <Label Text="Two Hand End Hold" VerticalOptions="Center"/>
+                    </StackLayout>
                 </HorizontalStackLayout>
 
                 <!-- End Hold Sections -->
