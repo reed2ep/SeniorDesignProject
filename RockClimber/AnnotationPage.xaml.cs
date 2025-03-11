@@ -575,6 +575,10 @@ namespace RockClimber
             double targetGap = 0.75 * climberHeightPixels;
 
             var allHolds = _holds.Values.Select(h => h.Rect).ToList();
+
+            // Added Hold types for future use
+            var holdTypes = _holds.Values.Select(h => h.Type).ToList();
+
             var rightHandStartHold = _holds[rightHandStartIndex].Rect;
             var leftHandStartHold = _holds[leftHandStartIndex].Rect;
             var rightLegStartHold = _holds[rightLegStartIndex].Rect;
@@ -595,6 +599,7 @@ namespace RockClimber
             try
             {
                 routeMoves = RoutePlanner.PlanSequentialRoute(allHolds, startConfig, rightHandFinishHold, leftHandFinishHold, maxReachPixels, targetGap);
+
             }
             catch (Exception ex)
             {
