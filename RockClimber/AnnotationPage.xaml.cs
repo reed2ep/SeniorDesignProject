@@ -9,7 +9,8 @@ namespace RockClimber
         private readonly string _imagePath;
         private readonly MCvScalar _lowerBound;
         private readonly MCvScalar _upperBound;
-        private Dictionary<int, (System.Drawing.Rectangle Rect, HoldType Type)> _holds = new();
+        private Dictionary<int, Hold> _holds = new();
+
 
         // End and start hold possible selections
         private int rightHandStartIndex = 0;
@@ -29,20 +30,13 @@ namespace RockClimber
 
             // Initialize the height of the wall
             LoadWallHeight();
-            // Initialize the HoldType picker 
-            InitializeHoldTypePicker();
+            // Initialize the HoldDifficulty picker 
+            InitializeHoldDifficultyPicker();
 
             // Process the image and display it
             ProcessAndDisplayImage();
 
             AttachPickerEventHandlers();
-        }
-
-        public enum HoldType
-        {
-            Jug = 1,
-            Crimp = 2,
-            Sloper = 3
         }
 
         private async void ProcessAndDisplayImage()
@@ -85,10 +79,11 @@ namespace RockClimber
                     return;
                 }
 
-                // Initialize holds with default HoldType (Jug)
+                // Initialize _holds with default difficulty = Easy
                 _holds = detectedHolds
-                    .Select((rect, index) => new { Index = index, Rect = rect })
-                    .ToDictionary(h => h.Index, h => (h.Rect, HoldType.Jug));
+                    .Select((rect, index) => new { Index = index, Hold = new Hold { Bounds = rect, Difficulty = HoldDifficulty.Easy } })
+                    .ToDictionary(h => h.Index, h => h.Hold);
+
 
                 DisplayProcessedImage(processedImage);
                 PopulateHoldsDropdown();
@@ -106,19 +101,21 @@ namespace RockClimber
             // Reload the original image
             Mat originalImage = CvInvoke.Imread(_imagePath, Emgu.CV.CvEnum.ImreadModes.Color);
 
-            // Draw circles and label them with updated Hold Types
+            // Draw circles and label them with updated Hold Difficulty
             foreach (var kvp in _holds)
             {
                 var index = kvp.Key;
-                var rect = kvp.Value.Rect;
-                var holdType = kvp.Value.Type;
+                var hold = kvp.Value;
+                var rect = hold.Bounds;
+                var holdDifficulty = kvp.Value.Difficulty;
 
-                // Determine color based on hold type
-                MCvScalar color = holdType switch
+                // Determine color based on hold Difficulty
+                MCvScalar color = holdDifficulty switch
                 {
-                    HoldType.Jug => new MCvScalar(0, 255, 0), // Green
-                    HoldType.Crimp => new MCvScalar(255, 0, 0), // Blue
-                    HoldType.Sloper => new MCvScalar(255, 255, 0), // Yellow
+                    HoldDifficulty.Easy => new MCvScalar(0, 255, 0), // Green
+                    HoldDifficulty.Medium => new MCvScalar(255, 0, 0), // Blue
+                    HoldDifficulty.Hard => new MCvScalar(255, 255, 0), // Yellow
+                    HoldDifficulty.Extreme => new MCvScalar(0, 0, 255), // Red
                     _ => new MCvScalar(0, 255, 0)
                 };
 
@@ -128,11 +125,24 @@ namespace RockClimber
                 // Draw a circle
                 CvInvoke.Circle(originalImage, center, 15, color, 2);
 
-                // Draw the number and hold type abbreviation
-                string label = $"{index + 1} ({holdType.ToString()[0]})"; // Example: "4 (J)"
+                // Draw the number and hold Difficulty abbreviation
+                string label = $"{index + 1} ({GetHoldAbbreviation(holdDifficulty)})"; // Example: "4 (J)"
                 CvInvoke.PutText(originalImage, label, new System.Drawing.Point(center.X - 10, center.Y + 5),
                     Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.6, color, 2);
             }
+
+            string GetHoldAbbreviation(HoldDifficulty holdDifficulty)
+            {
+                return holdDifficulty switch
+                {
+                    HoldDifficulty.Easy => "E",
+                    HoldDifficulty.Medium => "M",
+                    HoldDifficulty.Hard => "H",
+                    HoldDifficulty.Extreme => "X",
+                    _ => "E" // Default to Easy
+                };
+            }
+
 
             // Display the updated image
             CapturedImage.Source = ImageSource.FromStream(() =>
@@ -156,7 +166,7 @@ namespace RockClimber
             foreach (var kvp in _holds)
             {
                 var index = kvp.Key;
-                var rect = kvp.Value.Rect;
+                var rect = kvp.Value.Bounds;
 
                 // Calculate the center of the hold
                 var center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
@@ -222,14 +232,14 @@ namespace RockClimber
             LeftLegPicker.ItemsSource = holdItems;
         }
 
-        private void InitializeHoldTypePicker()
+        private void InitializeHoldDifficultyPicker()
         {
-            HoldTypePicker.ItemsSource = Enum.GetValues(typeof(HoldType))
-                                             .Cast<HoldType>()
+            HoldDifficultyPicker.ItemsSource = Enum.GetValues(typeof(HoldDifficulty))
+                                             .Cast<HoldDifficulty>()
                                              .Select(t => t.ToString())
                                              .ToList();
-            HoldTypePicker.SelectedIndexChanged += OnHoldTypeChanged;
-            HoldTypePicker.IsEnabled = false;
+            HoldDifficultyPicker.SelectedIndexChanged += OnHoldDifficultyChanged;
+            HoldDifficultyPicker.IsEnabled = false;
         }
 
         private void SaveSelections(object sender, EventArgs e)
@@ -319,38 +329,38 @@ namespace RockClimber
                 // Parse hold index from the selected item (assuming format: "1: Jug")
                 int selectedHoldIndex = int.Parse(selectedHoldString.Split(':')[0]) - 1;
 
-                // Display a picker or another selection method for the user to choose a new hold type
-                DisplayHoldTypePicker(selectedHoldIndex);
+                // Display a picker or another selection method for the user to choose a new hold Difficulty
+                DisplayHoldDifficultyPicker(selectedHoldIndex);
 
                 // Clear selection to allow re-selecting the same item
                 HoldListView.SelectedItem = null;
             }
         }
 
-        // This function would allow the user to select a new hold type
-        private async void DisplayHoldTypePicker(int selectedHoldIndex)
+        // This function would allow the user to select a new hold Difficulty
+        private async void DisplayHoldDifficultyPicker(int selectedHoldIndex)
         {
-            string[] holdTypeNames = Enum.GetNames(typeof(HoldType));
+            string[] holdDifficultyNames = Enum.GetNames(typeof(HoldDifficulty));
 
-            string selectedTypeString = await Application.Current.MainPage.DisplayActionSheet(
-                "Select Hold Type",
+            string selectedDifficultyString = await Application.Current.MainPage.DisplayActionSheet(
+                "Select Hold Difficulty",
                 "Cancel",
                 null,
-                holdTypeNames
+                holdDifficultyNames
             );
 
-            if (selectedTypeString != null && selectedTypeString != "Cancel")
+            if (selectedDifficultyString != null && selectedDifficultyString != "Cancel")
             {
-                HoldType selectedType = (HoldType)Enum.Parse(typeof(HoldType), selectedTypeString);
+                HoldDifficulty selectedDifficulty = (HoldDifficulty)Enum.Parse(typeof(HoldDifficulty), selectedDifficultyString);
 
-                // Update the hold type in the dictionary
+                // Update the hold Difficulty in the dictionary
                 var hold = _holds[selectedHoldIndex];
-                _holds[selectedHoldIndex] = (hold.Rect, selectedType);
+                _holds[selectedHoldIndex].Difficulty = selectedDifficulty;
 
                 // Refresh the UI to reflect changes
                 HoldListView.ItemsSource = _holds
                     .OrderBy(h => h.Key)
-                    .Select(h => $"{h.Key + 1}: {h.Value.Type}")
+                    .Select(h => $"{h.Key + 1}: {h.Value.Difficulty}")
                     .ToList();
 
                 // Redraw the image with updated values
@@ -359,12 +369,12 @@ namespace RockClimber
         }
 
 
-        private void OnListHoldTypesClicked(object sender, EventArgs e)
+        private void OnListHoldDifficultyClicked(object sender, EventArgs e)
         {
-            // Populate the hold list in the correct format: "1: Jug"
+            // Populate the hold list in the correct format: "1: Easy"
             HoldListView.ItemsSource = _holds
                 .OrderBy(h => h.Key)
-                .Select(h => $"{h.Key + 1}: {h.Value.Type}")
+                .Select(h => $"{h.Key + 1}: {h.Value.Difficulty}")
                 .ToList();
 
             // Toggle visibility of the hold list
@@ -391,20 +401,20 @@ namespace RockClimber
             if (HoldsPicker.SelectedIndex >= 0)
             {
                 int selectedHoldIndex = HoldsPicker.SelectedIndex;
-                HoldTypePicker.SelectedIndex = (int)_holds[selectedHoldIndex].Type - 1;
+                HoldDifficultyPicker.SelectedIndex = (int)_holds[selectedHoldIndex].Difficulty - 1;
             }
         }
 
-        private void OnHoldTypeChanged(object sender, EventArgs e)
+        private void OnHoldDifficultyChanged(object sender, EventArgs e)
         {
-            if (HoldsPicker.SelectedIndex >= 0 && HoldTypePicker.SelectedIndex >= 0)
+            if (HoldsPicker.SelectedIndex >= 0 && HoldDifficultyPicker.SelectedIndex >= 0)
             {
                 int selectedHoldIndex = HoldsPicker.SelectedIndex;
-                HoldType selectedType = (HoldType)Enum.Parse(typeof(HoldType), HoldTypePicker.SelectedItem.ToString());
+                HoldDifficulty selectedDifficulty = (HoldDifficulty)Enum.Parse(typeof(HoldDifficulty), HoldDifficultyPicker.SelectedItem.ToString());
 
-                // Update the hold type in the dictionary
+                // Update the hold Difficulty in the dictionary
                 var hold = _holds[selectedHoldIndex];
-                _holds[selectedHoldIndex] = (hold.Rect, selectedType);
+                _holds[selectedHoldIndex].Difficulty = selectedDifficulty;
 
                 // Redraw the image with updated values
                 RedrawProcessedImage();
@@ -414,7 +424,7 @@ namespace RockClimber
         {
             HoldEditSection.IsVisible = !HoldEditSection.IsVisible;
             HoldsPicker.IsEnabled = HoldEditSection.IsVisible;
-            HoldTypePicker.IsEnabled = HoldEditSection.IsVisible;
+            HoldDifficultyPicker.IsEnabled = HoldEditSection.IsVisible;
         }
 
         private void OnEditStartHoldsClicked(object sender, EventArgs e)
@@ -535,7 +545,7 @@ namespace RockClimber
 
             // Disable pickers
             HoldsPicker.IsEnabled = false;
-            HoldTypePicker.IsEnabled = false;
+            HoldDifficultyPicker.IsEnabled = false;
             EndHoldPicker.IsEnabled = false;
             RightHandEndPicker.IsEnabled = false;
             LeftHandEndPicker.IsEnabled = false;
@@ -574,18 +584,18 @@ namespace RockClimber
             double climberHeightPixels = ConvertFeetToPixels(climberHeightFeet);
             double targetGap = 0.75 * climberHeightPixels;
 
-            var allHolds = _holds.Values.Select(h => h.Rect).ToList();
+            var allHolds = _holds.Values.ToList();
 
-            // Added Hold types for future use
-            var holdTypes = _holds.Values.Select(h => h.Type).ToList();
+            // Added Hold Difficulty for future use
+            var holdDifficulty = _holds.Values.Select(h => h.Difficulty).ToList();
 
-            var rightHandStartHold = _holds[rightHandStartIndex].Rect;
-            var leftHandStartHold = _holds[leftHandStartIndex].Rect;
-            var rightLegStartHold = _holds[rightLegStartIndex].Rect;
-            var leftLegStartHold = _holds[leftLegStartIndex].Rect;
+            var rightHandStartHold = _holds[rightHandStartIndex].Bounds;
+            var leftHandStartHold = _holds[leftHandStartIndex].Bounds;
+            var rightLegStartHold = _holds[rightLegStartIndex].Bounds;
+            var leftLegStartHold = _holds[leftLegStartIndex].Bounds;
 
-            var rightHandFinishHold = _holds[rightHandEndIndex].Rect;
-            System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex) ? _holds[leftHandEndIndex].Rect : (System.Drawing.Rectangle?)null;
+            var rightHandFinishHold = _holds[rightHandEndIndex].Bounds;
+            System.Drawing.Rectangle? leftHandFinishHold = _holds.ContainsKey(leftHandEndIndex) ? _holds[leftHandEndIndex].Bounds : (System.Drawing.Rectangle?)null;
 
             var startConfig = new LimbConfiguration
             {

@@ -30,7 +30,7 @@ public class MoveCandidate
 public static class RoutePlanner
 {
     public static List<Move> PlanSequentialRoute(
-        List<Rectangle> holds,
+        List<Hold> holds,
         LimbConfiguration startConfig,
         Rectangle rightHandFinish,
         Rectangle? leftHandFinish,
@@ -48,32 +48,30 @@ public static class RoutePlanner
 
         int iterations = 0;
         int maxIterations = 100;
-        // Get middle of rectangle
         Func<Rectangle, Point> GetCenter = rect => new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
 
-        // Parameters for scoring.
-        double thresholdGap = 50;         // When gap between feet and hands exceeds this, adjustments kick in.
-        double penaltyFactorHand = 0.5;     // Extra penalty per pixel for hand moves if gap is high.
-        double bonusFactorFoot = 0.5;       // Bonus per pixel for foot moves when gap is high.
-        double minMoveDistance = 5;         // Ignore moves that are too small.
-        double horizontalPenaltyFactor = 0.3; // Penalty for large sideways movements
-        double finishBonus = 20;           // Bonus for reaching finish
-        double maxHandStep = 30;            // Maximum vertical progress for hand moves.
-        double maxFootStep = 20;            // Maximum vertical progress for foot moves.
-        int minHandFootGap = 10;            // Minimum gap (in pixels) required between a candidate foot and each hand.
+        double thresholdGap = 50;
+        double penaltyFactorHand = 0.5;
+        double bonusFactorFoot = 0.5;
+        double minMoveDistance = 5;
+        double horizontalPenaltyFactor = 0.3;
+        double finishBonus = 20;
+        double maxHandStep = 30;
+        double maxFootStep = 20;
+        int minHandFootGap = 10;
 
-        double ratioPenaltyFactor = 0.5;    // General penalty per pixel deviation from targetGap (applies to both hands and feet).
-        double extraHandPenaltyFactor = 1.0;  // Penalty applied when hands move to far from feet
-        double extraFootPenaltyFactor = 1.5;  // Penalty applied when feet move to far from hands
+        double ratioPenaltyFactor = 0.5;
+        double extraHandPenaltyFactor = 1.0;
+        double extraFootPenaltyFactor = 1.5;
+
+        Limb? lastFootMoved = null;
 
         while (!current.HandsAtFinish(rightHandFinish, leftHandFinish) && iterations < maxIterations)
         {
-
             double footBaseline = Math.Max(current.RightLeg.Y, current.LeftLeg.Y);
             double handBaseline = Math.Min(current.RightHand.Y, current.LeftHand.Y);
             double gap = footBaseline - handBaseline;
 
-            // Separate candidate lists for hand and foot moves.
             List<MoveCandidate> handCandidates = new List<MoveCandidate>();
             List<MoveCandidate> footCandidates = new List<MoveCandidate>();
 
@@ -81,8 +79,10 @@ public static class RoutePlanner
             {
                 Rectangle currentHold = GetLimbHold(current, limb);
                 Point centerCurrent = GetCenter(currentHold);
-                foreach (var candidate in holds)
+                foreach (var candidateHold in holds)
                 {
+                    // Use the candidate's Bounds for geometry.
+                    Rectangle candidate = candidateHold.Bounds;
                     double dist = Math.Sqrt(
                         Math.Pow(GetCenter(candidate).X - centerCurrent.X, 2) +
                         Math.Pow(GetCenter(candidate).Y - centerCurrent.Y, 2));
@@ -91,10 +91,19 @@ public static class RoutePlanner
 
                     if (dist <= maxReach)
                     {
-                        double verticalProgress = currentHold.Y - candidate.Y; // positive if candidate is higher.
+                        double verticalProgress = currentHold.Y - candidate.Y;
                         double horizontalDiff = Math.Abs(GetCenter(candidate).X - centerCurrent.X);
                         double score = 0.0;
-                        double newGapCandidate = gap; // Simulate new gap if move is applied.
+                        double newGapCandidate = gap;
+
+                        // Apply a difficulty penalty based on the candidate hold's Difficulty.
+                        double difficultyPenalty = candidateHold.Difficulty switch
+                        {
+                            HoldDifficulty.Medium => 5.0,
+                            HoldDifficulty.Hard => 15.0,
+                            HoldDifficulty.Extreme => 30.0,
+                            _ => 0.0  // Easy
+                        };
 
                         if (limb == Limb.RightHand || limb == Limb.LeftHand)
                         {
@@ -103,19 +112,18 @@ public static class RoutePlanner
                             double weight = 2.97;
                             score = weight * verticalProgress - dist;
                             score -= horizontalPenaltyFactor * horizontalDiff;
+                            score -= difficultyPenalty; // Subtract difficulty penalty
 
                             if (candidate == rightHandFinish ||
-                               (leftHandFinish.HasValue && candidate == leftHandFinish.Value))
+                                (leftHandFinish.HasValue && candidate == leftHandFinish.Value))
                             {
                                 score += finishBonus;
                             }
                             if (verticalProgress > maxHandStep)
                             {
                                 double excess = verticalProgress - maxHandStep;
-                                double handOvershootPenalty = 1.0;
-                                score -= excess * handOvershootPenalty;
+                                score -= excess * 1.0;
                             }
-                            // Get new hand baseline
                             double otherHandY = (limb == Limb.RightHand) ? current.LeftHand.Y : current.RightHand.Y;
                             double newHandBaseline = Math.Min(candidate.Y, otherHandY);
                             newGapCandidate = footBaseline - newHandBaseline;
@@ -129,7 +137,6 @@ public static class RoutePlanner
                         }
                         else // Foot moves.
                         {
-                            // Ensure candidate foot move is at least minHandFootGap below both hands.
                             if (candidate.Y < current.RightHand.Y + minHandFootGap || candidate.Y < current.LeftHand.Y + minHandFootGap)
                                 continue;
                             if (verticalProgress < 0)
@@ -137,11 +144,11 @@ public static class RoutePlanner
                             double weight = 1.0;
                             score = weight * verticalProgress - dist;
                             score -= horizontalPenaltyFactor * horizontalDiff;
+                            score -= difficultyPenalty * 0.75; // Apply a reduced penalty for foot holds
                             if (verticalProgress > maxFootStep)
                             {
                                 double excess = verticalProgress - maxFootStep;
-                                double footOvershootPenalty = 1.0;
-                                score -= excess * footOvershootPenalty;
+                                score -= excess * 1.0;
                             }
                             double otherFootY = (limb == Limb.RightLeg) ? current.LeftLeg.Y : current.RightLeg.Y;
                             double newFootBaseline = Math.Max(candidate.Y, otherFootY);
@@ -150,7 +157,6 @@ public static class RoutePlanner
                             {
                                 score += (gap - thresholdGap) * bonusFactorFoot;
                             }
-                            // Extra penalty if the new gap is less than targetGap (feet too close to hands).
                             if (newGapCandidate < targetGap)
                             {
                                 double extra = targetGap - newGapCandidate;
@@ -163,7 +169,16 @@ public static class RoutePlanner
                 }
             }
 
-            // Select candidate: prioritize hand moves if available.
+            // Enforce alternating foot moves: if last foot moved exists, filter for the opposite foot if possible.
+            if (lastFootMoved != null)
+            {
+                var alternateFootCandidates = footCandidates.Where(c => c.Limb != lastFootMoved).ToList();
+                if (alternateFootCandidates.Any())
+                {
+                    footCandidates = alternateFootCandidates;
+                }
+            }
+
             MoveCandidate bestCandidate = null;
             if (handCandidates.Count > 0)
             {
@@ -182,15 +197,20 @@ public static class RoutePlanner
             {
                 case Limb.RightHand:
                     current.RightHand = bestCandidate.To;
+                    // Reset foot move memory when a hand moves.
+                    lastFootMoved = null;
                     break;
                 case Limb.LeftHand:
                     current.LeftHand = bestCandidate.To;
+                    lastFootMoved = null;
                     break;
                 case Limb.RightLeg:
                     current.RightLeg = bestCandidate.To;
+                    lastFootMoved = Limb.RightLeg;
                     break;
                 case Limb.LeftLeg:
                     current.LeftLeg = bestCandidate.To;
+                    lastFootMoved = Limb.LeftLeg;
                     break;
             }
             moves.Add(new Move { Limb = bestCandidate.Limb, From = bestCandidate.From, To = bestCandidate.To });

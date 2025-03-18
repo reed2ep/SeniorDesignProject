@@ -20,14 +20,14 @@
                        VerticalOptions="Fill"/>
 
                 <!-- Buttons -->
-                <Button Text="List Hold Types" Clicked="OnListHoldTypesClicked"/>
+                <Button Text="List Hold Difficulty" Clicked="OnListHoldDifficultyClicked"/>
                 <Button Text="Edit Start and End Holds" Clicked="OnEditStartHoldsClicked"/>
 
                 <!-- Hold Edit Section (Restored but Hidden) -->
                 <StackLayout x:Name="HoldEditSection" IsVisible="False">
                     <Label Text="Edit Hold Section" FontSize="Medium" FontAttributes="Bold"/>
                     <Picker x:Name="HoldsPicker" Title="Select Hold"/>
-                    <Picker x:Name="HoldTypePicker" Title="Select Hold Type"/>
+                    <Picker x:Name="HoldDifficultyPicker" Title="Select Hold Difficulty"/>
                 </StackLayout>
 
                 <!-- Start Hold Section (Initially Hidden) -->

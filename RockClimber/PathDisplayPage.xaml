@@ -4,35 +4,69 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="RockClimber.PathDisplayPage"
     Title="Climbing Path">
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <!-- Image that shows the annotated climbing path -->
-        <Image x:Name="PathImage" 
-           Aspect="AspectFit" 
-           HorizontalOptions="Center" 
-           HeightRequest="500" />
+            <!-- Image that shows the annotated climbing path -->
+            <Border Stroke="Black" StrokeThickness="5" Padding="0" HorizontalOptions="Center">
+                <Image x:Name="PathImage" 
+                       Aspect="AspectFit" 
+                       HeightRequest="500" />
+            </Border>
 
-        <!-- Navigation Buttons: Next/Previous -->
-        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,0">
-            <Button Text="Previous" Clicked="OnPreviousMoveClicked" />
-            <Button Text="Next" Clicked="OnNextMoveClicked" Margin="20,0,0,0" />
-        </HorizontalStackLayout>
+            <!-- Legend for Hands and Feet -->
+            <Frame BorderColor="Gray" Padding="10" CornerRadius="5" HasShadow="True" HorizontalOptions="Center">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Label Text="Legend" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                        <StackLayout Orientation="Horizontal" Spacing="5">
+                            <BoxView WidthRequest="20" HeightRequest="20" Color="Red" />
+                            <Label Text="Right Hand" VerticalOptions="Center" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="5">
+                            <BoxView WidthRequest="20" HeightRequest="20" Color="Blue" />
+                            <Label Text="Left Hand" VerticalOptions="Center" />
+                        </StackLayout>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                        <StackLayout Orientation="Horizontal" Spacing="5">
+                            <BoxView WidthRequest="20" HeightRequest="20" Color="Green" />
+                            <Label Text="Right Leg" VerticalOptions="Center" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="5">
+                            <BoxView WidthRequest="20" HeightRequest="20" Color="Yellow" />
+                            <Label Text="Left Leg" VerticalOptions="Center" />
+                        </StackLayout>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
 
-        <!-- Buttons to show the entire path and go back to Annotation-->
-        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,10,0,0">
-            <Button Text="View Final Path"
-                    Clicked="OnViewFinalPathClicked"
-                    HorizontalOptions="Center" />
-            <Button Text="Back"
-                    Clicked="OnBackClicked" 
-                    HorizontalOptions="Center" 
-                    Margin="20,0,0,0"/>
-        </HorizontalStackLayout>
-        
-        <!-- Save Path Button -->
-        <Button Text="Save Path" Clicked="OnSavePathClicked"
-            HorizontalOptions="Center" 
-            Margin="0,20,0,0"/>
+            <!-- Navigation Buttons organized in a Grid -->
+            <Grid Margin="20,10,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-    </VerticalStackLayout>
+                <!-- Row 0: Previous and Next -->
+                <Button Grid.Row="0" Grid.Column="0" Text="Previous" Clicked="OnPreviousMoveClicked" />
+                <Button Grid.Row="0" Grid.Column="1" Text="Next" Clicked="OnNextMoveClicked" />
+
+                <!-- Row 1: View Final Path and Back -->
+                <Button Grid.Row="1" Grid.Column="0" Text="View Final Path" Clicked="OnViewFinalPathClicked" />
+                <Button Grid.Row="1" Grid.Column="1" Text="Back" Clicked="OnBackClicked" />
+
+                <!-- Row 2: Save Path -->
+                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+                        Text="Save Path" Clicked="OnSavePathClicked" 
+                        HorizontalOptions="Center" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
+
