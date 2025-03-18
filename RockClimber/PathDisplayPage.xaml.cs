@@ -55,12 +55,6 @@ namespace RockClimber
             DisplaySequentialRoute(_routeMoves.Count);
         }
 
-        //private void OnViewFinalPathClicked(object sender, EventArgs e)
-        //{
-        //    // Display all moves at once.
-        //    DisplaySequentialRoute(_routeMoves.Count);
-        //}
-
         private async void OnBackClicked(object sender, EventArgs e)
         {
             // Navigate back to the AnnotationPage.
@@ -128,6 +122,46 @@ namespace RockClimber
                 System.Drawing.Point offset = GetOffsetForLimb(move.Limb);
                 DrawMoveWithOffset(annotatedImage, move, offset);
             }
+
+            // Draw starting hold with a short segment (matching the limb's color)
+            if (upToMoveIndex > 0 && _routeMoves.Count > 0)
+            {
+                var firstMove = _routeMoves[0];
+                System.Drawing.Point offset = GetOffsetForLimb(firstMove.Limb);
+                System.Drawing.Point startCenter = new System.Drawing.Point(
+                    firstMove.From.X + firstMove.From.Width / 2 + offset.X,
+                    firstMove.From.Y + firstMove.From.Height / 2 + offset.Y);
+                System.Drawing.Point destCenter = new System.Drawing.Point(
+                    firstMove.To.X + firstMove.To.Width / 2 + offset.X,
+                    firstMove.To.Y + firstMove.To.Height / 2 + offset.Y);
+                int segmentLength = 10; // pixels
+                int dx = destCenter.X - startCenter.X;
+                int dy = destCenter.Y - startCenter.Y;
+                double distance = Math.Sqrt(dx * dx + dy * dy);
+                if (distance > 0)
+                {
+                    int segX = (int)(startCenter.X + (dx / distance) * segmentLength);
+                    int segY = (int)(startCenter.Y + (dy / distance) * segmentLength);
+                    System.Drawing.Point segmentEnd = new System.Drawing.Point(segX, segY);
+                    CvInvoke.Line(annotatedImage, startCenter, segmentEnd, GetColorForLimb(firstMove.Limb), 2);
+                }
+                else
+                {
+                    CvInvoke.Circle(annotatedImage, startCenter, 5, GetColorForLimb(firstMove.Limb), -1);
+                }
+            }
+
+            // Draw dot for each destination hold along the path using the move's color.
+            for (int i = 0; i < upToMoveIndex && i < _routeMoves.Count; i++)
+            {
+                var move = _routeMoves[i];
+                System.Drawing.Point offset = GetOffsetForLimb(move.Limb);
+                System.Drawing.Point holdCenter = new System.Drawing.Point(
+                    move.To.X + move.To.Width / 2 + offset.X,
+                    move.To.Y + move.To.Height / 2 + offset.Y);
+                CvInvoke.Circle(annotatedImage, holdCenter, 5, GetColorForLimb(move.Limb), -1);
+            }
+
             PathImage.Source = ImageSource.FromStream(() =>
             {
                 MemoryStream memoryStream = new MemoryStream();

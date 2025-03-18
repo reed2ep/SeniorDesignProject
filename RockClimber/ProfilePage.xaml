@@ -48,49 +48,6 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Difficulty Level Section -->
-            <Frame CornerRadius="10" Padding="10" BorderColor="#D3D3D3">
-                <VerticalStackLayout>
-                    <Label Text="Difficulty Level:" FontSize="16" TextColor="#333333"/>
-                    <Picker x:Name="DifficultyPicker" Title="Select Difficulty" FontSize="18">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Beginner</x:String>
-                                <x:String>Intermediate Beginner</x:String>
-                                <x:String>Advanced Beginner</x:String>
-                                <x:String>Intermediate</x:String>
-                                <x:String>Advanced</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- Hold Type Ranking Section -->
-            <Frame CornerRadius="10" Padding="10" BorderColor="#D3D3D3">
-                <VerticalStackLayout>
-                    <Label Text="Rank Hold Types (1 = Most Preferred, 3 = Least Preferred)" FontSize="16" TextColor="#333333"/>
-
-                    <!-- Jug Rank -->
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="Jug:" VerticalOptions="Center" FontSize="16"/>
-                        <Picker x:Name="JugRankPicker" Title="Rank" WidthRequest="100"/>
-                    </HorizontalStackLayout>
-
-                    <!-- Crimp Rank -->
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="Crimp:" VerticalOptions="Center" FontSize="16"/>
-                        <Picker x:Name="CrimpRankPicker" Title="Rank" WidthRequest="100"/>
-                    </HorizontalStackLayout>
-
-                    <!-- Sloper Rank -->
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="Sloper:" VerticalOptions="Center" FontSize="16"/>
-                        <Picker x:Name="SloperRankPicker" Title="Rank" WidthRequest="100"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
-
             <!-- Save Button -->
             <Button Text="Save Profile" 
                     Clicked="OnSaveButtonClicked" 
