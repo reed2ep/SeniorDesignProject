@@ -11,7 +11,10 @@
                     <ViewCell>
                         <StackLayout Orientation="Horizontal" Padding="10">
                             <Label Text="{Binding Name}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
-                            <Button Text="Delete" BackgroundColor="Red" TextColor="White" Clicked="OnDeletePathClicked" CommandParameter="{Binding}" />
+                            <Button Text="Delete"
+                                    TextColor="White"
+                                    BackgroundColor="Red" BorderWidth="0" Padding="5,0" CornerRadius="0" 
+                                    Clicked="OnDeletePathClicked" CommandParameter="{Binding}" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
