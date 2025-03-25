@@ -2,165 +2,159 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.AnnotationPage"
              Title="Configure Holds">
-
-    <!-- Grid to structure the page into two sections dynamically -->
     <Grid x:Name="MainGrid">
+        <!-- Two columns: Left for main content, right for (hidden) hold list -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="ImageColumn" Width="*" />
             <ColumnDefinition x:Name="ListColumn" Width="0" />
         </Grid.ColumnDefinitions>
 
-        <!-- Left Side: Image and Controls -->
-        <ScrollView Grid.Column="0">
-            <VerticalStackLayout Padding="20" Spacing="4">
-                <!-- Image Display with Border -->
-                <Frame BorderColor="Black" Padding="5" CornerRadius="10" HasShadow="True">
-                    <Image x:Name="CapturedImage"
-                           Aspect="AspectFit"
-                           HorizontalOptions="Fill"
-                           VerticalOptions="Fill"/>
-                </Frame>
+        <!-- Left Side: Nested grid with fixed image row and controls row -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <!-- Fixed height for the image -->
+                <RowDefinition Height="500"/>
+                <!-- Remaining space for controls -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                <!-- Buttons with Spacing -->
-                <Button Text="List Hold Types" 
-                        Clicked="OnListHoldTypesClicked" 
-                        Margin="0,10" 
-                        BackgroundColor="#e0d8f9" 
-                        TextColor="White"/>
+            <!-- Image Container (Row 0) -->
+            <Frame Stroke="Black" StrokeThickness="5" Padding="0" HorizontalOptions="Center">
+                <Image x:Name="CapturedImage"
+                       Aspect="AspectFit"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Fill"/>
+            </Frame>
 
-                <!-- Buttons -->
-                <Button Text="List Hold Difficulty" Clicked="OnListHoldDifficultyClicked"/>
-                <Button Text="Edit Start and End Holds" Clicked="OnEditStartHoldsClicked"/>
-
-                <!-- Hold Edit Section (Restored but Hidden) -->
-                <StackLayout x:Name="HoldEditSection" IsVisible="False">
-                    <Label Text="Edit Hold Section" FontSize="Medium" FontAttributes="Bold"/>
-                    <Picker x:Name="HoldsPicker" Title="Select Hold"/>
-                    <Picker x:Name="HoldDifficultyPicker" Title="Select Hold Difficulty"/>
-                </StackLayout>
-
-                <!-- Start Hold Section (Initially Hidden) -->
-                <StackLayout x:Name="StartHoldDisplay" IsVisible="False">
-                    <Label Text="Edit Start Hold Section" FontSize="Medium" FontAttributes="Bold"/>
-                </StackLayout>
-
-                <!-- Checkboxes for Start Hold Selection -->
-                <HorizontalStackLayout>
-                    <StackLayout x:Name="OneStartCheckSection" Orientation="Horizontal" IsVisible="False">
-                        <CheckBox x:Name="OneHandStartCheckBox" CheckedChanged="OnOneHandStartChecked"/>
-                        <Label Text="One Hand Start" VerticalOptions="Center"/>
-                    </StackLayout>
-
-                    <StackLayout x:Name="TwoStartCheckSection" Orientation="Horizontal" IsVisible="False">
-                        <CheckBox x:Name="TwoHandStartCheckBox" CheckedChanged="OnTwoHandStartChecked"/>
-                        <Label Text="Two Hand Start" VerticalOptions="Center"/>
-                    </StackLayout>
-                </HorizontalStackLayout>
-
-                <!-- Leg Selection Checkboxes (Side by Side) -->
-                <HorizontalStackLayout>
-                    <StackLayout x:Name="OneLegCheckSection" Orientation="Horizontal" IsVisible="False">
-                        <CheckBox x:Name="OneLegStartCheckBox" CheckedChanged="OnOneLegChecked"/>
-                        <Label Text="One Leg Start" VerticalOptions="Center"/>
-                    </StackLayout>
-
-                    <StackLayout x:Name="TwoLegCheckSection" Orientation="Horizontal" IsVisible="False">
-                        <CheckBox x:Name="TwoLegStartCheckBox" CheckedChanged="OnTwoLegChecked"/>
-                        <Label Text="Two Leg Start" VerticalOptions="Center"/>
-                    </StackLayout>
-                </HorizontalStackLayout>
-
-                <!-- Start Hold Sections -->
-                <StackLayout x:Name="StartHoldSection" IsVisible="False">
-                    <Label Text="One Hand Start Hold Selection" FontSize="Medium"/>
-                    <Picker x:Name="StartHoldPicker" Title="Select Start Hold"/>
-                </StackLayout>
-
-                <StackLayout x:Name="TwoStartHoldSection" IsVisible="False">
-                    <Label Text="Two Hand Start Hold Selection" FontSize="Medium"/>
-                    <Picker x:Name="LeftStartPicker" Title="Left Arm Start Hold"/>
-                    <Picker x:Name="RightStartPicker" Title="Right Arm Start Hold"/>
-                </StackLayout>
-
-                <StackLayout x:Name="OneLegStartHoldSection" IsVisible="False">
-                    <Label Text="One Leg Start Hold Selection" FontSize="Medium"/>
-                    <Picker x:Name="StartLegPicker" Title="Select Leg Start Hold"/>
-                </StackLayout>
-
-                <StackLayout x:Name="TwoLegStartHoldSection" IsVisible="False">
-                    <Label Text="Two Leg Start Hold Selection" FontSize="Medium"/>
-                    <Picker x:Name="RightLegPicker" Title="Right Leg Start Hold"/>
-                    <Picker x:Name="LeftLegPicker" Title="Left Leg Start Hold"/>
-                </StackLayout>
-
-                <!-- End Hold Section (Initially Hidden) -->
-                <StackLayout x:Name="EndHoldDisplay" IsVisible="False">
-                    <Label Text="Edit End Hold Section" FontSize="Medium" FontAttributes="Bold"/>
-                </StackLayout>
-
-                <!-- Checkboxes for End Hold Selection -->
-                <HorizontalStackLayout>
-                    <StackLayout x:Name="OneEndCheckSection" Orientation="Horizontal" IsVisible="False">
-                        <CheckBox x:Name="OneHandEndCheckBox" CheckedChanged="OnOneHandEndChecked"/>
-                        <Label Text="One Hand End Hold" VerticalOptions="Center"/>
-                    </StackLayout>
-
-                    <StackLayout x:Name="TwoEndCheckSection" Orientation="Horizontal" IsVisible="False">
-                        <CheckBox x:Name="TwoHandEndCheckBox" CheckedChanged="OnTwoHandEndChecked"/>
-                        <Label Text="Two Hand End Hold" VerticalOptions="Center"/>
-                    </StackLayout>
-                </HorizontalStackLayout>
-
-                <!-- End Hold Sections -->
-                <StackLayout x:Name="EndHoldSection" IsVisible="False">
-                    <Label Text="One Hand End Hold Selection" FontSize="Medium"/>
-                    <Picker x:Name="EndHoldPicker" Title="Select End Hold"/>
-                </StackLayout>
-
-                <StackLayout x:Name="TwoEndHoldSection" IsVisible="False">
-                    <Label Text="Two Hand End Hold Selection" FontSize="Medium"/>
-                    <Picker x:Name="LeftHandEndPicker" Title="Left Hand End"/>
-                    <Picker x:Name="RightHandEndPicker" Title="Right Hand End"/>
-                </StackLayout>
-
-                <!-- Save Changes Button -->
-                <StackLayout x:Name="EditStartEndHoldsSection" IsVisible="False">
-                    <Button Text="Save Changes" Clicked="OnSaveClicked" BackgroundColor="#9C4D97" TextColor="White"/>
-                </StackLayout>
-
-                <!-- Entry for the height of the wall -->
-                <StackLayout>
-                    <Button Text="Change Wall Height" 
-                            Clicked="OnChangeWallHeightClicked" 
-                            Margin="0,4"
-                            BackgroundColor="#e0d8f9" 
-                            TextColor="White"/>
-                    <StackLayout x:Name="WallHeightSection" IsVisible="False">
-                        <Label Text="Wall Height (feet):" FontSize="Medium"/>
-                        <Entry x:Name="WallHeightEntry" Placeholder="Enter wall height" Keyboard="Numeric"/>
-                        <Button Text="Save Wall Height" 
+            <!-- Controls Container (Row 1) -->
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="20" Spacing="10">
+                    <!-- Visible Buttons Container -->
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="List Hold Difficulty" Clicked="OnListHoldDifficultyClicked" 
+                                BackgroundColor="#e0d8f9" TextColor="Black"/>
+                        <Button Text="Edit Start and End Holds" Clicked="OnEditStartHoldsClicked"
+                                BackgroundColor="#e0d8f9" TextColor="Black"/>
+                        <Button Text="Change Wall Height" 
                                 Clicked="OnChangeWallHeightClicked" 
-                                BackgroundColor="#e0d8f9" 
-                                TextColor="White"/>
+                                BackgroundColor="#e0d8f9" TextColor="Black"/>
+                        <Button Text="Continue to Next Step" 
+                                Clicked="OnContinueClicked" 
+                                BackgroundColor="#e0d8f9" TextColor="Black"/>
+                    </VerticalStackLayout>
+
+                    <!-- Hidden Sections Container -->
+                    <StackLayout>
+                        <!-- Hold Edit Section (Hidden) -->
+                        <StackLayout x:Name="HoldEditSection" IsVisible="False">
+                            <Label Text="Edit Hold Section" FontSize="Medium" FontAttributes="Bold"/>
+                            <Picker x:Name="HoldsPicker" Title="Select Hold"/>
+                            <Picker x:Name="HoldDifficultyPicker" Title="Select Hold Difficulty"/>
+                        </StackLayout>
+
+                        <!-- Start Hold Section (Hidden) -->
+                        <StackLayout x:Name="StartHoldDisplay" IsVisible="False">
+                            <Label Text="Edit Start Hold Section" FontSize="Medium" FontAttributes="Bold"/>
+                        </StackLayout>
+
+                        <!-- Checkboxes for Start Hold Selection -->
+                        <HorizontalStackLayout>
+                            <StackLayout x:Name="OneStartCheckSection" Orientation="Horizontal" IsVisible="False">
+                                <CheckBox x:Name="OneHandStartCheckBox" CheckedChanged="OnOneHandStartChecked"/>
+                                <Label Text="One Hand Start" VerticalOptions="Center"/>
+                            </StackLayout>
+                            <StackLayout x:Name="TwoStartCheckSection" Orientation="Horizontal" IsVisible="False">
+                                <CheckBox x:Name="TwoHandStartCheckBox" CheckedChanged="OnTwoHandStartChecked"/>
+                                <Label Text="Two Hand Start" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </HorizontalStackLayout>
+
+                        <!-- Leg Selection Checkboxes (Side by Side) -->
+                        <HorizontalStackLayout>
+                            <StackLayout x:Name="OneLegCheckSection" Orientation="Horizontal" IsVisible="False">
+                                <CheckBox x:Name="OneLegStartCheckBox" CheckedChanged="OnOneLegChecked"/>
+                                <Label Text="One Leg Start" VerticalOptions="Center"/>
+                            </StackLayout>
+                            <StackLayout x:Name="TwoLegCheckSection" Orientation="Horizontal" IsVisible="False">
+                                <CheckBox x:Name="TwoLegStartCheckBox" CheckedChanged="OnTwoLegChecked"/>
+                                <Label Text="Two Leg Start" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </HorizontalStackLayout>
+
+                        <!-- Start Hold Sections (Hidden) -->
+                        <StackLayout x:Name="StartHoldSection" IsVisible="False">
+                            <Label Text="One Hand Start Hold Selection" FontSize="Medium"/>
+                            <Picker x:Name="StartHoldPicker" Title="Select Start Hold"/>
+                        </StackLayout>
+                        <StackLayout x:Name="TwoStartHoldSection" IsVisible="False">
+                            <Label Text="Two Hand Start Hold Selection" FontSize="Medium"/>
+                            <Picker x:Name="LeftStartPicker" Title="Left Arm Start Hold"/>
+                            <Picker x:Name="RightStartPicker" Title="Right Arm Start Hold"/>
+                        </StackLayout>
+                        <StackLayout x:Name="OneLegStartHoldSection" IsVisible="False">
+                            <Label Text="One Leg Start Hold Selection" FontSize="Medium"/>
+                            <Picker x:Name="StartLegPicker" Title="Select Leg Start Hold"/>
+                        </StackLayout>
+                        <StackLayout x:Name="TwoLegStartHoldSection" IsVisible="False">
+                            <Label Text="Two Leg Start Hold Selection" FontSize="Medium"/>
+                            <Picker x:Name="RightLegPicker" Title="Right Leg Start Hold"/>
+                            <Picker x:Name="LeftLegPicker" Title="Left Leg Start Hold"/>
+                        </StackLayout>
+
+                        <!-- End Hold Section (Hidden) -->
+                        <StackLayout x:Name="EndHoldDisplay" IsVisible="False">
+                            <Label Text="Edit End Hold Section" FontSize="Medium" FontAttributes="Bold"/>
+                        </StackLayout>
+
+                        <!-- Checkboxes for End Hold Selection (Hidden) -->
+                        <HorizontalStackLayout>
+                            <StackLayout x:Name="OneEndCheckSection" Orientation="Horizontal" IsVisible="False">
+                                <CheckBox x:Name="OneHandEndCheckBox" CheckedChanged="OnOneHandEndChecked"/>
+                                <Label Text="One Hand End Hold" VerticalOptions="Center"/>
+                            </StackLayout>
+                            <StackLayout x:Name="TwoEndCheckSection" Orientation="Horizontal" IsVisible="False">
+                                <CheckBox x:Name="TwoHandEndCheckBox" CheckedChanged="OnTwoHandEndChecked"/>
+                                <Label Text="Two Hand End Hold" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </HorizontalStackLayout>
+
+                        <!-- End Hold Sections (Hidden) -->
+                        <StackLayout x:Name="EndHoldSection" IsVisible="False">
+                            <Label Text="One Hand End Hold Selection" FontSize="Medium"/>
+                            <Picker x:Name="EndHoldPicker" Title="Select End Hold"/>
+                        </StackLayout>
+                        <StackLayout x:Name="TwoEndHoldSection" IsVisible="False">
+                            <Label Text="Two Hand End Hold Selection" FontSize="Medium"/>
+                            <Picker x:Name="LeftHandEndPicker" Title="Left Hand End"/>
+                            <Picker x:Name="RightHandEndPicker" Title="Right Hand End"/>
+                        </StackLayout>
+
+                        <!-- Wall Height Section (Hidden) -->
+                        <StackLayout x:Name="WallHeightSection" IsVisible="False">
+                            <Label Text="Wall Height (feet):" FontSize="Medium"/>
+                            <Entry x:Name="WallHeightEntry" Placeholder="Enter wall height" Keyboard="Numeric"/>
+                            <Button Text="Save Wall Height" 
+                                    Clicked="OnChangeWallHeightClicked" 
+                                    BackgroundColor="#e0d8f9" TextColor="Black"/>
+                        </StackLayout>
+
+                        <!-- Save Changes Button (Hidden) -->
+                        <StackLayout x:Name="EditStartEndHoldsSection" IsVisible="False">
+                            <Button Text="Save Changes" Clicked="OnSaveClicked" 
+                                    BackgroundColor="#9C4D97" TextColor="Black"/>
+                        </StackLayout>
                     </StackLayout>
-                </StackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
 
-                <!-- Continue Button -->
-                <Button Text="Continue to Next Step" 
-                        Clicked="OnContinueClicked" 
-                        Margin="0,10" 
-                        BackgroundColor="#e0d8f9" 
-                        TextColor="White"/>
-            </VerticalStackLayout>
-        </ScrollView>
-
-        <!-- Right Side: Hold List Sidebar (Initially Hidden) -->
+        <!-- Right Side: Hold List Sidebar (Hidden) -->
         <StackLayout x:Name="HoldListSection" Grid.Column="1" IsVisible="False" Padding="10">
             <Label Text="Hold List" FontSize="Medium" FontAttributes="Bold"/>
             <ListView x:Name="HoldListView" ItemSelected="OnHoldItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding}" />
+                        <TextCell Text="{Binding}" TextColor="Black"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
