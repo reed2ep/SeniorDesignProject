@@ -13,7 +13,7 @@ namespace RockClimber
 
         private async void OnHelpClicked(object sender, EventArgs e)
         {
-            string url = "https://github.com/reed2ep/SeniorDesignProject"; // Replace with your actual help page URL
+            string url = "https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/User%20Docs.md"; // Replace with your actual help page URL
             await Launcher.OpenAsync(new Uri(url));
         }
     }
