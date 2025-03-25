@@ -12,16 +12,27 @@
 
         <!-- Left Side: Image and Controls -->
         <ScrollView Grid.Column="0">
-            <VerticalStackLayout Padding="20">
-                <!-- Image Display -->
-                <Image x:Name="CapturedImage"
-                       Aspect="AspectFit"
-                       HorizontalOptions="Fill"
-                       VerticalOptions="Fill"/>
+            <VerticalStackLayout Padding="20" Spacing="4">
+                <!-- Image Display with Border -->
+                <Frame BorderColor="Black" Padding="5" CornerRadius="10" HasShadow="True">
+                    <Image x:Name="CapturedImage"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Fill"/>
+                </Frame>
 
-                <!-- Buttons -->
-                <Button Text="List Hold Types" Clicked="OnListHoldTypesClicked"/>
-                <Button Text="Edit Start and End Holds" Clicked="OnEditStartHoldsClicked"/>
+                <!-- Buttons with Spacing -->
+                <Button Text="List Hold Types" 
+                        Clicked="OnListHoldTypesClicked" 
+                        Margin="0,10" 
+                        BackgroundColor="#e0d8f9" 
+                        TextColor="White"/>
+
+                <Button Text="Edit Start and End Holds" 
+                        Clicked="OnEditStartHoldsClicked" 
+                        Margin="0,4" 
+                        BackgroundColor="#e0d8f9" 
+                        TextColor="White"/>
 
                 <!-- Hold Edit Section (Restored but Hidden) -->
                 <StackLayout x:Name="HoldEditSection" IsVisible="False">
@@ -36,7 +47,6 @@
                 </StackLayout>
 
                 <!-- Checkboxes for Start Hold Selection -->
-                <!-- Hand Selection Checkboxes (Side by Side) -->
                 <HorizontalStackLayout>
                     <StackLayout x:Name="OneStartCheckSection" Orientation="Horizontal" IsVisible="False">
                         <CheckBox x:Name="OneHandStartCheckBox" CheckedChanged="OnOneHandStartChecked"/>
@@ -61,7 +71,6 @@
                         <Label Text="Two Leg Start" VerticalOptions="Center"/>
                     </StackLayout>
                 </HorizontalStackLayout>
-
 
                 <!-- Start Hold Sections -->
                 <StackLayout x:Name="StartHoldSection" IsVisible="False">
@@ -116,23 +125,34 @@
                     <Picker x:Name="RightHandEndPicker" Title="Right Hand End"/>
                 </StackLayout>
 
-                <!-- Save Changes Button (Moved to the Bottom of Start and End Holds Section) -->
+                <!-- Save Changes Button -->
                 <StackLayout x:Name="EditStartEndHoldsSection" IsVisible="False">
-                    <Button Text="Save Changes" Clicked="OnSaveClicked"/>
+                    <Button Text="Save Changes" Clicked="OnSaveClicked" BackgroundColor="#9C4D97" TextColor="White"/>
                 </StackLayout>
 
                 <!-- Entry for the height of the wall -->
                 <StackLayout>
-                    <Button Text="Change Wall Height" Clicked="OnChangeWallHeightClicked"/>
+                    <Button Text="Change Wall Height" 
+                            Clicked="OnChangeWallHeightClicked" 
+                            Margin="0,4"
+                            BackgroundColor="#e0d8f9" 
+                            TextColor="White"/>
                     <StackLayout x:Name="WallHeightSection" IsVisible="False">
                         <Label Text="Wall Height (feet):" FontSize="Medium"/>
                         <Entry x:Name="WallHeightEntry" Placeholder="Enter wall height" Keyboard="Numeric"/>
-                        <Button Text="Save Wall Height" Clicked="OnChangeWallHeightClicked"/>
+                        <Button Text="Save Wall Height" 
+                                Clicked="OnChangeWallHeightClicked" 
+                                BackgroundColor="#e0d8f9" 
+                                TextColor="White"/>
                     </StackLayout>
                 </StackLayout>
 
                 <!-- Continue Button -->
-                <Button Text="Continue to Next Step" Clicked="OnContinueClicked"/>
+                <Button Text="Continue to Next Step" 
+                        Clicked="OnContinueClicked" 
+                        Margin="0,10" 
+                        BackgroundColor="#e0d8f9" 
+                        TextColor="White"/>
             </VerticalStackLayout>
         </ScrollView>
 

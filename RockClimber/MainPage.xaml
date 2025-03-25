@@ -1,46 +1,104 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RockClimber.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            
-            <Label
-                Text="RockClimber"
-                FontSize="32"
-                HorizontalOptions="Center" 
-                SemanticProperties.HeadingLevel="Level1" />
+    <Grid>
 
-            <Label
-                Text="Welcome to the testing app!"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to the testing app!" />
+        <!-- Background Image with Slight Zoom -->
+        <Image Source="logo3.jpg"
+               Aspect="AspectFill"
+               Scale="1.2"  
+            Opacity="1.0"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
 
-            <Button
-                Text="Go to Profile" 
-                Clicked="OnGoToProfileClicked"
-                HorizontalOptions="Center" />
+            <!-- Overlay for better contrast -->
+            <BoxView BackgroundColor="Black" Opacity="0.3"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill" />
 
-            <Button 
-                Text="Go To Camera"
-                Clicked="OnGoToCameraPageClicked"
-                HorizontalOptions="Center"/>
+            <ScrollView>
+                <VerticalStackLayout
+                Padding="40,270,40,40"  
+                    Spacing="25"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
 
-            <Button
-                Text="Open Gallery"
-                Clicked="OnOpenGalleryClicked"
-                HorizontalOptions="Center" />
+                    <!-- Logo -->
+                    <Image 
+                    Source="climbing.png" 
+                    WidthRequest="80" 
+                    HeightRequest="80"
+                    HorizontalOptions="Center" />
 
-            <Button
-                Text="Saved Paths"
-                Clicked="OnGoToSavedPathsPageClicked"
-                HorizontalOptions="Center" />
+                    <!-- Title -->
+                    <Label
+                    Text="RockClimber"
+                    FontSize="30" 
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    HorizontalOptions="Center"
+                    Margin="0,15,0,0" />
+                    <!-- Added margin to move title down -->
 
-        </VerticalStackLayout>
-    </ScrollView>
+                    <!-- Subtitle -->
+                    <Label
+                    Text="Elevate Your Climb"
+                    FontSize="14" 
+                    FontAttributes="Italic"
+                    TextColor="White"
+                    Opacity="0.8"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,20" />
 
+                    <!-- Buttons -->
+                    <VerticalStackLayout Spacing="15" Padding="5">
+                        <Button
+                        Text="Go to Profile"
+                        Clicked="OnGoToProfileClicked"
+                        BackgroundColor="#e0d8f9"
+                        TextColor="White"
+                        FontSize="14" 
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        WidthRequest="180"
+                        HorizontalOptions="Center" />
+
+                        <Button
+                        Text="Go To Camera"
+                        Clicked="OnGoToCameraPageClicked"
+                        BackgroundColor="#e0d8f9"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        WidthRequest="180"
+                        HorizontalOptions="Center" />
+
+                        <Button
+                        Text="Open Gallery"
+                        Clicked="OnOpenGalleryClicked"
+                        BackgroundColor="#e0d8f9"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        WidthRequest="180"
+                        HorizontalOptions="Center" />
+
+                        <Button
+                        Text="Saved Paths"
+                        Clicked="OnGoToSavedPathsPageClicked"
+                        BackgroundColor="#e0d8f9"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        WidthRequest="180"
+                        HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+    </Grid>
 </ContentPage>
