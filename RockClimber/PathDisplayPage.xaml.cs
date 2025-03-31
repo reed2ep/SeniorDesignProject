@@ -207,5 +207,9 @@ namespace RockClimber
             await DisplayAlert("Success", "Path saved successfully!", "OK");
         }
 
+        private async void OnBackToHomeClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopToRootAsync();
+        }
     }
 }
