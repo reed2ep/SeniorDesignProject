@@ -87,8 +87,8 @@
                         </StackLayout>
                         <StackLayout x:Name="TwoLegStartHoldSection" IsVisible="False">
                             <Label Text="Two Leg Start Hold Selection" FontSize="Medium"/>
-                            <Picker x:Name="RightLegPicker" Title="Right Leg Start Hold"/>
                             <Picker x:Name="LeftLegPicker" Title="Left Leg Start Hold"/>
+                            <Picker x:Name="RightLegPicker" Title="Right Leg Start Hold"/>
                         </StackLayout>
 
                         <StackLayout x:Name="EndHoldDisplay" IsVisible="False">
