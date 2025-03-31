@@ -582,7 +582,7 @@ namespace RockClimber
 
             int climberHeightFeet = Preferences.Get("climberHeightFeet", 5);
             double climberHeightPixels = ConvertFeetToPixels(climberHeightFeet);
-            double targetGap = 0.75 * climberHeightPixels;
+            double targetGap = 0.85 * climberHeightPixels;
 
             var allHolds = _holds.Values.ToList();
 

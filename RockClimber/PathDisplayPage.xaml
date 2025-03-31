@@ -47,6 +47,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -63,9 +65,15 @@
 
                 <!-- Row 2: Save Path -->
                 <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
-                        Text="Save Path" Clicked="OnSavePathClicked" 
-                        HorizontalOptions="Center" />
+                    Text="Save Path" Clicked="OnSavePathClicked" 
+                    HorizontalOptions="Center" />
+
+                <!-- Row 3: Back to Home -->
+                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                    Text="Back to Home" Clicked="OnBackToHomeClicked"
+                    HorizontalOptions="Center"/>
             </Grid>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -30,12 +30,12 @@ public class MoveCandidate
 public static class RoutePlanner
 {
     public static List<Move> PlanSequentialRoute(
-        List<Hold> holds,
-        LimbConfiguration startConfig,
-        Rectangle rightHandFinish,
-        Rectangle? leftHandFinish,
-        double maxReach,
-        double targetGap) // targetGap in pixels (0.75 * climberHeightPixels)
+    List<Hold> holds,
+    LimbConfiguration startConfig,
+    Rectangle rightHandFinish,
+    Rectangle? leftHandFinish,
+    double maxReach,
+    double targetGap) // targetGap in pixels (0.75 * climberHeightPixels)
     {
         List<Move> moves = new List<Move>();
         LimbConfiguration current = new LimbConfiguration
@@ -55,7 +55,7 @@ public static class RoutePlanner
         double bonusFactorFoot = 0.5;
         double minMoveDistance = 5;
         double horizontalPenaltyFactor = 0.3;
-        double finishBonus = 20;
+        double finishBonus = 35;
         double maxHandStep = 30;
         double maxFootStep = 20;
         int minHandFootGap = 10;
@@ -65,6 +65,12 @@ public static class RoutePlanner
         double extraFootPenaltyFactor = 1.5;
 
         Limb? lastFootMoved = null;
+        double holdSizeFactor = 0.05;
+
+        // Constants for eliminating paths where limbs follow each other
+        double sameRouteThreshold = 10; 
+        double handSameRoutePenaltyFactor = 4.0;
+        double footSameRoutePenaltyFactor = 6.0;
 
         while (!current.HandsAtFinish(rightHandFinish, leftHandFinish) && iterations < maxIterations)
         {
@@ -105,14 +111,28 @@ public static class RoutePlanner
                             _ => 0.0  // Easy
                         };
 
+                        // Calculate bonus based on hold size.
+                        double holdArea = candidateHold.Bounds.Width * candidateHold.Bounds.Height;
+                        double sizeBonus = holdSizeFactor * holdArea;
+
                         if (limb == Limb.RightHand || limb == Limb.LeftHand)
                         {
                             if (verticalProgress < 10)
                                 continue;
                             double weight = 2.97;
                             score = weight * verticalProgress - dist;
-                            score -= horizontalPenaltyFactor * horizontalDiff;
                             score -= difficultyPenalty; // Subtract difficulty penalty
+                            score += sizeBonus; // Add bonus for hold size
+
+                            // Penalize if candidate's horizontal position is too similar to the other hand's current hold.
+                            Rectangle otherHandHold = (limb == Limb.RightHand) ? current.LeftHand : current.RightHand;
+                            double otherHandCenterX = GetCenter(otherHandHold).X;
+                            double candidateCenterX = GetCenter(candidate).X;
+                            double horizontalDiffWithOther = Math.Abs(candidateCenterX - otherHandCenterX);
+                            if (horizontalDiffWithOther < sameRouteThreshold)
+                            {
+                                score -= (sameRouteThreshold - horizontalDiffWithOther) * handSameRoutePenaltyFactor;
+                            }
 
                             if (candidate == rightHandFinish ||
                                 (leftHandFinish.HasValue && candidate == leftHandFinish.Value))
@@ -132,6 +152,27 @@ public static class RoutePlanner
                                 double extra = newGapCandidate - targetGap;
                                 score -= extra * extraHandPenaltyFactor;
                             }
+                            if (limb == Limb.LeftHand)
+                            {
+                                // Ensure left hand stays to the left of the right hand's current hold.
+                                double rightHandCenterX = GetCenter(current.RightHand).X;
+                                if (candidateCenterX > rightHandCenterX)
+                                {
+                                    // Penalize the crossover.
+                                    double crossoverPenalty = 20; // Adjust this value as needed
+                                    score -= crossoverPenalty;
+                                }
+                            }
+                            else if (limb == Limb.RightHand)
+                            {
+                                // Ensure right hand stays to the right of the left hand's current hold.
+                                double leftHandCenterX = GetCenter(current.LeftHand).X;
+                                if (candidateCenterX < leftHandCenterX)
+                                {
+                                    double crossoverPenalty = 20; // Adjust this value as needed
+                                    score -= crossoverPenalty;
+                                }
+                            }
                             if (score >= 0)
                                 handCandidates.Add(new MoveCandidate { Limb = limb, From = currentHold, To = candidate, Score = score });
                         }
@@ -144,7 +185,20 @@ public static class RoutePlanner
                             double weight = 1.0;
                             score = weight * verticalProgress - dist;
                             score -= horizontalPenaltyFactor * horizontalDiff;
-                            score -= difficultyPenalty * 0.75; // Apply a reduced penalty for foot holds
+                            score -= difficultyPenalty * 0.75; // Reduced penalty for foot holds
+                            score += sizeBonus; // Add bonus for hold size
+
+
+                            // Penalize if candidate's horizontal position is too similar to the other foot's current hold.
+                            Rectangle otherFootHold = (limb == Limb.RightLeg) ? current.LeftLeg : current.RightLeg;
+                            double otherFootCenterX = GetCenter(otherFootHold).X;
+                            double candidateCenterX = GetCenter(candidate).X;
+                            double horizontalDiffWithOther = Math.Abs(candidateCenterX - otherFootCenterX);
+                            if (horizontalDiffWithOther < sameRouteThreshold)
+                            {
+                                score -= (sameRouteThreshold - horizontalDiffWithOther) * footSameRoutePenaltyFactor;
+                            }
+
                             if (verticalProgress > maxFootStep)
                             {
                                 double excess = verticalProgress - maxFootStep;
@@ -161,6 +215,26 @@ public static class RoutePlanner
                             {
                                 double extra = targetGap - newGapCandidate;
                                 score -= extra * extraFootPenaltyFactor;
+                            }
+                            if (limb == Limb.LeftLeg)
+                            {
+                                // Ensure left leg stays to the left of the right leg's current hold.
+                                double rightLegCenterX = GetCenter(current.RightLeg).X;
+                                if (candidateCenterX > rightLegCenterX)
+                                {
+                                    double crossoverPenaltyFoot = 20; 
+                                    score -= crossoverPenaltyFoot;
+                                }
+                            }
+                            else if (limb == Limb.RightLeg)
+                            {
+                                // Ensure right leg stays to the right of the left leg's current hold.
+                                double leftLegCenterX = GetCenter(current.LeftLeg).X;
+                                if (candidateCenterX < leftLegCenterX)
+                                {
+                                    double crossoverPenaltyFoot = 20;
+                                    score -= crossoverPenaltyFoot;
+                                }
                             }
                             if (score >= 0)
                                 footCandidates.Add(new MoveCandidate { Limb = limb, From = currentHold, To = candidate, Score = score });
