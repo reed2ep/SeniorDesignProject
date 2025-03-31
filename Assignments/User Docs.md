@@ -64,7 +64,7 @@ You are presented with various options:
 1. Once you are out of your config page, you will be sent to the next page, which will show you the results according to the configuration you have made.
 2. On this page you will be given five  options (Previous, Next, View Final Path, Back, SavePath )
 
-I will now explain the function of each button
+Explanation for the function of each button
 
 1. Previous Button: This button is basically used once you have your final path but you are stuck at one point you can use the previous button to go to the point where you are stuck and start the path from there again
 2. Next Button: This button is used if you want a step-by-step process of reaching the final destination.
