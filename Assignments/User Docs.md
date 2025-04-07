@@ -5,7 +5,7 @@ If this is your first time using the app you should head to the ***Profile page*
 ## User Profile
 To navigate to the [User Profile](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/UserProfile.jpg) page select the option ***Go to User Profile***.
 
-You will be prompted with 4 options ***Name, Height, Wingspan, Difficulty Level***
+You will be prompted with 3 options ***Name, Height, Wingspan***
 
 **Name:** This is just a your name, It is optional but can be helpful if multiple people use the app on the same device.
 
@@ -14,14 +14,12 @@ You will be prompted with 4 options ***Name, Height, Wingspan, Difficulty Level*
 **Wingspan:** Similar to height, this is in Feet and Inches and is used alongside height to optimize possible moves during the route calculation. 
 - If you are unsure of your wingspan a good estimate is your height
 
-**Difficulty Level:** Difficulty level will be used to adjust possible routes as a faster route may be possible but may be too difficult for a beginner. 
-
 After you finish filling out your User Profile hit **Save Profile**. Your profile will be saved for all future use.
 
 ## Using The app
 After you have your profile set up the app is ready to use. You have 3 available options.
 
-**Saved Paths:** If you already calculated a path you can choose to save it for later. Those paths wil be saved here for future use. 
+**Saved Paths:** If you already calculated a path you can choose to save it for later. Those paths will be saved here for future use. 
 
 ### Step 1: Select one of the following options
 **[Go to Camera:](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/CameraPage.jpg)** Launches camera and allows you to take a live photo of a bouldering problem you would like a path created for.
@@ -34,16 +32,16 @@ To determine a route, you need to select a color that best displays the route yo
 For example if you would like to take a route with all red holds you would select **RED**
 
 ### Step 3: [Selecting a start point and end point for both hands and legs](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/AdditionalInformation/AnnotationPage.jpg)
-After you select confirm you will be prompted with a picture showing all the detected holds as well as hold type.
+After you select confirm you will be prompted with a picture showing all the detected holds.
 
 You are presented with various options:
 
-**Select Hold to Edit:** This is used to select a hold. If you want to modify hold 1 you simpily select hold 1.
+**List Hold Difficulty:** This is used to list the assigned difficulty of a hold. If you want to view or modify the difficulty of holds, select this button. 
 
-**Select or Change Hold Type:** Once you have selected a hold above you will have the option to change the hold type. By default all holds are considered jugs. If you'd like to avoid certain holds and favor others, you can do that here.
-1. Select the Desired hold by its number on the image.
-2. Change the hold type to what you would categorize it as.
-3. Selected hold should be automatically updated with new hold type.
+**Change Hold Difficulty:** Once you have selected the hold list above, you will have the option to change the hold difficulty. If you'd like to avoid certain holds and favor others, you can do that here.
+1. Select the desired hold by its number found on the image.
+2. Change the hold difficulty to what you would categorize it as.
+3. Edited hold should be automatically update with new difficulty.
 
 **Select Start Hold:** This is your starting point. By default, it goes to the lowest available hold but should be modified to match where the you would like to start with your hands.
 
@@ -57,12 +55,12 @@ You are presented with various options:
 
 **1 Hand End:** If the route indicates there is 1 hold finish instead of two, you can check the following option and you will be prompted where the finish hold is for one hand.
 
-**WingSpan:** If you have already selected wingspan in your user profile and don't want to change(Default wingspan in user-profile) you can choose just next but if you want to change it you have the option given. 
+**Change Wall Height:** If you know or can estimate the height of the bouldering wall, you can change the wall height to ensure the generated path is more optimal and accurate.
 
 ### Step 4:[PathFinding]
 
 1. Once you are out of your config page, you will be sent to the next page, which will show you the results according to the configuration you have made.
-2. On this page you will be given five  options (Previous, Next, View Final Path, Back, SavePath )
+2. On this page you will be given six options (Previous, Next, View Final Path, Back, SavePath, Home)
 
 Explanation for the function of each button
 
@@ -71,6 +69,7 @@ Explanation for the function of each button
 3. View Final Path Button: This button is basically used if you want to skip the step-by-step process given by the next button and just want the whole path in one go.
 4. Back Button: This button is used to go to the previous pages if you want to make any changes
 5. SavePath Button: This button is used to save all of your paths as this can help you to revisit the same path easily instead of doing the same process again and again for the same path.
+6. Home Button: This button will return you to the home page.
 
 ### Help Button:
-This button is used to help users who are having problem understanding how to communicate with the app.
+This button is used to help users who are having problem understanding how to utilize all functionality of the app. It is found in the top right corner of all pages. If you are ever stuck or confused, use this button to clarify the steps you should take.
