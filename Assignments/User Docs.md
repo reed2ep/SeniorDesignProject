@@ -7,14 +7,14 @@ To navigate to the [User Profile](https://github.com/reed2ep/SeniorDesignProject
 
 You will be prompted with 3 options ***Name, Height, Wingspan***
 
-**Name:** This is just a your name, It is optional but can be helpful if multiple people use the app on the same device.
+**Name:** This is just your name. It is optional but can be helpful if multiple people use the app on the same device.
 
 **Height:** Your height should be inputed in Feet and Inches. These measurements will be used to optimize a [route](AdditionalInformation/WhatIsARoute.md) best fit for your height. The default is 5 ft.
 
 **Wingspan:** Similar to height, this is in Feet and Inches and is used alongside height to optimize possible moves during the route calculation. 
 - If you are unsure of your wingspan a good estimate is your height
 
-After you finish filling out your User Profile hit **Save Profile**. Your profile will be saved for all future use.
+After you finish filling out your User Profile, hit **Save Profile**. Your profile will be saved for all future use.
 
 ## Using The app
 After you have your profile set up the app is ready to use. You have 3 available options.
@@ -41,7 +41,7 @@ You are presented with various options:
 **Change Hold Difficulty:** Once you have selected the hold list above, you will have the option to change the hold difficulty. If you'd like to avoid certain holds and favor others, you can do that here.
 1. Select the desired hold by its number found on the image.
 2. Change the hold difficulty to what you would categorize it as.
-3. Edited hold should be automatically update with new difficulty.
+3. Edited hold should be automatically updated with new difficulty.
 
 **Select Start Hold:** This is your starting point. By default, it goes to the lowest available hold but should be modified to match where the you would like to start with your hands.
 
@@ -49,13 +49,13 @@ You are presented with various options:
 
 **2 Hand Start:** If the route indicates there are 2 starting hand holds instead of one, you can check this box and you will be prompted to select a start hold for both hands. 
 
-**2 Hand leg Start:** If the route indicates there are 2 starting leg holds, you can check this box and you will prompted to select two leg hold for both legs
+**2 Hand leg Start:** If the route indicates there are 2 starting leg holds, you can check this box and you will prompted to select a leg hold for both legs
 
 **2 Hand End:** If the route indicates there are 2 finish holds instead of one, you can check this box and you will be prompted to select a finish hold for both hands.
 
-**1 Hand End:** If the route indicates there is 1 hold finish instead of two, you can check the following option and you will be prompted where the finish hold is for one hand.
+**1 Hand End:** If the route indicates there is 1 hold finish instead of two, you can check the following option and you will be prompted to select a finish hold for one hand.
 
-**Change Wall Height:** If you know or can estimate the height of the bouldering wall, you can change the wall height to ensure the generated path is more optimal and accurate.
+**Change Wall Height:** If you know or can estimate the height of the bouldering wall, you can change the wall height to ensure the generated path is more accurate.
 
 ### Step 4:[PathFinding]
 
