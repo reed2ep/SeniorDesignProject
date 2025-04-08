@@ -57,7 +57,7 @@ You are presented with various options:
 
 **Change Wall Height:** If you know or can estimate the height of the bouldering wall, you can change the wall height to ensure the generated path is more accurate.
 
-### Step 4: [PathFinding]
+### Step 4: PathFinding
 
 1. Once you are out of your config page, you will be sent to the next page, which will show you the results according to the configuration you have made.
 2. On this page you will be given six options (Previous, Next, View Final Path, Back, SavePath, Home)
