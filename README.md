@@ -12,7 +12,10 @@
 8. [Professional Biographies](https://github.com/reed2ep/SeniorDesignProject/tree/main/Assignments/Assignment1-Biographies)
 9. Budget
     - Currently, no expenses and none planned
-10. Appendix
+10. [User Docs](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/User%20Docs.md)
+11. [Expo Presentation](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Expo%20Slides.pdf)
+12. Appendix
     - [Research](https://github.com/reed2ep/SeniorDesignProject/tree/main/Research)
     - [Code Repo](https://github.com/reed2ep/SeniorDesignProject/tree/main/RockClimber)
     - [Timesheets](https://github.com/reed2ep/SeniorDesignProject/tree/main/Timesheet)
+    - [Poster Board](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Poster.pdf)
