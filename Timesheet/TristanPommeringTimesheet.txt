@@ -1,4 +1,4 @@
-Time(hours) Date Topic
+Time(hours) Date Topic FALL
 1 Sep 5 Group Meeting Intro discussion 
 1 Sep 12 Meeting Planning 
 1 Sep 14 Individual capstone and team contract review
@@ -25,29 +25,35 @@ Time(hours) Date Topic
 2 Nov 25 Researched alternative Blob detection methods
 3 Nov 26 Attempted alternative blob detection methods
 Total 41 Hours
-
-Various meeting notes:
-Evolutionary computing 
-- Center point with arms and legs searching for valid positions 
-- Decide how are we going to extract the image and store it
-- Model climber
-- Optimization for phones
-- Find alternative path planning algorithms
-- Path planning research
-- Greedy tree search, evolutionary
-- blob detection of color
-
-Always bring deliverable to advisor meetings
-format: What we did, any issues, what we plan to do 
-
-Got basic app env setup
-Got an app working 
-need to upload base to github 
-Talk about UI design 
-
-For the demo at the expo?
-Research getting phone into dev mode
-Getting app on my phone and testing camera 
-
-Blob detection alternatives
-State of work divison Blob detection and AI Should be more fairly divivded
+--------------------------------------------------------------------------------------------------
+Time(hours) Date Topic SPRING
+1 :Jan 21: Meeting (Planning for the semester)
+1 :Jan 28: Group Meeting
+3 :Feb 1 Created a first attempt at a way to modify hold types on annotation page
+4 :Feb 3 Tried to create a way to crop images 
+1 :Feb 4 Group Meeting
+3 :Feb 8 Created draft of user docs explaining every part of the app and what each button does 
+1 :Feb 11 Group Meeting
+2 :Feb 15 Worked on Presentation Slidedeck
+1 :Feb 18 Group Meeting
+4 :Feb 22 Revised the way user can modify hold types on annotation page allowing them to change them in a easier way 
+1 :Feb 25 Group Meeting
+1 :Feb 27 Put the latest verson of the app on my phone and tested for issues or bugs as well as performance
+2 :Feb 28 Fixed a bug where the image was not filling the entire screen
+2 :March 1 Fixed some UI related issues and added a save button to better reflect the layout of the other buttons
+1 :March 4 Group Meeting
+3 :March 8 Tested app on my phone and reported any issues or bugs 
+1 :March 11 Group Meeting
+1 :March 15 Renamed paged on app to reflect final design
+3 :March 16 Removed unneeded extra buttons and reworked them a bit
+2 :March 18 Created my draft of the expo poster
+3 : March 22 Tested app on my phone using various pictures and reporting any bugs
+2 : March 24 Created expo slideshow draft
+1 :March 25 Group Meeting
+2 :March 26 Put the latest version of the app on my phone and got various test images showing all the results
+2 :March 29 Finished final expo slideshow with tested images from app
+1 :April 1 Group Meeting
+2 :April 3 Put the final version of the app on my phone and made sure the app was working flawlessly for the expo testing various images
+All day April 8 EXPO
+1 April 11: Finalized repo and self reflection
+Total 52 hours
