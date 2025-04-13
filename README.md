@@ -8,7 +8,7 @@
 4. [Project Tasks and Timeline](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Assignment5-Tasklist.md)
 5. [Test Plan with results](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Test%20Plan.pdf)
 6. [User Manual](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/User%20Docs.md)
-7. [Spring Expo Presentation](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Expo%20Slides.pdf)
+7. [Spring Expo Presentation With Ui](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Expo%20Slides.pdf)
 8. [Poster Board](https://github.com/reed2ep/SeniorDesignProject/blob/main/Assignments/Poster.pdf)
 9. [Spring Self Assessment](https://github.com/reed2ep/SeniorDesignProject/tree/main/Assignments/Self-Assessments(Spring))
 10. [Summary of Hours and Justification](https://github.com/reed2ep/SeniorDesignProject/tree/main/Assignments/Summary%20of%20Hours%20and%20Justification)
